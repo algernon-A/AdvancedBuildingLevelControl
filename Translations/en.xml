@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Language UniqueName="en" ReadableName="English">
+  <Translations>
+    <Translation ID="ABLC_DESC" String="UNDER DEVELOPMENT: allows control of building levels by district and/or building." />
+    <Translation ID="ABLC_NAME" String="Level Control" />
+    <Translation ID="ABLC_CTRL" String="Control levels" />
+    <Translation ID="ABLC_CAT_RES" String="Residential levels" />
+    <Translation ID="ABLC_CAT_WRK" String="Workplace levels" />
+    <Translation ID="ABLC_FORCE_UP" String="Trigger upgrade" />
+  </Translations>
+</Language>
