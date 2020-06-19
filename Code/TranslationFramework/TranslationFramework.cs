@@ -44,7 +44,7 @@ namespace ABLC
     {
         private Language currentLanguage;
         private List<Language> languages;
-        private string fallbackLanguage = "en";
+        private string defaultLanguage = "en";
 
         /// <summary>
         /// Constructor.
@@ -105,9 +105,12 @@ namespace ABLC
             // Don't do anything if no languages have been loaded, or the LocaleManager isn't available.
             if (languages != null && languages.Count > 0 && LocaleManager.exists)
             {
-                // Try to set current language, falling back to default if null.
+                // Try to set current language, using fallback if null.
                 currentLanguage = languages.Find(language => language.uniqueName == LocaleManager.instance.language) ?? FallbackLanguage();
             }
+
+            // Update 'control levels' checkbox text.
+            BuildingPanelManager.SetText();
         }
 
 
@@ -117,7 +120,19 @@ namespace ABLC
         /// <returns>Fallback language reference</returns>
         private Language FallbackLanguage()
         {
-            return languages.Find(language => language.uniqueName == fallbackLanguage);
+            Language fallbackLanguage = null;
+
+            // First, check to see if there is a shortened version of this language id (e.g. zh-tw -> zh).
+            if (LocaleManager.instance.language.Length > 2)
+            {
+                string newName = LocaleManager.instance.language.Substring(0, 2);
+                Debugging.Message("language " + LocaleManager.instance.language + " failed; trying " + newName);
+
+                fallbackLanguage = languages.Find(language => language.uniqueName == newName);
+            }
+
+            // If we picked up a fallback language, return that; otherwise, return the default language.
+            return fallbackLanguage ?? languages.Find(language => language.uniqueName == defaultLanguage);
         }
 
 

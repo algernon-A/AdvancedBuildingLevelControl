@@ -55,10 +55,10 @@ namespace ABLC
                 UILabel titleLabel = AddLabel(Translations.Translate("ABLC_NAME"), 0f, margin, 1.0f);
 
                 // Level dropdowns.
-                minLevelDropDown = UIUtils.CreateDropDown(this, "Minimum level", yPos : 70f);
+                minLevelDropDown = UIUtils.CreateDropDown(this, Translations.Translate("ABLC_LVL_MIN"), yPos : 70f);
                 minLevelDropDown.items = new string[] { "1", "2", "3", "4", "5" };
 
-                maxLevelDropDown = UIUtils.CreateDropDown(this, "Maximum level", yPos : 100f);
+                maxLevelDropDown = UIUtils.CreateDropDown(this, Translations.Translate("ABLC_LVL_MAX"), yPos : 100f);
                 maxLevelDropDown.items = new string[] { "1", "2", "3", "4", "5" };
 
                 // Apply button.

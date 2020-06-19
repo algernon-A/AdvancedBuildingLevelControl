@@ -28,7 +28,6 @@ namespace ABLC
             // Constants.
             const float Width = 60f;
             const float Height = 25f;
-            const int ListWidth = 70;
             const int ItemHeight = 20;
 
 
@@ -66,7 +65,7 @@ namespace ABLC
 
             // Dropdown size parameters.
             dropDown.size = new Vector2(Width, Height);
-            dropDown.listWidth = ListWidth;
+            dropDown.listWidth = (int)Width;
             dropDown.listHeight = 500;
             dropDown.itemHeight = ItemHeight;
             dropDown.textScale = 0.7f;
@@ -89,16 +88,6 @@ namespace ABLC
             button.horizontalAlignment = UIHorizontalAlignment.Right;
             button.verticalAlignment = UIVerticalAlignment.Middle;
             button.zOrder = 0;
-
-            // Dropdown button size parameters.
-            //button.textScale = 0.8f;
-
-            /* 
-            dropDown.eventSizeChanged += new PropertyChangedEventHandler<Vector2>((control, size) =>
-            {
-                button.size = size;
-                dropDown.listWidth = (int)size.x;
-            });*/
 
             return dropDown;
         }

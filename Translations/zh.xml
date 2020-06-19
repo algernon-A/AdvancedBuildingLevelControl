@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Language UniqueName="zh" ReadableName="中文">
+  <Translations>
+    <Translation ID="ABLC_DESC" String="持續開發中：允許按行政區或建築本身，控制建築物等級。" />
+    <Translation ID="ABLC_NAME" String="等級控制" />
+    <Translation ID="ABLC_CTRL" String="級別控制" />
+    <Translation ID="ABLC_LVL_MIN" String="最低等級" />
+    <Translation ID="ABLC_LVL_MAX" String="最高等級" />
+    <Translation ID="ABLC_CAT_RES" String="住宅建築級別" />
+    <Translation ID="ABLC_CAT_WRK" String="就職建築級別" />
+    <Translation ID="ABLC_FORCE_UP" String="強制升級" />
+  </Translations>
+</Language>

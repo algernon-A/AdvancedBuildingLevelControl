@@ -132,10 +132,10 @@ namespace ABLC
                 UILabel workLabel = AddLabel(Translations.Translate("ABLC_CAT_WRK"), margin, 140f, hAlign: UIHorizontalAlignment.Left);
 
                 // Add workplace min and max dropdowns.
-                minWorkLevelDropDown = UIUtils.CreateDropDown(this, "Minimum level", yPos: 160f);
+                minWorkLevelDropDown = UIUtils.CreateDropDown(this, Translations.Translate("ABLC_LVL_MIN"), yPos: 160f);
                 minWorkLevelDropDown.items = new string[] { "1", "2", "3" };
 
-                maxWorkLevelDropDown = UIUtils.CreateDropDown(this, "Maximum level", yPos: 190f);
+                maxWorkLevelDropDown = UIUtils.CreateDropDown(this, Translations.Translate("ABLC_LVL_MAX"), yPos: 190f);
                 maxWorkLevelDropDown.items = new string[] { "1", "2", "3" };
 
                 // Set initial district.

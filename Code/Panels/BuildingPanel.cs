@@ -127,7 +127,9 @@ namespace ABLC
                 controlBuildingCheckbox.label.font = infoPanel.Find<UICheckBox>("CheckboxHistorical").label.font;
 
                 controlBuildingCheckbox.name = "ControlLevel";
-                controlBuildingCheckbox.text = Translations.Translate("ABLC_CTRL");
+
+                // Set the label text based on current language.
+                SetText();
 
                 // Event handler.
                 controlBuildingCheckbox.eventCheckChanged += (component, isChecked) =>
@@ -145,6 +147,20 @@ namespace ABLC
                         }
                     }
                 };
+            }
+        }
+
+
+        /// <summary>
+        /// Adds/updates the 'control levels' checkbox text according to the current language.
+        /// </summary>
+        internal static void SetText()
+        {
+            // Don't do anything if it isn't created yet.
+            if (controlBuildingCheckbox != null)
+            {
+                // Set 'control levels' checkbox text.
+                controlBuildingCheckbox.text = Translations.Translate("ABLC_CTRL");
             }
         }
     }
