@@ -201,7 +201,7 @@ namespace ABLC
 
             // If we got here, then we didn't find the assembly.
             Debugging.Message("assembly path not found");
-            throw new FileNotFoundException("RICO Revisited: assembly path not found!");
+            throw new FileNotFoundException("Advanced Building Level Control: assembly path not found!");
         }
     }
 }

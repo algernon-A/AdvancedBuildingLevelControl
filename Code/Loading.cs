@@ -3,7 +3,6 @@
 
 namespace ABLC
 {
-
     /// <summary>
     /// Main loading class: the mod runs from here.
     /// </summary>

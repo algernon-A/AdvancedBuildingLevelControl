@@ -85,6 +85,9 @@ namespace ABLC
         }
 
 
+        /// <summary>
+        /// Adds the "Control levels" checkbox to private building info panels.
+        /// </summary>
         internal static void AddPanelCheckbox()
         {
             // Add button to access building details from building info panels, if it doesn't already exist.
