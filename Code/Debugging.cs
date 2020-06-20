@@ -32,12 +32,16 @@ namespace ABLC
             message.AppendLine("caught exception!");
             message.AppendLine("Exception:");
             message.AppendLine(exception.Message);
+            message.AppendLine(exception.Source);
+            message.AppendLine(exception.StackTrace);
 
             // Log inner exception as well, if there is one.
             if (exception.InnerException != null)
             {
                 message.AppendLine("Inner exception:");
                 message.AppendLine(exception.InnerException.Message);
+                message.AppendLine(exception.InnerException.Source);
+                message.AppendLine(exception.InnerException.StackTrace);
             }
 
             // Write to log.
