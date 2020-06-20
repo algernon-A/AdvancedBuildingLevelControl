@@ -68,7 +68,7 @@ namespace ABLC
             }
             catch (Exception e)
             {
-                Debug.LogException(e);
+                Debugging.LogException(e);
             }
         }
 
@@ -211,7 +211,7 @@ namespace ABLC
             }
             catch (Exception e)
             {
-                Debug.LogException(e);
+                Debugging.LogException(e);
             }
         }
 

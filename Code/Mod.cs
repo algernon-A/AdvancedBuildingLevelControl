@@ -9,8 +9,10 @@ namespace ABLC
     /// </summary>
     public class ABLCMod : IUserMod
     {
+        public static string ModName => "Garbage Bin Manager";
         public static string Version => "0.1";
-        public string Name => "Advanced Building Level Control " + Version;
+
+        public string Name => ModName + " " + Version;
         public string Description => Translations.Translate("ABLC_DESC");
 
 

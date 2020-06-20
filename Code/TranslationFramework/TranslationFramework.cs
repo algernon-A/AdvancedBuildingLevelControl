@@ -185,9 +185,9 @@ namespace ABLC
 
 
         /// <summary>
-        /// Returns the filepath of the ABLC assembly.
+        /// Returns the filepath of the mod assembly.
         /// </summary>
-        /// <returns>ABLC assembly filepath</returns>
+        /// <returns>Mod assembly filepath</returns>
         private string GetAssemblyPath()
         {
             // Get list of currently active plugins.
@@ -216,7 +216,7 @@ namespace ABLC
 
             // If we got here, then we didn't find the assembly.
             Debugging.Message("assembly path not found");
-            throw new FileNotFoundException("Advanced Building Level Control: assembly path not found!");
+            throw new FileNotFoundException(ABLCMod.ModName + ": assembly path not found!");
         }
     }
 }
