@@ -16,7 +16,7 @@ namespace ABLC
         /// <param name="message">Message to log</param>
         internal static void Message(string message)
         {
-            Debug.Log("Advanced Building Level Control: " + message + ".");
+            Debug.Log(ABLCMod.ModName + ": " + message + ".");
         }
 
 
