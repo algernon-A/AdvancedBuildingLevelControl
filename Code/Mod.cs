@@ -9,7 +9,7 @@ namespace ABLC
     /// </summary>
     public class ABLCMod : IUserMod
     {
-        public static string ModName => "Garbage Bin Manager";
+        public static string ModName => "Advanced Building Level Control";
         public static string Version => "0.1";
 
         public string Name => ModName + " " + Version;
@@ -37,6 +37,15 @@ namespace ABLC
             {
                 Patcher.UnpatchAll();
             }
+        }
+
+
+        /// <summary>
+        /// Called by the game when the mod options panel is setup.
+        /// </summary>
+        public void OnSettingsUI(UIHelperBase helper)
+        {
+            helper.AddDropdown("Choose language", Translations.LanguageList, 0, (value) => { Translations.SetIndex(value); });
         }
     }
 }
