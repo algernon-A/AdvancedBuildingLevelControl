@@ -9,5 +9,7 @@
     <Translation ID="ABLC_CAT_RES" String="住宅建築級別" />
     <Translation ID="ABLC_CAT_WRK" String="就職建築級別" />
     <Translation ID="ABLC_FORCE_UP" String="強制升級" />
+    <Translation ID="TRN_CHOICE" String="語言設置" />
+    <Translation ID="TRN_SYS" String="使用遊戲默認語言" />
   </Translations>
 </Language>
