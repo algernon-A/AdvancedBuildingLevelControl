@@ -1,3 +1,4 @@
 ﻿- Add mod options panel with manual translation selection option
 - Add zh translation by M.S.Referee
+- Add null check in OnBuildingReleased()
 - Standardise exception logging

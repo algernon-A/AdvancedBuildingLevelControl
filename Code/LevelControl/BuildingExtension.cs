@@ -36,8 +36,8 @@ namespace ABLC
         /// <param name="id">Building instance ID</param>
         public override void OnBuildingReleased(ushort id)
         {
-            // Check to see if our dictionary contains this building ID.
-            if (BuildingsABLC.levelRanges.ContainsKey(id))
+            // Check to see if our dictionary is ready, and if it contains this building ID.
+            if (BuildingsABLC.levelRanges != null && BuildingsABLC.levelRanges.ContainsKey(id))
             {
                 // It does; delete the entry.
                 BuildingsABLC.levelRanges.Remove(id);
