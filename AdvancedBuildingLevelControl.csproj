@@ -73,6 +73,7 @@
     <Compile Include="Code\Debugging.cs" />
     <Compile Include="Code\Mod.cs" />
     <Compile Include="Code\Serialization.cs" />
+    <Compile Include="Code\Settings\SettingsXML.cs" />
     <Compile Include="Code\TranslationFramework\TranslationFramework.cs" />
     <Compile Include="Code\TranslationFramework\TranslationXML.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

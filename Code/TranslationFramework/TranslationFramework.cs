@@ -26,21 +26,44 @@ namespace ABLC
         /// <returns>Translation (or key if translation failed)</returns>
         public static string Translate(string key) => Instance.Translate(key);
 
+        public static string Language
+        {
+            get
+            {
+                return Instance.Language;
+            }
+            set
+            {
+                Instance.SetLanguage(value);
+            }
+        }
+
 
         /// <summary>
         /// Static interface to instance's language list property.
         /// Returns an alphabetically-sorted (by unique name) string array of language display names, with an additional "system settings" item as the first item.
-        /// Useful for automatically populating drop-down language selection menus.
+        /// Useful for automatically populating drop-down language selection menus; works in conjunction with Index.
         /// </summary>
         public static string[] LanguageList => Instance.LanguageList;
 
 
         /// <summary>
-        /// Sets the current language to the provided index number (equals the index number of the language names list provied bye LanguageList).
-        /// Useful for automatically setting the language when selected from a drop-down language selection menus with item lists created by LanguageList.
+        /// The current language index number (equals the index number of the language names list provied bye LanguageList).
+        /// Useful for easy automatic drop-down language selection menus, working in conjunction with LanguageList:
+        /// Set to set the language to the equivalent LanguageList index.
+        /// Get to return the LanguageList index of the current languge.
         /// </summary>
-        /// <param name="index">Language index number (matches list from LanguageList)</param>
-        public static void SetIndex(int index) => Instance.SetLanguage(index);
+        public static int Index
+        {
+            get
+            {
+                return Instance.Index;
+            }
+            set
+            {
+                Instance.SetLanguage(value);
+            }
+        }
 
 
         /// <summary>
@@ -71,6 +94,13 @@ namespace ABLC
         private SortedList<string, Language> languages;
         private string defaultLanguage = "en";
         private int currentIndex = 0;
+        public int Index => currentIndex;
+
+
+        /// <summary>
+        /// Returns the current language code if one has specifically been set; otherwise, return "default".
+        /// </summary>
+        public string Language => currentIndex <= 0 ? "default" : currentLanguage.uniqueName;
 
 
         /// <summary>
@@ -85,7 +115,7 @@ namespace ABLC
                 List<string> readableNames = languages.Values.Select((language) => language.readableName).ToList();
 
                 // Insert system settings item at the start.
-                readableNames.Insert(0, "Use system setings");
+                readableNames.Insert(0, Translate("TRN_SYS"));
 
                 // Return out list as a string array.
                 return readableNames.ToArray();
@@ -155,6 +185,14 @@ namespace ABLC
 
 
         /// <summary>
+        /// Sets the current language to the provided language code.
+        /// If the key isn't in the list of loaded translations, then the system default is attempted instead.
+        /// </summary>
+        /// <param name="uniqueName">Language unique name (code)</param>
+        public void SetLanguage(string uniqueName) => SetLanguage(languages.IndexOfKey(uniqueName) + 1);
+
+
+        /// <summary>
         /// Sets the current language based on the supplied index number.
         /// If index number is invalid (negative or out-of-bounds) then the system language setting is tried instead.
         /// If even that fails, the default language is used.
@@ -162,10 +200,8 @@ namespace ABLC
         /// <param name="index">1-based language index number (zero or negative values will use system language settings instead)</param>
         public void SetLanguage(int index)
         {
-            Debugging.Message("before - currentindex: " + currentIndex + " index: " + index);
-
-            // Don't do anything if no languages have been loaded, or the LocaleManager isn't available.
-            if (languages != null && languages.Count > 0 && LocaleManager.exists)
+            // Don't do anything if no languages have been loaded.
+            if (languages != null && languages.Count > 0)
             {
                 // If we have a valid index number (greater than zero but within bounds), use that to get the language.
                 // Remember that we've effectively added an additional 'system' index at 0, so less-than-or-equals is needed.
@@ -179,15 +215,30 @@ namespace ABLC
                 }
                 else
                 {
-                    // Try to set current language, using fallback if null.
-                    currentLanguage = languages[LocaleManager.instance.language] ?? FallbackLanguage();
+                    // Try to set current language.
+                    try
+                    {
+                        currentLanguage = languages[LocaleManager.instance?.language];
+                    }
+                    catch
+                    {
+                        // Don't care.
+                        Debugging.Message("couldn't set current system language");
+                    }
+
+                    // If we didn't get a valid language, try to fall back.
+                    if (currentLanguage == null)
+                    {
+                        currentLanguage = FallbackLanguage();
+                    }
+
 
                     // We weren't given a valid index, so remove any stored index.
                     currentIndex = 0;
                 }
-            }
 
-            Debugging.Message("after - currentindex: " + currentIndex + " index: " + index + " current language " + currentLanguage.uniqueName);
+                Debugging.Message("setting language to " + currentLanguage?.uniqueName ?? "none");
+            }
 
             // Update 'control levels' checkbox text.
             BuildingPanelManager.SetText();
@@ -208,7 +259,14 @@ namespace ABLC
                 string newName = LocaleManager.instance.language.Substring(0, 2);
                 Debugging.Message("language " + LocaleManager.instance.language + " failed; trying " + newName);
 
-                fallbackLanguage = languages[newName];
+                try
+                {
+                    fallbackLanguage = languages[newName];
+                }
+                catch
+                {
+                    // Don't care.
+                }
             }
 
             // If we picked up a fallback language, return that; otherwise, return the default language.

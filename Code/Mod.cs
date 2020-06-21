@@ -1,4 +1,5 @@
 ﻿using ICities;
+using ColossalFramework.UI;
 using CitiesHarmony.API;
 
 
@@ -24,6 +25,9 @@ namespace ABLC
             // Apply Harmony patches via Cities Harmony.
             // Called here instead of OnCreated to allow the auto-downloader to do its work prior to launch.
             HarmonyHelper.DoOnHarmonyReady(() => Patcher.PatchAll());
+
+            // Load the settings file.
+            ABLCSettingsFile.LoadSettings();
         }
 
 
@@ -45,7 +49,9 @@ namespace ABLC
         /// </summary>
         public void OnSettingsUI(UIHelperBase helper)
         {
-            helper.AddDropdown("Choose language", Translations.LanguageList, 0, (value) => { Translations.SetIndex(value); });
+            UIDropDown languageDropDown = (UIDropDown)helper.AddDropdown(Translations.Translate("TRN_CHOICE"), Translations.LanguageList, Translations.Index, (value) => { Translations.Index = value; ABLCSettingsFile.SaveSettings();  });
+            languageDropDown.autoSize = false;
+            languageDropDown.width = 270f;
         }
     }
 }

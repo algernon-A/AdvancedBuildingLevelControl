@@ -9,5 +9,7 @@
     <Translation ID="ABLC_CAT_RES" String="Residential levels" />
     <Translation ID="ABLC_CAT_WRK" String="Workplace levels" />
     <Translation ID="ABLC_FORCE_UP" String="Trigger upgrade" />
+    <Translation ID="TRN_CHOICE" String="Set language" />
+    <Translation ID="TRN_SYS" String="Use system language" />
   </Translations>
 </Language>
