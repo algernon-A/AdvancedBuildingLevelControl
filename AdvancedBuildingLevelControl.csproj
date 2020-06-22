@@ -86,6 +86,7 @@
     <Content Include="Changelog.txt" />
     <Content Include="Images\PreviewImage.png" />
     <Content Include="Translations\en.xml" />
+    <Content Include="Translations\ru.xml" />
     <Content Include="Translations\zh.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -1,4 +1,5 @@
 ﻿- Add mod options panel with manual translation selection option
 - Add zh translation by M.S.Referee
+- Add ru translation by vitalii201
 - Add null check in OnBuildingReleased()
 - Standardise exception logging
