@@ -25,7 +25,7 @@ namespace ABLC
         /// </summary>
         internal static void Hook()
         {
-
+            // Get building info panel instance.
             UIComponent buildingInfoPanel = UIView.library.Get<ZonedBuildingWorldInfoPanel>(typeof(ZonedBuildingWorldInfoPanel).Name)?.component;
             if (buildingInfoPanel == null)
             {
@@ -33,6 +33,7 @@ namespace ABLC
             }
             else
             {
+                // Create/destroy our panel as and when the info panel is shown or hidd
                 buildingInfoPanel.eventVisibilityChanged += (control, isVisible) =>
                 {
                     if (isVisible)
@@ -171,9 +172,12 @@ namespace ABLC
     /// </summary>
     public class ABLCBuildingPanel : ABLCPanel
     {
-        // Constants
-        protected override float panelHeight => 180f;
+        // Constants.
+        protected override float panelHeight => 220f;
 
+        // Downgrade target level.
+        protected byte downgradeLevel; 
+        
 
         /// <summary>
         /// Adds custom settings for the current building and shows the panel.
@@ -233,7 +237,6 @@ namespace ABLC
         /// </summary>
         public void BuildingChanged()
         {
-
             // Update selected building ID.
             targetID = WorldInfoPanel.GetCurrentInstanceID().Building;
 
@@ -288,10 +291,22 @@ namespace ABLC
                 Hide();
             }
 
+            // Check to see if the building can be downgraded one level.
+            downgradeLevel = (byte)(Singleton<BuildingManager>.instance.m_buildings.m_buffer[targetID].m_level - 1);
+            if (LevelUtils.GetDowngradeInfo(targetID, downgradeLevel))
+            {
+                // Nope - disable downgrade button.
+                downgradeButton.enabled = false;
+            }
+            else
+            {
+                // Yep - enable downgrade button.
+                downgradeButton.enabled = true;
+            }
+
             // All done: re-enable events.
             disableEvents = false;
         }
-
 
 
         /// <summary>
@@ -302,8 +317,6 @@ namespace ABLC
             try
             {
                 base.Setup(parentTransform);
-
-
 
                 // Set initial building.
                 BuildingChanged();
@@ -341,11 +354,19 @@ namespace ABLC
                     }
                 };
 
-                applyButton.eventClick += (control, clickEvent) =>
+                upgradeButton.eventClick += (control, clickEvent) =>
                 {
                     Singleton<SimulationManager>.instance.AddAction(() =>
                     {
                         ((Action<ushort>)LevelUtils.ForceLevelUp).Invoke(targetID);
+                    });
+                };
+
+                downgradeButton.eventClick += (control, clickEvent) =>
+                {
+                    Singleton<SimulationManager>.instance.AddAction(() =>
+                    {
+                        ((Action<ushort, byte>)LevelUtils.ForceLevelDown).Invoke(targetID, downgradeLevel);
                     });
                 };
 

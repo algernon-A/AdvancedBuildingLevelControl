@@ -6,6 +6,6 @@
     <Translation ID="ABLC_CTRL" String="Уровни контроля" />
     <Translation ID="ABLC_CAT_RES" String="Жилые уровни" />
     <Translation ID="ABLC_CAT_WRK" String="Промышленные уровни" />
-    <Translation ID="ABLC_FORCE_UP" String="Запуск обновления" />
+    <Translation ID="ABLC_TRIG_UP" String="Запуск обновления" />
   </Translations>
 </Language>

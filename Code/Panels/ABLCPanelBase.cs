@@ -12,7 +12,7 @@ namespace ABLC
     {
         // Constants.
         protected const float margin = 5.0f;
-        protected virtual float panelHeight => 260f;
+        protected virtual float panelHeight => 300f;
 
         // Reference variables.
         protected ushort targetID;
@@ -24,7 +24,8 @@ namespace ABLC
         protected UILabel nameLabel;
         protected UIDropDown minLevelDropDown;
         protected UIDropDown maxLevelDropDown;
-        protected UIButton applyButton;
+        protected UIButton upgradeButton;
+        protected UIButton downgradeButton;
 
 
         /// <summary>
@@ -62,7 +63,10 @@ namespace ABLC
                 maxLevelDropDown.items = new string[] { "1", "2", "3", "4", "5" };
 
                 // Apply button.
-                applyButton = UIUtils.CreateButton(this, Translations.Translate("ABLC_FORCE_UP"), width: this.width - (margin * 2), xPos: margin, yPos: panelHeight - 40f);
+                upgradeButton = UIUtils.CreateButton(this, Translations.Translate("ABLC_TRIG_UP"), width: this.width - (margin * 2), xPos: margin, yPos: panelHeight - 80f);
+
+                // Add 'downgrade' button.
+                downgradeButton = UIUtils.CreateButton(this, Translations.Translate("ABLC_TRIG_DWN"), width: this.width - (margin * 2), xPos: margin, yPos: panelHeight - 40f);
             }
             catch (Exception e)
             {

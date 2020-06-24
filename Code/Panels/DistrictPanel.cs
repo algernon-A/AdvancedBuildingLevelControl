@@ -203,9 +203,14 @@ namespace ABLC
                     }
                 };
 
-                applyButton.eventClick += (control, clickEvent) =>
+                upgradeButton.eventClick += (control, clickEvent) =>
                 {
                     UpgradeDistrict(targetID);
+                };
+
+                downgradeButton.eventClick += (control, clickEvent) =>
+                {
+                    DowngradeDistrict(targetID);
                 };
 
             }
@@ -217,9 +222,9 @@ namespace ABLC
 
 
         /// <summary>
-        /// Forces an upgrade all buildings in the given district less than the district's specified minimum.
+        /// Queues an upgrade for all buildings in the given district with levels less than the district's specified minimum.
         /// </summary>
-        /// <param name="districtID"></param>
+        /// <param name="districtID">Target district</param>
         public void UpgradeDistrict(ushort districtID)
         {
             // Instances and arrays.
@@ -241,10 +246,50 @@ namespace ABLC
                             // It needs to be upgraded; store copy of current index for action queue.
                             ushort buildingID = i;
 
-                            // Force upgrade.
+                            // Queue upgrade.
                             Singleton<SimulationManager>.instance.AddAction(() =>
                             {
                                 ((Action<ushort>)LevelUtils.ForceLevelUp).Invoke(buildingID);
+                            });
+                        }
+                    }
+                }
+            }
+        }
+
+
+        /// <summary>
+        /// Queues an upgrade for all buildings in the given district will levels higher than the district's specified maximum.
+        /// </summary>
+        /// <param name="districtID">Target district</param>
+        public void DowngradeDistrict(ushort districtID)
+        {
+            // Instances and arrays.
+            Array16<Building> buildings = Singleton<BuildingManager>.instance.m_buildings;
+            DistrictManager districtManager = Singleton<DistrictManager>.instance;
+
+            // Iterate through all buildings in map.
+            for (ushort i = 0; i < buildings.m_size; ++i)
+            {
+                // Skip non-existent buildings.
+                if (buildings.m_buffer[i].m_flags != Building.Flags.None)
+                {
+                    // Building exists; get its district and see if it matches the target district.
+                    if (districtManager.GetDistrict(buildings.m_buffer[i].m_position) == districtID)
+                    {
+                        // It's in our district; get the relevant maximum level.
+                        byte maxLevel = (buildings.m_buffer[i].Info?.GetService() == ItemClass.Service.Residential ? DistrictsABLC.maxResLevel[districtID] : DistrictsABLC.maxWorkLevel[districtID]);
+
+                        // Check if building level is greater than our maximum.
+                        if (buildings.m_buffer[i].m_level > maxLevel)
+                        {
+                            // It needs to be upgraded; store copy of current index for action queue.
+                            ushort buildingID = i;
+
+                            // Queue downgrade.
+                            Singleton<SimulationManager>.instance.AddAction(() =>
+                            {
+                                ((Action<ushort, byte>)LevelUtils.ForceLevelDown).Invoke(buildingID, maxLevel);
                             });
                         }
                     }
