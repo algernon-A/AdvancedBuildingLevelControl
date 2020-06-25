@@ -293,7 +293,7 @@ namespace ABLC
 
             // Check to see if the building can be downgraded one level.
             downgradeLevel = (byte)(Singleton<BuildingManager>.instance.m_buildings.m_buffer[targetID].m_level - 1);
-            if (LevelUtils.GetDowngradeInfo(targetID, downgradeLevel))
+            if (LevelUtils.GetDowngradeInfo(targetID, downgradeLevel) == null)
             {
                 // Nope - disable downgrade button.
                 downgradeButton.enabled = false;
