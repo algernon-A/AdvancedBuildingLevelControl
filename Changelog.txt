@@ -1,4 +1,6 @@
-﻿- Add building downgrade ability
+﻿Version 0.2 -
+
+- Add building downgrade ability
 - Add mod options panel with manual translation selection option
 - Add zh translation by M.S.Referee
 - Add ru translation by vitalii201
