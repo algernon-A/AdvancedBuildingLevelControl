@@ -2,10 +2,15 @@
 <Language UniqueName="ru" ReadableName="Русский">
   <Translations>
     <Translation ID="ABLC_DESC" String="В РАЗРАБОТКЕ: позволяет контролировать уровни зданий в районах и/или независимо." />
-    <Translation ID="ABLC_NAME" String="Контроль уровня" />
-    <Translation ID="ABLC_CTRL" String="Уровни контроля" />
+    <Translation ID="ABLC_NAME" String="Уровни контроля" />
+    <Translation ID="ABLC_CTRL" String="Контроль уровней" />
+    <Translation ID="ABLC_LVL_MIN" String="Мин. уровень" />
+    <Translation ID="ABLC_LVL_MAX" String="Макс. уровень" />
     <Translation ID="ABLC_CAT_RES" String="Жилые уровни" />
     <Translation ID="ABLC_CAT_WRK" String="Промышленные уровни" />
     <Translation ID="ABLC_TRIG_UP" String="Запуск обновления" />
+    <Translation ID="ABLC_TRIG_DWN" String="Принудит. понижение" />
+    <Translation ID="TRN_CHOICE" String="Установить язык" />
+    <Translation ID="TRN_SYS" String="Использ. системный" />
   </Translations>
 </Language>
