@@ -18,7 +18,7 @@ namespace ABLC
         [XmlAttribute("Version")]
         public int version = 0;
 
-        // Global settings.
+        // Language.
         [XmlElement("Language")]
         public string language
         {
