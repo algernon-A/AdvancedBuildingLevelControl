@@ -1,4 +1,7 @@
-﻿Version 0.2 -
+﻿- Update translation framework
+
+
+Version 0.2 -
 
 - Add building downgrade ability
 - Add mod options panel with manual translation selection option
