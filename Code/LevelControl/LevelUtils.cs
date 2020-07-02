@@ -38,7 +38,11 @@ namespace ABLC
             }
             else
             {
-                buildingAI.StartUpgrading(buildingID, ref Singleton<BuildingManager>.instance.m_buildings.m_buffer[buildingID]);
+                // Only upgrade if we've got a valid upgrade target.
+                if (buildingAI.GetUpgradeInfo(buildingID, ref Singleton<BuildingManager>.instance.m_buildings.m_buffer[buildingID]) != null)
+                {
+                    buildingAI.StartUpgrading(buildingID, ref Singleton<BuildingManager>.instance.m_buildings.m_buffer[buildingID]);
+                }
             }
         }
 

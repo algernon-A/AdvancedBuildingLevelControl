@@ -1,4 +1,6 @@
-﻿- Update translation framework
+﻿- Don't try to upgrade when there's no valid upgrade target
+- Don't force downgrade Ploppable RICO Revisited ploppables
+- Update translation framework
 
 
 Version 0.2 -
