@@ -291,6 +291,18 @@ namespace ABLC
                 Hide();
             }
 
+            // Check to see if the building has a valid upgrade target.
+            if ((Singleton<BuildingManager>.instance.m_buildings.m_buffer[targetID].Info.GetAI() as PrivateBuildingAI)?.GetUpgradeInfo(targetID, ref Singleton<BuildingManager>.instance.m_buildings.m_buffer[targetID]) == null)
+            {
+                // Nope - disable upgrade button.
+                upgradeButton.enabled = false;
+            }
+            else
+            {
+                // Yep - enable upgrade button.
+                upgradeButton.enabled = true;
+            }
+
             // Check to see if the building can be downgraded one level.
             downgradeLevel = (byte)(Singleton<BuildingManager>.instance.m_buildings.m_buffer[targetID].m_level - 1);
             if (LevelUtils.GetDowngradeInfo(targetID, downgradeLevel) == null)

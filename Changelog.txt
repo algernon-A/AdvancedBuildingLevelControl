@@ -1,4 +1,5 @@
-﻿- Don't try to upgrade when there's no valid upgrade target
+﻿- Hide upgrade button when the building can't be upgraded
+- Don't try to upgrade when there's no valid upgrade target
 - Don't force downgrade Ploppable RICO Revisited ploppables
 - Update translation framework
 
