@@ -291,16 +291,29 @@ namespace ABLC
                 Hide();
             }
 
+            // Initialise panel with correct level settings.
+            UpdatePanel();
+
+            // All done: re-enable events.
+            disableEvents = false;
+        }
+
+        
+        /// <summary>
+        /// Updates the panel according to building's current level settings.
+        /// </summary>
+        public void UpdatePanel()
+        {
             // Check to see if the building has a valid upgrade target.
             if ((Singleton<BuildingManager>.instance.m_buildings.m_buffer[targetID].Info.GetAI() as PrivateBuildingAI)?.GetUpgradeInfo(targetID, ref Singleton<BuildingManager>.instance.m_buildings.m_buffer[targetID]) == null)
             {
                 // Nope - disable upgrade button.
-                upgradeButton.enabled = false;
+                upgradeButton.Disable();
             }
             else
             {
                 // Yep - enable upgrade button.
-                upgradeButton.enabled = true;
+                upgradeButton.Enable();
             }
 
             // Check to see if the building can be downgraded one level.
@@ -308,16 +321,13 @@ namespace ABLC
             if (LevelUtils.GetDowngradeInfo(targetID, downgradeLevel) == null)
             {
                 // Nope - disable downgrade button.
-                downgradeButton.enabled = false;
+                downgradeButton.Disable();
             }
             else
             {
                 // Yep - enable downgrade button.
-                downgradeButton.enabled = true;
+                downgradeButton.Enable();
             }
-
-            // All done: re-enable events.
-            disableEvents = false;
         }
 
 
@@ -371,6 +381,9 @@ namespace ABLC
                     Singleton<SimulationManager>.instance.AddAction(() =>
                     {
                         ((Action<ushort>)LevelUtils.ForceLevelUp).Invoke(targetID);
+
+                        // Update the panel once done.
+                        UpdatePanel();
                     });
                 };
 
@@ -379,6 +392,9 @@ namespace ABLC
                     Singleton<SimulationManager>.instance.AddAction(() =>
                     {
                         ((Action<ushort, byte>)LevelUtils.ForceLevelDown).Invoke(targetID, downgradeLevel);
+
+                        // Update the panel once done.
+                        UpdatePanel();
                     });
                 };
 

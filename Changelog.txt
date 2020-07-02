@@ -1,4 +1,5 @@
-﻿- Hide upgrade button when the building can't be upgraded
+﻿- Disable (not hide) building action buttons when the action can't be triggered
+- Building panel now automatically updates when action is completed
 - Don't try to upgrade when there's no valid upgrade target
 - Don't force downgrade Ploppable RICO Revisited ploppables
 - Update translation framework
