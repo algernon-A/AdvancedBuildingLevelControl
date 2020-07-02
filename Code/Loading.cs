@@ -22,6 +22,9 @@ namespace ABLC
                 return;
             }
 
+            // Check for Ploppable RICO Revisited.
+            ModUtils.RICOReflection();
+
             // Hook info panel events.
             DistrictPanelManager.Hook();
             BuildingPanelManager.Hook();

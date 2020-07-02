@@ -95,7 +95,13 @@ namespace ABLC
             {
                 return null;
             }
-            
+
+            // Check to see if this building is controlled by Ploppable RICO Revisited; if it is, we don't downgrade.
+            if (ModUtils.CheckRICOPloppable(thisBuilding.Info))
+            {
+                return null;
+            }
+
             // Get our district and its style (for finding suitable random downgrade building).
             byte district = Singleton<DistrictManager>.instance.GetDistrict(thisBuilding.m_position);
             ushort style = Singleton<DistrictManager>.instance.m_districts.m_buffer[district].m_Style;

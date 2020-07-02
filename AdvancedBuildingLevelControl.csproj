@@ -63,6 +63,7 @@
     <Compile Include="Code\LevelControl\BuildingExtension.cs" />
     <Compile Include="Code\LevelControl\LevelUtils.cs" />
     <Compile Include="Code\Loading.cs" />
+    <Compile Include="Code\ModUtils.cs" />
     <Compile Include="Code\Panels\BuildingPanel.cs" />
     <Compile Include="Code\Panels\DistrictPanel.cs" />
     <Compile Include="Code\Panels\ABLCPanelBase.cs" />
