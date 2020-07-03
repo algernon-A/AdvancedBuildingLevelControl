@@ -30,8 +30,6 @@ namespace ABLC
                 {
                     Debugging.Message("deploying Harmony patches");
 
-                    Harmony.DEBUG = true;
-
                     // Apply all annotated patches and update flag.
                     Harmony harmonyInstance = new Harmony(harmonyID);
                     harmonyInstance.PatchAll();

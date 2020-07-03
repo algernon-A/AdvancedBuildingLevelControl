@@ -160,12 +160,6 @@ namespace ABLC
                 return null;
             }
 
-            // Check to see if this building is controlled by Ploppable RICO Revisited; if it is, we don't downgrade.
-            if (ModUtils.CheckRICOPloppable(thisBuilding.Info))
-            {
-                return null;
-            }
-
             // Check to see if this is an historical building; if so, we just return the original building info.
             if (((BuildingAI)thisBuilding.Info.GetAI()).IsHistorical(buildingID, ref Singleton<BuildingManager>.instance.m_buildings.m_buffer[buildingID], out bool canSet))
             {
