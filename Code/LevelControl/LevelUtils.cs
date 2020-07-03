@@ -167,7 +167,7 @@ namespace ABLC
             }
 
             // Get our district and its style (for finding suitable random downgrade building).
-                byte district = Singleton<DistrictManager>.instance.GetDistrict(thisBuilding.m_position);
+            byte district = Singleton<DistrictManager>.instance.GetDistrict(thisBuilding.m_position);
             ushort style = Singleton<DistrictManager>.instance.m_districts.m_buffer[district].m_Style;
 
             // Get downgrade building target, if we can.
@@ -194,8 +194,8 @@ namespace ABLC
                 return false;
             }
 
-            // Ploppable RICO Revisited check; RICO buildings can be upgraded (if they're below max level, which we've already checked for above).
-            if (ModUtils.CheckRICOPloppable(thisBuilding.Info))
+            // 'Make historical' and Ploppable RICO Revisited check; these buildings can be upgraded (if they're below max level, which we've already checked for above).
+            if (((BuildingAI)thisBuilding.Info.GetAI()).IsHistorical(buildingID, ref Singleton<BuildingManager>.instance.m_buildings.m_buffer[buildingID], out bool canSet) || ModUtils.CheckRICOPloppable(thisBuilding.Info))
             {
                 return true;
             }

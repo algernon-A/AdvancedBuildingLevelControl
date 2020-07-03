@@ -69,6 +69,7 @@
     <Compile Include="Code\Panels\ABLCPanelBase.cs" />
     <Compile Include="Code\Panels\UIUtils.cs" />
     <Compile Include="Code\Patches\BuildingUpgraded.cs" />
+    <Compile Include="Code\Patches\SetHistorical.cs" />
     <Compile Include="Code\Patches\ReversePatches.cs" />
     <Compile Include="Code\Patches\WorldInfoPanel.cs" />
     <Compile Include="Code\Patches\Patcher.cs" />

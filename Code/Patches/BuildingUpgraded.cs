@@ -10,7 +10,7 @@ namespace ABLC
 	/// </summary>
 	[HarmonyPatch(typeof(PrivateBuildingAI))]
 	[HarmonyPatch("BuildingUpgraded")]
-	class BuildingUpgradedPatch
+	internal static class BuildingUpgradedPatch
     {
 		/// <summary>
 		/// Harmony Postfix patch to keep a building upgrading until it reaches the minimum controlled level.
