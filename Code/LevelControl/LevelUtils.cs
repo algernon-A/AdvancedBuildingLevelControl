@@ -15,7 +15,7 @@ namespace ABLC
         /// Forces a building to upgrade.
         /// </summary>
         /// <param name="buildingID">Building instance ID</param>
-        public static void ForceLevelUp(ushort buildingID)
+        public static void TriggerLevelUp(ushort buildingID)
         {
             // Don't force upgrade if building is already upgrading.
             if (Singleton<BuildingManager>.instance.m_buildings.m_buffer[buildingID].m_flags.IsFlagSet(Building.Flags.Upgrading))
@@ -48,32 +48,91 @@ namespace ABLC
 
 
         /// <summary>
+        /// Upgrades the selected building one level, if possible.
+        /// </summary>
+        /// <param name="buildingID">Building instance ID</param>
+        public static void ForceLevelUp(ushort buildingID)
+        {
+            // BuildingInfo to upgrade to, if this building isn't historical.
+            BuildingInfo upgradeInfo = null;
+
+
+            // Get an instance reference.
+            BuildingManager buildingManager = Singleton<BuildingManager>.instance;
+
+            // Get building AI reference.
+            PrivateBuildingAI buildingAI = Singleton<BuildingManager>.instance.m_buildings.m_buffer[buildingID].Info?.GetAI() as PrivateBuildingAI;
+
+            // Check to see if this is historical or not.
+            bool isHistorical = buildingAI.IsHistorical(buildingID, ref Singleton<BuildingManager>.instance.m_buildings.m_buffer[buildingID], out bool canSet);
+
+            // Get upgrade building target if needed.
+            if (!isHistorical)
+            {
+                upgradeInfo = buildingAI.GetUpgradeInfo(buildingID, ref Singleton<BuildingManager>.instance.m_buildings.m_buffer[buildingID]);
+            }
+
+            // If we have a valid downgrade target, proceed.
+            if (isHistorical || upgradeInfo != null)
+            {
+                // Apply minimum level to our building and cancel all level-up progress.
+                ++buildingManager.m_buildings.m_buffer[buildingID].m_level;
+                buildingManager.m_buildings.m_buffer[buildingID].m_levelUpProgress = 0;
+
+                // Apply our upgrade targe if not historical.
+                if (!isHistorical)
+                {
+                    buildingManager.UpdateBuildingInfo(buildingID, upgradeInfo);
+                }
+
+                // Post-upgrade processing to update instance values.
+                ((BuildingAI)Singleton<BuildingManager>.instance.m_buildings.m_buffer[buildingID].Info.GetAI()).BuildingUpgraded(buildingID, ref buildingManager.m_buildings.m_buffer[buildingID]);
+            }
+        }
+
+
+        /// <summary>
         /// Downgrades the selected building to the given level, if possible.
         /// </summary>
         /// <param name="buildingID">Building instance ID</param>
         /// <param name="targetLevel">Level to downgrade to</param>
         public static void ForceLevelDown(ushort buildingID, byte targetLevel)
         {
+            // BuildingInfo to upgrade to, if this building isn't historical.
+            BuildingInfo downgradeInfo = null;
+
+
             // Get an instance reference.
             BuildingManager buildingManager = Singleton<BuildingManager>.instance;
 
-            // Get downgrade building target.
-            BuildingInfo downgradeInfo = GetDowngradeInfo(buildingID, targetLevel);
+            // Get building AI reference.
+            PrivateBuildingAI buildingAI = Singleton<BuildingManager>.instance.m_buildings.m_buffer[buildingID].Info?.GetAI() as PrivateBuildingAI;
+
+            // Check to see if this is historical or not.
+            bool isHistorical = buildingAI.IsHistorical(buildingID, ref Singleton<BuildingManager>.instance.m_buildings.m_buffer[buildingID], out bool canSet);
+
+            // Get downgrade building target if needed.
+            if (!isHistorical)
+            {
+                // Get downgrade building target.
+                downgradeInfo = GetDowngradeInfo(buildingID, targetLevel);
+            }
 
             // If we have a valid downgrade target, proceed.
-            if (downgradeInfo != null)
+            if (isHistorical || downgradeInfo != null)
             {
-                Debugging.Message("downgrading building " + buildingID + " from " + buildingManager.m_buildings.m_buffer[buildingID].Info.name + " to " + downgradeInfo.name + ": new level " + targetLevel);
-
-                // Apply minimum level to our building and cancel all level-up progress.
+                // Apply target level to our building and cancel all level-up progress.
                 buildingManager.m_buildings.m_buffer[buildingID].m_level = targetLevel;
                 buildingManager.m_buildings.m_buffer[buildingID].m_levelUpProgress = 0;
 
-                // Apply our downgrade target.
-                buildingManager.UpdateBuildingInfo(buildingID, downgradeInfo);
+                // Apply our downgrade target if not historical
+                if (!isHistorical)
+                {
+                    buildingManager.UpdateBuildingInfo(buildingID, downgradeInfo);
+                }
 
                 // Post-downgrade processing to update instance values.
-                downgradeInfo.m_buildingAI.BuildingUpgraded(buildingID, ref buildingManager.m_buildings.m_buffer[buildingID]);
+                ((BuildingAI)Singleton<BuildingManager>.instance.m_buildings.m_buffer[buildingID].Info.GetAI()).BuildingUpgraded(buildingID, ref buildingManager.m_buildings.m_buffer[buildingID]);
             }
         }
 
@@ -106,8 +165,14 @@ namespace ABLC
                 return null;
             }
 
+            // Check to see if this is an historical building; if so, we just return the original building info.
+            if (((BuildingAI)thisBuilding.Info.GetAI()).IsHistorical(buildingID, ref Singleton<BuildingManager>.instance.m_buildings.m_buffer[buildingID], out bool canSet))
+            {
+                return thisBuilding.Info;
+            }
+
             // Get our district and its style (for finding suitable random downgrade building).
-            byte district = Singleton<DistrictManager>.instance.GetDistrict(thisBuilding.m_position);
+                byte district = Singleton<DistrictManager>.instance.GetDistrict(thisBuilding.m_position);
             ushort style = Singleton<DistrictManager>.instance.m_districts.m_buffer[district].m_Style;
 
             // Get downgrade building target, if we can.

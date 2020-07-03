@@ -249,7 +249,7 @@ namespace ABLC
                             // Queue upgrade.
                             Singleton<SimulationManager>.instance.AddAction(() =>
                             {
-                                ((Action<ushort>)LevelUtils.ForceLevelUp).Invoke(buildingID);
+                                ((Action<ushort>)LevelUtils.TriggerLevelUp).Invoke(buildingID);
                             });
                         }
                     }
