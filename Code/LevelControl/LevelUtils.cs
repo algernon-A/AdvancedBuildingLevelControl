@@ -1,4 +1,5 @@
 ﻿using ColossalFramework;
+using ColossalFramework.Math;
 
 
 namespace ABLC
@@ -86,7 +87,7 @@ namespace ABLC
                 }
 
                 // Post-upgrade processing to update instance values.
-                ((BuildingAI)Singleton<BuildingManager>.instance.m_buildings.m_buffer[buildingID].Info.GetAI()).BuildingUpgraded(buildingID, ref buildingManager.m_buildings.m_buffer[buildingID]);
+                CustomBuildingUpgraded(buildingID, ref buildingManager.m_buildings.m_buffer[buildingID], buildingAI);
             }
         }
 
@@ -132,7 +133,7 @@ namespace ABLC
                 }
 
                 // Post-downgrade processing to update instance values.
-                ((BuildingAI)Singleton<BuildingManager>.instance.m_buildings.m_buffer[buildingID].Info.GetAI()).BuildingUpgraded(buildingID, ref buildingManager.m_buildings.m_buffer[buildingID]);
+                CustomBuildingUpgraded(buildingID, ref buildingManager.m_buildings.m_buffer[buildingID], buildingAI);
             }
         }
 
@@ -177,6 +178,23 @@ namespace ABLC
 
             // Get downgrade building target, if we can.
             return buildingManager.GetRandomBuildingInfo(ref Singleton<SimulationManager>.instance.m_randomizer, thisBuilding.Info.GetService(), thisBuilding.Info.GetSubService(), (ItemClass.Level)targetLevel, thisBuilding.Width, thisBuilding.Length, thisBuilding.Info.m_zoningMode, style);
+        }
+
+
+        /// <summary>
+        /// Custom implementation of PrivateBuildingAI.BuildingUpgraded that takes into account that our levels can be upgraded OR downgraded.
+        /// </summary>
+        /// <param name="buildingID"></param>
+        /// <param name="data"></param>
+        /// <param name="buildingAI"></param>
+        private static void CustomBuildingUpgraded(ushort buildingID, ref Building data, PrivateBuildingAI buildingAI)
+        {
+            buildingAI.CalculateWorkplaceCount((ItemClass.Level)data.m_level, new Randomizer(buildingID), data.Width, data.Length, out int level, out int level2, out int level3, out int level4);
+            buildingAI.AdjustWorkplaceCount(buildingID, ref data, ref level, ref level2, ref level3, ref level4);
+            int workCount = level + level2 + level3 + level4;
+            int homeCount = buildingAI.CalculateHomeCount((ItemClass.Level)data.m_level, new Randomizer(buildingID), data.Width, data.Length);
+            int visitCount = buildingAI.CalculateVisitplaceCount((ItemClass.Level)data.m_level, new Randomizer(buildingID), data.Width, data.Length);
+            ReversePatches.EnsureCitizenUnits(buildingAI, buildingID, ref data, homeCount, workCount, visitCount, 0);
         }
     }
 }
