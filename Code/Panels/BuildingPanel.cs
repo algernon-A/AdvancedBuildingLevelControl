@@ -304,16 +304,16 @@ namespace ABLC
         /// </summary>
         public void UpdatePanel()
         {
-            // Check to see if the building has a valid upgrade target.
-            if ((Singleton<BuildingManager>.instance.m_buildings.m_buffer[targetID].Info.GetAI() as PrivateBuildingAI)?.GetUpgradeInfo(targetID, ref Singleton<BuildingManager>.instance.m_buildings.m_buffer[targetID]) == null)
-            {
-                // Nope - disable upgrade button.
-                upgradeButton.Disable();
-            }
-            else
+            // Check to see if the building can upgrade.
+            if (LevelUtils.CanBuildingUpgrade(targetID))
             {
                 // Yep - enable upgrade button.
                 upgradeButton.Enable();
+            }
+            else
+            {
+                // Nope - disable upgrade button.
+                upgradeButton.Disable();
             }
 
             // Check to see if the building can be downgraded one level.

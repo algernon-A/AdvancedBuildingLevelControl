@@ -176,6 +176,43 @@ namespace ABLC
 
 
         /// <summary>
+        /// Calculates whether or not this building can upgrade.
+        /// </summary>
+        /// <param name="buildingID">Building instance ID</param>
+        /// <returns>True if the building can upgrade, false otherwise</returns>
+        public static bool CanBuildingUpgrade(ushort buildingID)
+        {
+            // Get an instance reference.
+            BuildingManager buildingManager = Singleton<BuildingManager>.instance;
+
+            // Note this is a struct, not a class, so we don't write back to it, but it's handy for reads.
+            Building thisBuilding = buildingManager.m_buildings.m_buffer[buildingID];
+
+            // Baseic level check - note GetMaxLevel is 1-based (visible level), m_level is zero-based, so -1 is required.
+            if (thisBuilding.m_level >= (GetMaxLevel(buildingID) - 1))
+            {
+                return false;
+            }
+
+            // Ploppable RICO Revisited check; RICO buildings can be upgraded (if they're below max level, which we've already checked for above).
+            if (ModUtils.CheckRICOPloppable(thisBuilding.Info))
+            {
+                return true;
+            }
+
+            // Generic growable - see if there's a valid upgrade target.
+            BuildingInfo upgradeInfo = ((BuildingAI)thisBuilding.Info.GetAI()).GetUpgradeInfo(buildingID, ref Singleton<BuildingManager>.instance.m_buildings.m_buffer[buildingID]);
+            if (upgradeInfo != null)
+            {
+                return true;
+            }
+
+            // If we got here, we've failed all checks.  Exit.
+            return false;
+        }
+
+
+        /// <summary>
         /// Custom implementation of PrivateBuildingAI.BuildingUpgraded that takes into account that our levels can be upgraded OR downgraded.
         /// </summary>
         /// <param name="buildingID"></param>
