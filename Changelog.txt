@@ -1,6 +1,7 @@
 ﻿- Add proper 'Force Level Up' (not just politely suggesting that the game might possibly consider levelling up at some point, maybe?)
 - Observe 'make historical' setting for both upgrading and downgrading
 - Can now downgrade below prefab minimum level
+- Upgrading/downgrading above/below set max/min levels now updates that max/min accordingly
 - Disable (not hide) building action buttons when the action can't be triggered
 - Building panel now automatically updates when action is completed
 - Don't try to upgrade when there's no valid upgrade target

@@ -378,24 +378,34 @@ namespace ABLC
 
                 upgradeButton.eventClick += (control, clickEvent) =>
                 {
-                    Singleton<SimulationManager>.instance.AddAction(() =>
-                    {
-                        ((Action<ushort>)LevelUtils.ForceLevelUp).Invoke(targetID);
+                    LevelUtils.ForceLevelUp(targetID);
 
-                        // Update the panel once done.
-                        UpdatePanel();
-                    });
+                    // Check to see if we should increase this buildings maximum level.
+                    byte newLevel = Singleton<BuildingManager>.instance.m_buildings.m_buffer[targetID].m_level;
+                    if (BuildingsABLC.levelRanges.ContainsKey(targetID) && BuildingsABLC.levelRanges[targetID].maxLevel < newLevel)
+                    {
+                        //BuildingsABLC.levelRanges[targetID].maxLevel = newLevel;
+                        maxLevelDropDown.selectedIndex = newLevel;
+                    }
+
+                    // Update the panel once done.
+                    UpdatePanel();
                 };
 
                 downgradeButton.eventClick += (control, clickEvent) =>
                 {
-                    Singleton<SimulationManager>.instance.AddAction(() =>
-                    {
-                        ((Action<ushort, byte>)LevelUtils.ForceLevelDown).Invoke(targetID, downgradeLevel);
+                    LevelUtils.ForceLevelDown(targetID, downgradeLevel);
 
-                        // Update the panel once done.
-                        UpdatePanel();
-                    });
+                    // Check to see if we should increase this buildings maximum level.
+                    byte newLevel = Singleton<BuildingManager>.instance.m_buildings.m_buffer[targetID].m_level;
+                    if (BuildingsABLC.levelRanges.ContainsKey(targetID) && BuildingsABLC.levelRanges[targetID].minLevel > newLevel)
+                    {
+                        //BuildingsABLC.levelRanges[targetID].minLevel = newLevel;
+                        minLevelDropDown.selectedIndex = newLevel;
+                    }
+
+                    // Update the panel once done.
+                    UpdatePanel();
                 };
 
             }
