@@ -122,9 +122,6 @@ namespace ABLC
             // UI update code goes here.
 
             // TOOO:  Add dynamic UI update.
-
-            // Update 'control levels' checkbox text.
-            BuildingPanelManager.SetText();
         }
 
 
