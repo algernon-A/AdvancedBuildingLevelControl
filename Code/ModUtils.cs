@@ -85,9 +85,9 @@ namespace ABLC
             {
                 foreach (Assembly assembly in plugin.GetAssemblies())
                 {
-                    if (assembly.GetName().Name.Equals("ploppablerico"))
+                    if (assembly.GetName().Name.Equals("ploppablerico") && plugin.isEnabled)
                     {
-                        // Found ploppablerico.dll; try to get its ModUtils class.
+                        // Found ploppablerico.dll that's part of an enabled plugin; try to get its ModUtils class.
                         Type ricoModUtils = assembly.GetType("PloppableRICO.Interfaces");
 
                         if (ricoModUtils != null)

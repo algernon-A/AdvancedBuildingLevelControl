@@ -203,14 +203,14 @@ namespace ABLC
                     }
                 };
 
-                upgradeButton.eventClick += (control, clickEvent) =>
+                upgradeButton.eventClicked += (control, clickEvent) =>
                 {
-                    UpgradeDistrict(targetID);
+                    LevelDistrict(targetID, true);
                 };
 
-                downgradeButton.eventClick += (control, clickEvent) =>
+                downgradeButton.eventClicked += (control, clickEvent) =>
                 {
-                    DowngradeDistrict(targetID);
+                    LevelDistrict(targetID, false);
                 };
 
             }
@@ -222,47 +222,11 @@ namespace ABLC
 
 
         /// <summary>
-        /// Queues an upgrade for all buildings in the given district with levels less than the district's specified minimum.
+        /// Attempts to force all buildings in a district to meet the district's minimum or maximum target level, as specified.
         /// </summary>
         /// <param name="districtID">Target district</param>
-        public void UpgradeDistrict(ushort districtID)
-        {
-            // Instances and arrays.
-            Array16<Building> buildings = Singleton<BuildingManager>.instance.m_buildings;
-            DistrictManager districtManager = Singleton<DistrictManager>.instance;
-
-            // Iterate through all buildings in map.
-            for (ushort i = 0; i < buildings.m_size; ++ i)
-            {
-                // Skip non-existent buildings.
-                if (buildings.m_buffer[i].m_flags != Building.Flags.None)
-                {
-                    // Building exists; get its district and see if it matches the target district.
-                    if (districtManager.GetDistrict(buildings.m_buffer[i].m_position) == districtID)
-                    {
-                        // It's in our district; check if its level is less than the relevant minimum.
-                        if (buildings.m_buffer[i].m_level < (buildings.m_buffer[i].Info?.GetService() == ItemClass.Service.Residential ? DistrictsABLC.minResLevel[districtID] : DistrictsABLC.minWorkLevel[districtID]))
-                        {
-                            // It needs to be upgraded; store copy of current index for action queue.
-                            ushort buildingID = i;
-
-                            // Queue upgrade.
-                            Singleton<SimulationManager>.instance.AddAction(() =>
-                            {
-                                ((Action<ushort>)LevelUtils.TriggerLevelUp).Invoke(buildingID);
-                            });
-                        }
-                    }
-                }
-            }
-        }
-
-
-        /// <summary>
-        /// Queues an upgrade for all buildings in the given district will levels higher than the district's specified maximum.
-        /// </summary>
-        /// <param name="districtID">Target district</param>
-        public void DowngradeDistrict(ushort districtID)
+        /// <param name="upgrade">True if we want to upgrade all buildings (below the minimum) to the minimum for this district, false if we want to downgrade (all buildings above the maximum) to the maximum</param>
+        public void LevelDistrict(ushort districtID, bool upgrade)
         {
             // Instances and arrays.
             Array16<Building> buildings = Singleton<BuildingManager>.instance.m_buildings;
@@ -271,26 +235,46 @@ namespace ABLC
             // Iterate through all buildings in map.
             for (ushort i = 0; i < buildings.m_size; ++i)
             {
-                // Skip non-existent buildings.
-                if (buildings.m_buffer[i].m_flags != Building.Flags.None)
+                // Get local reference.
+                Building thisBuilding = buildings.m_buffer[i];
+
+                // Skip non-existent buildings or non-Private AI buildings.
+                if (thisBuilding.m_flags != Building.Flags.None || !(thisBuilding.Info?.GetAI() is PrivateBuildingAI))
                 {
                     // Building exists; get its district and see if it matches the target district.
-                    if (districtManager.GetDistrict(buildings.m_buffer[i].m_position) == districtID)
+                    if (districtManager.GetDistrict(thisBuilding.m_position) == districtID)
                     {
-                        // It's in our district; get the relevant maximum level.
-                        byte maxLevel = (buildings.m_buffer[i].Info?.GetService() == ItemClass.Service.Residential ? DistrictsABLC.maxResLevel[districtID] : DistrictsABLC.maxWorkLevel[districtID]);
-
-                        // Check if building level is greater than our maximum.
-                        if (buildings.m_buffer[i].m_level > maxLevel)
+                        // It's in our district.
+                        // Are we upgrading or downgrading?
+                        if (upgrade)
                         {
-                            // It needs to be upgraded; store copy of current index for action queue.
-                            ushort buildingID = i;
+                            // Upgrading.
+                            byte minLevel = (thisBuilding.Info?.GetService() == ItemClass.Service.Residential ? DistrictsABLC.minResLevel[districtID] : DistrictsABLC.minWorkLevel[districtID]);
 
-                            // Queue downgrade.
-                            Singleton<SimulationManager>.instance.AddAction(() =>
+                            // It's in our district; check if its level is less than the relevant minimum.
+                            if (buildings.m_buffer[i].m_level < minLevel)
                             {
-                                ((Action<ushort, byte>)LevelUtils.ForceLevelDown).Invoke(buildingID, maxLevel);
-                            });
+                                // It needs to be upgraded; store copy of current index for action queue.
+                                ushort buildingID = i;
+
+                                // Upgrade.
+                                LevelUtils.ForceLevel(buildingID, minLevel);
+                            }
+                        }
+                        else
+                        {
+                            // Downgrading.
+                            byte maxLevel = (thisBuilding.Info?.GetService() == ItemClass.Service.Residential ? DistrictsABLC.maxResLevel[districtID] : DistrictsABLC.maxWorkLevel[districtID]);
+
+                            // It's in our district; check if its level is less than the relevant minimum.
+                            if (buildings.m_buffer[i].m_level > maxLevel)
+                            {
+                                // It needs to be upgraded; store copy of current index for action queue.
+                                ushort buildingID = i;
+
+                                // Upgrade.
+                                LevelUtils.ForceLevel(buildingID, maxLevel);
+                            }
                         }
                     }
                 }

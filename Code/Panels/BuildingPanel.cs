@@ -93,8 +93,8 @@ namespace ABLC
         // Constants.
         protected override float panelHeight => 220f;
 
-        // Downgrade target level.
-        protected byte downgradeLevel;
+        // Upgrade and downgrade target levels.
+        protected byte upgradeLevel, downgradeLevel;
 
 
         /// <summary>
@@ -234,21 +234,23 @@ namespace ABLC
         /// </summary>
         public void UpdatePanel()
         {
-            // Check to see if the building can upgrade.
-            if (LevelUtils.CanBuildingUpgrade(targetID))
-            {
-                // Yep - enable upgrade button.
-                upgradeButton.Enable();
-            }
-            else
+            // Check to see if the building can be upgraded one level.
+            upgradeLevel = (byte)(Singleton<BuildingManager>.instance.m_buildings.m_buffer[targetID].m_level + 1);
+            if (LevelUtils.GetTargetInfo(targetID, upgradeLevel) == null)
+
             {
                 // Nope - disable upgrade button.
                 upgradeButton.Disable();
             }
-
+            else
+            {
+                // Yep - enable upgrade button.
+                upgradeButton.Enable();
+            }
+            
             // Check to see if the building can be downgraded one level.
             downgradeLevel = (byte)(Singleton<BuildingManager>.instance.m_buildings.m_buffer[targetID].m_level - 1);
-            if (LevelUtils.GetDowngradeInfo(targetID, downgradeLevel) == null)
+            if (LevelUtils.GetTargetInfo(targetID, downgradeLevel) == null)
             {
                 // Nope - disable downgrade button.
                 downgradeButton.Disable();
@@ -309,7 +311,7 @@ namespace ABLC
 
                 upgradeButton.eventClick += (control, clickEvent) =>
                 {
-                    LevelUtils.ForceLevelUp(targetID);
+                    LevelUtils.ForceLevel(targetID, upgradeLevel);
 
                     // Check to see if we should increase this buildings maximum level.
                     byte newLevel = Singleton<BuildingManager>.instance.m_buildings.m_buffer[targetID].m_level;
@@ -325,7 +327,7 @@ namespace ABLC
 
                 downgradeButton.eventClick += (control, clickEvent) =>
                 {
-                    LevelUtils.ForceLevelDown(targetID, downgradeLevel);
+                    LevelUtils.ForceLevel(targetID, downgradeLevel);
 
                     // Check to see if we should increase this buildings maximum level.
                     byte newLevel = Singleton<BuildingManager>.instance.m_buildings.m_buffer[targetID].m_level;

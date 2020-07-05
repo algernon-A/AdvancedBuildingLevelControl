@@ -49,78 +49,47 @@ namespace ABLC
 
 
         /// <summary>
-        /// Upgrades the selected building one level, if possible.
+        /// Upgrades/downgrades the selected building to the given level, if possible.
         /// </summary>
         /// <param name="buildingID">Building instance ID</param>
-        public static void ForceLevelUp(ushort buildingID)
+        /// <param name="targetLevel">Level to upgrade/downgrade to</param>
+        public static void ForceLevel(ushort buildingID, byte targetLevel)
         {
-            // BuildingInfo to upgrade to, if this building isn't historical.
-            BuildingInfo upgradeInfo = null;
+            // BuildingInfo to change to, if this building isn't historical.
+            BuildingInfo targetInfo = null;
 
 
             // Get an instance reference.
             BuildingManager buildingManager = Singleton<BuildingManager>.instance;
 
-            // Get building AI reference.
-            PrivateBuildingAI buildingAI = Singleton<BuildingManager>.instance.m_buildings.m_buffer[buildingID].Info?.GetAI() as PrivateBuildingAI;
+            // Get building references.
+            BuildingInfo buildingInfo = Singleton<BuildingManager>.instance.m_buildings.m_buffer[buildingID].Info;
+            PrivateBuildingAI buildingAI = buildingInfo?.GetAI() as PrivateBuildingAI;
 
-            // Check to see if this is historical or not.
-            bool isHistorical = buildingAI.IsHistorical(buildingID, ref Singleton<BuildingManager>.instance.m_buildings.m_buffer[buildingID], out bool canSet);
-
-            // Get upgrade building target if needed.
-            if (!isHistorical)
+            if (buildingInfo == null || buildingAI == null)
             {
-                upgradeInfo = buildingAI.GetUpgradeInfo(buildingID, ref Singleton<BuildingManager>.instance.m_buildings.m_buffer[buildingID]);
+                // If something went wrong, abort.
+                Debugging.Message("couldn't get existing building info");
+                return;
             }
 
-            // If we have a valid downgrade target, proceed.
-            if (isHistorical || upgradeInfo != null)
-            {
-                // Apply minimum level to our building and cancel all level-up progress.
-                ++buildingManager.m_buildings.m_buffer[buildingID].m_level;
-                buildingManager.m_buildings.m_buffer[buildingID].m_levelUpProgress = 0;
+            // Check to see if this is historical or not, or is a RICO ploppable.
+            bool isHistorical = buildingAI.IsHistorical(buildingID, ref Singleton<BuildingManager>.instance.m_buildings.m_buffer[buildingID], out bool canSet) || ModUtils.CheckRICOPloppable(buildingInfo);
 
-                // Apply our upgrade targe if not historical.
-                if (!isHistorical)
-                {
-                    buildingManager.UpdateBuildingInfo(buildingID, upgradeInfo);
-                }
-
-                // Post-upgrade processing to update instance values.
-                CustomBuildingUpgraded(buildingID, ref buildingManager.m_buildings.m_buffer[buildingID], buildingAI);
-            }
-        }
-
-
-        /// <summary>
-        /// Downgrades the selected building to the given level, if possible.
-        /// </summary>
-        /// <param name="buildingID">Building instance ID</param>
-        /// <param name="targetLevel">Level to downgrade to</param>
-        public static void ForceLevelDown(ushort buildingID, byte targetLevel)
-        {
-            // BuildingInfo to upgrade to, if this building isn't historical.
-            BuildingInfo downgradeInfo = null;
-
-
-            // Get an instance reference.
-            BuildingManager buildingManager = Singleton<BuildingManager>.instance;
-
-            // Get building AI reference.
-            PrivateBuildingAI buildingAI = Singleton<BuildingManager>.instance.m_buildings.m_buffer[buildingID].Info?.GetAI() as PrivateBuildingAI;
-
-            // Check to see if this is historical or not.
-            bool isHistorical = buildingAI.IsHistorical(buildingID, ref Singleton<BuildingManager>.instance.m_buildings.m_buffer[buildingID], out bool canSet);
-
-            // Get downgrade building target if needed.
+            // Get target prefab (if needed, i.e. not historical or RICO ploppable).
             if (!isHistorical)
             {
                 // Get downgrade building target.
-                downgradeInfo = GetDowngradeInfo(buildingID, targetLevel);
+                targetInfo = GetTargetInfo(buildingID, targetLevel);
+                if (targetInfo == null)
+                {
+                    // If we failed, don't do anything more.
+                    return;
+                }
             }
 
             // If we have a valid downgrade target, proceed.
-            if (isHistorical || downgradeInfo != null)
+            if (isHistorical || targetInfo != null)
             {
                 // Apply target level to our building and cancel all level-up progress.
                 buildingManager.m_buildings.m_buffer[buildingID].m_level = targetLevel;
@@ -129,7 +98,7 @@ namespace ABLC
                 // Apply our downgrade target if not historical
                 if (!isHistorical)
                 {
-                    buildingManager.UpdateBuildingInfo(buildingID, downgradeInfo);
+                    buildingManager.UpdateBuildingInfo(buildingID, targetInfo);
                 }
 
                 // Post-downgrade processing to update instance values.
@@ -139,14 +108,15 @@ namespace ABLC
 
 
         /// <summary>
-        /// The reverse equivalent of "BuildingAI.GetUpgradeInfo"; attempts to find a valid downgrade target for the provided building.
-        /// Will return null if the building is already at minimum level, is currently upgrading, or if no valid replacement can be found.
+        /// The universal equivalent of "BuildingAI.GetUpgradeInfo"; attempts to find a valid upgrade/downgrade target for the provided building.
+        /// Will return null if the target level is out of bounds, if the building is currently upgrading, or if no valid replacement can be found.
+        /// If the building is historical or a RICO ploppable, will return the existing BuildingInfo for that building.
         /// Replacements follow the same rule as upgrades: same zoning type, same service and subservice, and same size.
         /// </summary>
         /// <param name="buildingID">Building instance ID</param>
         /// <param name="targetLevel">Target level of the downgrade</param>
         /// <returns>BuildingInfo reference of the target building, or null if there's no valid target</returns>
-        public static BuildingInfo GetDowngradeInfo (ushort buildingID, byte targetLevel)
+        public static BuildingInfo GetTargetInfo (ushort buildingID, byte targetLevel)
         {
             // Get an instance reference.
             BuildingManager buildingManager = Singleton<BuildingManager>.instance;
@@ -160,8 +130,8 @@ namespace ABLC
                 return null;
             }
 
-            // Check to see if this is an historical building; if so, we just return the original building info.
-            if (((BuildingAI)thisBuilding.Info.GetAI()).IsHistorical(buildingID, ref Singleton<BuildingManager>.instance.m_buildings.m_buffer[buildingID], out bool canSet))
+            // Check to see if this is an historical or RICO Ploppable building; if so, we just return the original building info.
+            if (((BuildingAI)thisBuilding.Info.GetAI()).IsHistorical(buildingID, ref Singleton<BuildingManager>.instance.m_buildings.m_buffer[buildingID], out bool canSet) || ModUtils.CheckRICOPloppable(thisBuilding.Info))
             {
                 return thisBuilding.Info;
             }
@@ -170,45 +140,8 @@ namespace ABLC
             byte district = Singleton<DistrictManager>.instance.GetDistrict(thisBuilding.m_position);
             ushort style = Singleton<DistrictManager>.instance.m_districts.m_buffer[district].m_Style;
 
-            // Get downgrade building target, if we can.
+            // Get new building target, if we can.
             return buildingManager.GetRandomBuildingInfo(ref Singleton<SimulationManager>.instance.m_randomizer, thisBuilding.Info.GetService(), thisBuilding.Info.GetSubService(), (ItemClass.Level)targetLevel, thisBuilding.Width, thisBuilding.Length, thisBuilding.Info.m_zoningMode, style);
-        }
-
-
-        /// <summary>
-        /// Calculates whether or not this building can upgrade.
-        /// </summary>
-        /// <param name="buildingID">Building instance ID</param>
-        /// <returns>True if the building can upgrade, false otherwise</returns>
-        public static bool CanBuildingUpgrade(ushort buildingID)
-        {
-            // Get an instance reference.
-            BuildingManager buildingManager = Singleton<BuildingManager>.instance;
-
-            // Note this is a struct, not a class, so we don't write back to it, but it's handy for reads.
-            Building thisBuilding = buildingManager.m_buildings.m_buffer[buildingID];
-
-            // Baseic level check - note GetMaxLevel is 1-based (visible level), m_level is zero-based, so -1 is required.
-            if (thisBuilding.m_level >= (GetMaxLevel(buildingID) - 1))
-            {
-                return false;
-            }
-
-            // 'Make historical' and Ploppable RICO Revisited check; these buildings can be upgraded (if they're below max level, which we've already checked for above).
-            if (((BuildingAI)thisBuilding.Info.GetAI()).IsHistorical(buildingID, ref Singleton<BuildingManager>.instance.m_buildings.m_buffer[buildingID], out bool canSet) || ModUtils.CheckRICOPloppable(thisBuilding.Info))
-            {
-                return true;
-            }
-
-            // Generic growable - see if there's a valid upgrade target.
-            BuildingInfo upgradeInfo = ((BuildingAI)thisBuilding.Info.GetAI()).GetUpgradeInfo(buildingID, ref Singleton<BuildingManager>.instance.m_buildings.m_buffer[buildingID]);
-            if (upgradeInfo != null)
-            {
-                return true;
-            }
-
-            // If we got here, we've failed all checks.  Exit.
-            return false;
         }
 
 
