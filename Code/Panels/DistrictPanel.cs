@@ -92,6 +92,7 @@ namespace ABLC
         // Panel components.
         protected UIDropDown minWorkLevelDropDown;
         protected UIDropDown maxWorkLevelDropDown;
+        private UICheckBox randomSpawnCheck;
 
 
         /// <summary>
@@ -108,10 +109,14 @@ namespace ABLC
             // Set name.
             nameLabel.text = Singleton<DistrictManager>.instance.GetDistrictName(targetID);
 
+            // Set min and max levels.
             minLevelDropDown.selectedIndex = DistrictsABLC.minResLevel[targetID];
             maxLevelDropDown.selectedIndex = DistrictsABLC.maxResLevel[targetID];
             minWorkLevelDropDown.selectedIndex = DistrictsABLC.minWorkLevel[targetID];
             maxWorkLevelDropDown.selectedIndex = DistrictsABLC.maxWorkLevel[targetID];
+
+            // Set flags.
+            randomSpawnCheck.isChecked = (DistrictsABLC.flags[targetID] & (byte)DistrictFlags.randomSpawnLevels) != 0;
 
             // All done: re-enable events.
             disableEvents = false;
@@ -137,6 +142,9 @@ namespace ABLC
 
                 maxWorkLevelDropDown = UIUtils.CreateDropDown(this, Translations.Translate("ABLC_LVL_MAX"), yPos: 190f);
                 maxWorkLevelDropDown.items = new string[] { "1", "2", "3" };
+
+                // Add random level checkbox.
+                randomSpawnCheck = UIUtils.AddCheckBox(this, Translations.Translate("ABLC_RAN_SPN"), yPos: 220f);
 
                 // Set initial district.
                 DistrictChanged();
@@ -200,6 +208,16 @@ namespace ABLC
                         {
                             minWorkLevelDropDown.selectedIndex = index;
                         }
+                    }
+                };
+
+                randomSpawnCheck.eventCheckChanged += (control, isChecked) =>
+                {
+                    // Don't do anything if events are disabled.
+                    if (!disableEvents)
+                    {
+                        // XOR relevant flag to toggle.
+                        DistrictsABLC.flags[targetID] ^= (byte)DistrictFlags.randomSpawnLevels;
                     }
                 };
 

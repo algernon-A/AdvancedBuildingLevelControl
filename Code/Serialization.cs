@@ -61,8 +61,6 @@ namespace ABLC
             // Check to see if anything was read.
             if (data != null && data.Length != 0)
             {
-                Debugging.Message("read " + data.Length);
-
                 // Data was read - go ahead and deserialise.
                 using (MemoryStream stream = new MemoryStream(data))
                 {
@@ -82,21 +80,6 @@ namespace ABLC
 
                 // Use the post-deserialisation method of the district data serialiser to populate arrays with defaults.
                 new DistrictSerializer().AfterDeserialize(null);
-
-                // Initialise district arrays.
-                /*DistrictsABLC.minResLevel = new byte[128];
-                DistrictsABLC.maxResLevel = new byte[128];
-                DistrictsABLC.minWorkLevel = new byte[128];
-                DistrictsABLC.maxWorkLevel = new byte[128];
-
-                // Populate district arrays with default data.
-                for (int i = 0; i < 128; i++)
-                {
-                    DistrictsABLC.minResLevel[i] = 0;
-                    DistrictsABLC.maxResLevel[i] = 4;
-                    DistrictsABLC.minWorkLevel[i] = 0;
-                    DistrictsABLC.maxWorkLevel[i] = 2;
-                }*/
             }
         }
     }

@@ -8,6 +8,7 @@
     <Translation ID="ABLC_LVL_MAX" String="Maximum level" />
     <Translation ID="ABLC_CAT_RES" String="Residential levels" />
     <Translation ID="ABLC_CAT_WRK" String="Workplace levels" />
+    <Translation ID="ABLC_RAN_SPN" String="Random spawn levels" />
     <Translation ID="ABLC_TRIG_UP" String="Force upgrade" />
     <Translation ID="ABLC_TRIG_DWN" String="Force downgrade" />
     <Translation ID="TRN_CHOICE" String="Set language" />

@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using ICities;
 using ColossalFramework;
+using ColossalFramework.Math;
 
 
 namespace ABLC
@@ -22,9 +23,31 @@ namespace ABLC
             // Get district.
             ushort districtID = Singleton<DistrictManager>.instance.GetDistrict(position);
 
-            // Get our minimum level for this district for this type of building.
-            spawn.level = spawn.service == Service.Residential ? (Level)DistrictsABLC.minResLevel[districtID] : (Level)DistrictsABLC.minWorkLevel[districtID];
+            // Get our minimum level for this district for this type of building - our default is for this to be the spawn level.
+            Level spawnLevel = spawn.service == Service.Residential ? (Level)DistrictsABLC.minResLevel[districtID] : (Level)DistrictsABLC.minWorkLevel[districtID];
 
+            // See if we have random spawning levels.
+            if ((DistrictsABLC.flags[districtID] & (byte)DistrictFlags.randomSpawnLevels) != 0)
+            {
+                // Yes - get max level then choose a random level between min and max.
+                Level maxLevel = spawn.service == Service.Residential ? (Level)DistrictsABLC.maxResLevel[districtID] : (Level)DistrictsABLC.maxWorkLevel[districtID];
+
+                // Get our possible range.
+                uint levelRange = (uint)(maxLevel - spawnLevel);
+
+                // Only go further if we've got more than one level to work with, otherwise what's the point?
+                if (levelRange > 0)
+                {
+                    // Create new randomizer (seeded with spawn position, because it's nice and pseudo-random and convenient and simple and why not).
+                    Randomizer r = new Randomizer((int)(position.x + position.y + position.z));
+
+                    // Use randomizer to generate a random level between min and max (note max has to be +1'd to get full range).
+                    spawnLevel = (Level)((uint)(spawnLevel) + r.UInt32(levelRange + 1));
+                }
+            }
+
+            // Set our spawning level to our result.
+            spawn.level = spawnLevel;
             return spawn;
         }
 

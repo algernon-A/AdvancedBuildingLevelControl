@@ -1,8 +1,17 @@
-﻿using ColossalFramework.IO;
+﻿using System;
+using ColossalFramework.IO;
 
 
 namespace ABLC
 {
+    // District flags enum.
+    internal enum DistrictFlags
+    {
+        none = 0,
+        randomSpawnLevels
+    }
+
+
     /// <summary>
     /// Static class to hold the level control data for districts.
     /// Class, not struct, as this is mutable, and Mutable Structs Are Evil.
@@ -11,6 +20,9 @@ namespace ABLC
     {
         // Level data arrays.
         internal static byte[] minResLevel, maxResLevel, minWorkLevel, maxWorkLevel;
+
+        // District flags.
+        internal static byte[] flags;
     }
 
 
@@ -32,6 +44,10 @@ namespace ABLC
             serializer.WriteByteArray(DistrictsABLC.maxResLevel);
             serializer.WriteByteArray(DistrictsABLC.minWorkLevel);
             serializer.WriteByteArray(DistrictsABLC.maxWorkLevel);
+
+            // Extended attributes - starting with version flag.
+            serializer.WriteInt16(0);
+            serializer.WriteByteArray(DistrictsABLC.flags);
         }
 
 
@@ -48,6 +64,21 @@ namespace ABLC
             DistrictsABLC.maxResLevel = serializer.ReadByteArray();
             DistrictsABLC.minWorkLevel = serializer.ReadByteArray();
             DistrictsABLC.maxWorkLevel = serializer.ReadByteArray();
+
+            // Try to extended attributes - original version didn't have these.
+            try
+            {
+                // Read version, but ignore it for now.
+                int version = serializer.ReadInt16();
+
+                // Read flags.
+                DistrictsABLC.flags = serializer.ReadByteArray();
+            }
+            catch
+            {
+                // Don't care if we can't read them; 
+                DistrictsABLC.flags = null;
+            }
         }
 
 
@@ -73,6 +104,14 @@ namespace ABLC
             if (DistrictsABLC.maxWorkLevel == null || DistrictsABLC.minResLevel.Length < 128)
             {
                 DistrictsABLC.maxWorkLevel = ResetLevels(2, "MaxWorkLevel");
+            }
+            if (DistrictsABLC.maxWorkLevel == null || DistrictsABLC.minResLevel.Length < 128)
+            {
+                DistrictsABLC.maxWorkLevel = ResetLevels(2, "MaxWorkLevel");
+            }
+            if (DistrictsABLC.flags == null || DistrictsABLC.flags.Length < 128)
+            {
+                DistrictsABLC.flags = ResetLevels(0, "Flags");
             }
             Debugging.Message("district settings read");
         }
