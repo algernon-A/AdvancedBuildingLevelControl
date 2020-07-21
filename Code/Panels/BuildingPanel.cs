@@ -215,7 +215,6 @@ namespace ABLC
             }
             else
             {
-                Debugging.Message("Using default levels");
                 // Set min and max to default.
                 minLevelDropDown.selectedIndex = 0;
                 maxLevelDropDown.selectedIndex = maxLevelDropDown.items.Length - 1;
@@ -234,8 +233,20 @@ namespace ABLC
         /// </summary>
         public void UpdatePanel()
         {
+            // Make sure we have a valid builidng first.
+            if (targetID == 0 || (Singleton<BuildingManager>.instance.m_buildings.m_buffer[targetID].m_flags == Building.Flags.None))
+            {
+                // Invalid target - disable buttons.
+                upgradeButton.Disable();
+                downgradeButton.Disable();
+                return;
+            }
+
+            // Get building level.
+            byte level = (Singleton<BuildingManager>.instance.m_buildings.m_buffer[targetID].m_level);
+
             // Check to see if the building can be upgraded one level.
-            upgradeLevel = (byte)(Singleton<BuildingManager>.instance.m_buildings.m_buffer[targetID].m_level + 1);
+            upgradeLevel = (byte)(level + 1);
             if (LevelUtils.GetTargetInfo(targetID, upgradeLevel) == null)
 
             {
@@ -249,7 +260,7 @@ namespace ABLC
             }
             
             // Check to see if the building can be downgraded one level.
-            downgradeLevel = (byte)(Singleton<BuildingManager>.instance.m_buildings.m_buffer[targetID].m_level - 1);
+            downgradeLevel = (byte)(level - 1);
             if (LevelUtils.GetTargetInfo(targetID, downgradeLevel) == null)
             {
                 // Nope - disable downgrade button.
