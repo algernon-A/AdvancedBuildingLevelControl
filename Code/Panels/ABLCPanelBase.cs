@@ -12,7 +12,7 @@ namespace ABLC
     {
         // Constants.
         protected const float margin = 5.0f;
-        protected virtual float panelHeight => 330f;
+        protected virtual float panelHeight => 360f;
 
         // Reference variables.
         protected ushort targetID;

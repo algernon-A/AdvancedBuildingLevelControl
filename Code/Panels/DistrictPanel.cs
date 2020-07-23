@@ -144,7 +144,7 @@ namespace ABLC
                 maxWorkLevelDropDown.items = new string[] { "1", "2", "3" };
 
                 // Add random level checkbox.
-                randomSpawnCheck = UIUtils.AddCheckBox(this, Translations.Translate("ABLC_RAN_SPN"), yPos: 220f);
+                randomSpawnCheck = UIUtils.AddCheckBox(this, Translations.Translate("ABLC_RAN_SPN"), yPos: 235f);
 
                 // Set initial district.
                 DistrictChanged();
