@@ -1,4 +1,9 @@
-﻿Version 0.3 -
+﻿Version 0.4 -
+
+- Add random spawn level option
+
+
+Version 0.3 -
 
 - Remove the 'control levels' checkbox; replace with dynamic level control
 - Add proper 'Force Level Up' (not just politely suggesting that the game might possibly consider levelling up at some point, maybe?)
