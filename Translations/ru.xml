@@ -8,6 +8,7 @@
     <Translation ID="ABLC_LVL_MAX" String="Макс. уровень" />
     <Translation ID="ABLC_CAT_RES" String="Жилые уровни" />
     <Translation ID="ABLC_CAT_WRK" String="Промышленные уровни" />
+    <Translation ID="ABLC_RAN_SPN" String="Случ. ур. нов. зданий" />
     <Translation ID="ABLC_TRIG_UP" String="Принудит. повышение" />
     <Translation ID="ABLC_TRIG_DWN" String="Принудит. понижение" />
     <Translation ID="TRN_CHOICE" String="Установить язык" />
