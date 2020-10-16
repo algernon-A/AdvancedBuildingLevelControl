@@ -31,6 +31,7 @@ namespace ABLC
 
             // Add building info panel button.
             //BuildingPanelManager.AddPanelCheckbox();
+            BuildingPanelManager.AddInfoPanelButton();
         }
     }
 }

@@ -1,4 +1,7 @@
-﻿Version 0.4 -
+﻿- Add building panel open and close buttons
+
+
+Version 0.4 -
 
 - Add random spawn level option
 

@@ -358,7 +358,7 @@ namespace ABLC
             languages.Clear();
 
             // Get the current assembly path and append our locale directory name.
-            string assemblyPath = GetAssemblyPath();
+            string assemblyPath = FileUtils.GetAssemblyPath();
             if (!assemblyPath.IsNullOrWhiteSpace())
             {
                 string localePath = Path.Combine(assemblyPath, "Translations");
@@ -394,42 +394,6 @@ namespace ABLC
             {
                 Debugging.Message("assembly path was empty");
             }
-        }
-
-
-        /// <summary>
-        /// Returns the filepath of the mod assembly.
-        /// </summary>
-        /// <returns>Mod assembly filepath</returns>
-        private string GetAssemblyPath()
-        {
-            // Get list of currently active plugins.
-            IEnumerable<PluginManager.PluginInfo> plugins = PluginManager.instance.GetPluginsInfo();
-
-            // Iterate through list.
-            foreach (PluginManager.PluginInfo plugin in plugins)
-            {
-                try
-                {
-                    // Get all (if any) mod instances from this plugin.
-                    IUserMod[] mods = plugin.GetInstances<IUserMod>();
-
-                    // Check to see if the primary instance is this mod.
-                    if (mods.FirstOrDefault() is ABLCMod)
-                    {
-                        // Found it! Return path.
-                        return plugin.modPath;
-                    }
-                }
-                catch
-                {
-                    // Don't care.
-                }
-            }
-
-            // If we got here, then we didn't find the assembly.
-            Debugging.Message("assembly path not found");
-            throw new FileNotFoundException(ABLCMod.ModName + ": assembly path not found!");
         }
     }
 }

@@ -22,6 +22,7 @@ namespace ABLC
 
         // Panel components.
         protected UILabel nameLabel;
+        protected UIButton closeButton;
         protected UIDropDown minLevelDropDown;
         protected UIDropDown maxLevelDropDown;
         protected UIButton upgradeButton;
@@ -67,6 +68,13 @@ namespace ABLC
 
                 // Add 'downgrade' button.
                 downgradeButton = UIUtils.CreateButton(this, Translations.Translate("ABLC_TRIG_DWN"), width: this.width - (margin * 2), xPos: margin, yPos: panelHeight - 40f);
+
+                // Close button.
+                closeButton = AddUIComponent<UIButton>();
+                closeButton.relativePosition = new Vector3(width - 35, 2);
+                closeButton.normalBgSprite = "buttonclose";
+                closeButton.hoveredBgSprite = "buttonclosehover";
+                closeButton.pressedBgSprite = "buttonclosepressed";
             }
             catch (Exception e)
             {
