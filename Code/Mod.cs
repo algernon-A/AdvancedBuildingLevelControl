@@ -49,6 +49,10 @@ namespace ABLC
         /// </summary>
         public void OnSettingsUI(UIHelperBase helper)
         {
+
+            // Panel location checks.
+            UICheckBox onRightCheck = (UICheckBox)helper.AddCheckbox(Translations.Translate("ABLC_OPT_RT"), ModSettings.onRight, (value) => { ModSettings.onRight = value; ABLCSettingsFile.SaveSettings(); } );
+
             UIDropDown languageDropDown = (UIDropDown)helper.AddDropdown(Translations.Translate("TRN_CHOICE"), Translations.LanguageList, Translations.Index, (value) => { Translations.Index = value; ABLCSettingsFile.SaveSettings();  });
             languageDropDown.autoSize = false;
             languageDropDown.width = 270f;

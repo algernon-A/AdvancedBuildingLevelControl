@@ -7,7 +7,7 @@
     <ProjectGuid>{02438BDE-6340-4270-926F-6D9A788E0F43}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>AdvancedBuildingLevelControl</RootNamespace>
+    <RootNamespace>ABLC</RootNamespace>
     <AssemblyName>AdvancedBuildingLevelControl</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -77,6 +77,7 @@
     <Compile Include="Code\Debugging.cs" />
     <Compile Include="Code\Mod.cs" />
     <Compile Include="Code\Serialization.cs" />
+    <Compile Include="Code\Settings\ModSettings.cs" />
     <Compile Include="Code\Settings\SettingsXML.cs" />
     <Compile Include="Code\TranslationFramework\TranslationFramework.cs" />
     <Compile Include="Code\TranslationFramework\TranslationXML.cs" />

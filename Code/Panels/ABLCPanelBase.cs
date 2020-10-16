@@ -50,7 +50,18 @@ namespace ABLC
 
                 // Set parent transform to game's district info panel.
                 transform.parent = parentTransform;
-                relativePosition = new Vector3(-(width + 10), 0f);
+
+                // Set position according to setting.
+                if (ModSettings.onRight)
+                {
+                    // On right of info panel.
+                    relativePosition = new Vector2(parent.width + 10f, 0f);
+                }
+                else
+                {
+                    // On left of info panel.
+                    relativePosition = new Vector2(-(width + 10f), 0f);
+                }
 
                 // Category labels
                 nameLabel = AddLabel("", 0f, 25f);

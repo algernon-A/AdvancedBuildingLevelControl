@@ -1,4 +1,5 @@
 ﻿- Add building panel open and close buttons
+- Add option for ABLC panel to open to the right of parent panel
 
 
 Version 0.4 -
