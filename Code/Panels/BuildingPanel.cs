@@ -30,10 +30,10 @@ namespace ABLC
             }
             else
             {
-                // Create/destroy our panel as and when the info panel is shown or hidd
+                // Create/destroy our panel as and when the info panel is shown or hidden.
                 buildingInfoPanel.eventVisibilityChanged += (control, isVisible) =>
                 {
-                    if (isVisible)
+                    if (isVisible && ModSettings.showPanel)
                     {
                         Create();
                     }
@@ -92,8 +92,6 @@ namespace ABLC
         {
             BuildingWorldInfoPanel infoPanel = UIView.library.Get<ZonedBuildingWorldInfoPanel>(typeof(ZonedBuildingWorldInfoPanel).Name);
             UIButton panelButton = infoPanel.component.AddUIComponent<UIButton>();
-
-            // Load icon.
 
             // Create new texture atlas for button.
             UITextureAtlas buttonAtlas = ScriptableObject.CreateInstance<UITextureAtlas>();
@@ -167,8 +165,15 @@ namespace ABLC
             // Event handler.
             panelButton.eventClick += (control, clickEvent) =>
             {
-                // Select current building in the building details panel and show.
-                Create();
+                // Toggle panel visibility.
+                if (uiGameObject == null)
+                {
+                    Create();
+                }
+                else
+                {
+                    Close();
+                }
 
                 // Manually unfocus control, otherwise it can stay focused until next UI event (looks untidy).
                 control.Unfocus();

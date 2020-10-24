@@ -37,6 +37,10 @@ namespace ABLC
         [XmlElement("PanelOnRight")]
         public bool onRight { get => ModSettings.onRight; set => ModSettings.onRight = value; }
 
+        // Show panel.
+        [XmlElement("ShowPanel")]
+        public bool showPanel { get => ModSettings.showPanel; set => ModSettings.showPanel = value; }
+
 
         /// <summary>
         /// Load settings from XML file.

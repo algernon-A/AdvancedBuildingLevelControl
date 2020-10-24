@@ -11,6 +11,8 @@
     <Translation ID="ABLC_RAN_SPN" String="Random spawn levels" />
     <Translation ID="ABLC_TRIG_UP" String="Force upgrade" />
     <Translation ID="ABLC_TRIG_DWN" String="Force downgrade" />
+    <Translation ID="ABLC_OPT_PNL" String="Panel options" />
+    <Translation ID="ABLC_OPT_SHO" String="Show panel on building selection" />
     <Translation ID="ABLC_OPT_RT" String="Place ABLC panel on right of game info panel (instead of on left)" />
     <Translation ID="TRN_CHOICE" String="Set language" />
     <Translation ID="TRN_SYS" String="Use system language" />

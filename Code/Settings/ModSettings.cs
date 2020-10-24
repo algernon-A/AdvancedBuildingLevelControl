@@ -6,5 +6,6 @@
     internal static class ModSettings
     {
         internal static bool onRight = false;
+        internal static bool showPanel = true;
     }
 }
