@@ -81,6 +81,75 @@ namespace ABLC
             GameObject.Destroy(_panel);
             GameObject.Destroy(uiGameObject);
         }
+
+
+        /// <summary>
+        /// Adds an ABLC button to a building info panel to open the ABLC panel for that building.
+        /// The button will be added to the right of the panel with a small margin from the panel edge, at the relative Y position specified.
+        /// </summary>
+        /*internal static void AddInfoPanelButton()
+        {
+            DistrictWorldInfoPanel infoPanel = UIView.library.Get<DistrictWorldInfoPanel>(typeof(DistrictWorldInfoPanel).Name);
+            UIButton panelButton = infoPanel.component.AddUIComponent<UIButton>();
+
+            // Create new texture atlas for button.
+            UITextureAtlas buttonAtlas = ScriptableObject.CreateInstance<UITextureAtlas>();
+            buttonAtlas.name = "ABLCButton";
+            buttonAtlas.material = UnityEngine.Object.Instantiate<Material>(UIView.GetAView().defaultAtlas.material);
+
+            // Load texture from file.
+            Texture2D buttonTexture = FileUtils.LoadTexture("ablc_buttons.png");
+            buttonAtlas.material.mainTexture = buttonTexture;
+
+            // Setup sprites.
+            string[] spriteNames = new string[] { "disabled", "normal", "pressed", "hovered" };
+            int numSprites = spriteNames.Length;
+            float spriteWidth = 1f / spriteNames.Length;
+
+            // Iterate through each sprite (counter increment is in region setup).
+            for (int i = 0; i < numSprites; ++i)
+            {
+                UITextureAtlas.SpriteInfo sprite = new UITextureAtlas.SpriteInfo
+                {
+                    name = spriteNames[i],
+                    texture = buttonTexture,
+                    // Sprite regions are horizontally arranged, evenly spaced.
+                    region = new Rect(i * spriteWidth, 0f, spriteWidth, 1f)
+                };
+                buttonAtlas.AddSprite(sprite);
+            }
+
+            // Basic button setup.
+            panelButton.atlas = buttonAtlas;
+            panelButton.size = new Vector2(36, 36);
+            panelButton.normalFgSprite = "normal";
+            panelButton.focusedFgSprite = "hovered";
+            panelButton.hoveredFgSprite = "hovered";
+            panelButton.pressedFgSprite = "pressed";
+            panelButton.disabledFgSprite = "disabled";
+            panelButton.name = "ABLCbutton";
+            panelButton.tooltip = Translations.Translate("ABLC_NAME");
+
+            // Set position.
+            panelButton.relativePosition = new Vector3(4f, 78f, 0f);
+
+            // Event handler.
+            panelButton.eventClick += (control, clickEvent) =>
+            {
+                // Toggle panel visibility.
+                if (uiGameObject == null)
+                {
+                    Create(UIView.library.Get<DistrictWorldInfoPanel>(typeof(DistrictWorldInfoPanel).Name)?.component.transform);
+                }
+                else
+                {
+                    Close();
+                }
+
+                // Manually unfocus control, otherwise it can stay focused until next UI event (looks untidy).
+                control.Unfocus();
+            };
+        }*/
     }
 
 

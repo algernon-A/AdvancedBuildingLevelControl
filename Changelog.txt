@@ -1,6 +1,8 @@
-﻿- Add building panel open and close buttons
+﻿Version 0.5 -
+
+- Add building panel open and close buttons
 - Add option for ABLC panel to open to the right of parent panel
-- Add toggle for building panel initial visibility state.
+- Add toggle for building panel initial visibility state
 
 
 Version 0.4 -

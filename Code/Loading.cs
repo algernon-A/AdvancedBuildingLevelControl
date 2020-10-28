@@ -30,8 +30,8 @@ namespace ABLC
             BuildingPanelManager.Hook();
 
             // Add building info panel button.
-            //BuildingPanelManager.AddPanelCheckbox();
             BuildingPanelManager.AddInfoPanelButton();
+            //DistrictPanelManager.AddInfoPanelButton();
         }
     }
 }
