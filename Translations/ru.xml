@@ -11,6 +11,9 @@
     <Translation ID="ABLC_RAN_SPN" String="Случ. ур. нов. зданий" />
     <Translation ID="ABLC_TRIG_UP" String="Принудит. повышение" />
     <Translation ID="ABLC_TRIG_DWN" String="Принудит. понижение" />
+    <Translation ID="ABLC_OPT_PNL" String="Настройки панели" />
+    <Translation ID="ABLC_OPT_SHO" String="Показать панель при выборе здания" />
+    <Translation ID="ABLC_OPT_RT" String="Поместить панель ABLC справа от панели информации о здании (а не слева)" />
     <Translation ID="TRN_CHOICE" String="Установить язык" />
     <Translation ID="TRN_SYS" String="Использ. системный" />
   </Translations>
