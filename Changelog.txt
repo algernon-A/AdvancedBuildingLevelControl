@@ -1,4 +1,9 @@
-﻿Version 0.5 -
+﻿Version 0.5.1 -
+
+- Level control panel no longer shows for buildings with only one level (e.g. specialized commercial or IT office)
+
+
+Version 0.5 -
 
 - Add building panel open and close buttons
 - Add option for ABLC panel to open to the right of parent panel

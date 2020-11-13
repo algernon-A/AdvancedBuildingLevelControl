@@ -7,10 +7,29 @@ namespace ABLC
     public static class LevelUtils
     {
         /// <summary>
-        /// Returns the maximum building level of a given building, based on class and subclass.
+        /// Returns the maximum building level of a given building, based on subclass.
         /// </summary>
-        public static byte GetMaxLevel(ushort buildingID) => (byte)ZonedBuildingWorldInfoPanel.GetMaxLevel(Singleton<BuildingManager>.instance.m_buildings.m_buffer[buildingID].Info.m_class);
+        public static byte GetMaxLevel(ushort buildingID)
+        {
+            ItemClass.SubService subService = Singleton<BuildingManager>.instance.m_buildings.m_buffer[buildingID].Info.m_class.m_subService;
 
+            switch (subService)
+            {
+                case ItemClass.SubService.ResidentialLow:
+                case ItemClass.SubService.ResidentialHigh:
+                case ItemClass.SubService.ResidentialLowEco:
+                case ItemClass.SubService.ResidentialHighEco:
+                    return 5;
+                case ItemClass.SubService.CommercialLow:
+                case ItemClass.SubService.CommercialHigh:
+                case ItemClass.SubService.OfficeGeneric:
+                case ItemClass.SubService.IndustrialGeneric:
+                    return 3;
+                default:
+                    return 1;
+            }
+        }
+        
 
         /// <summary>
         /// Forces a building to upgrade.
