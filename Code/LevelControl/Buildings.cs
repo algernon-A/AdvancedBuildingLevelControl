@@ -5,9 +5,68 @@ using ColossalFramework.IO;
 namespace ABLC
 {
     /// ABLC dictionary of individual building level settings.
-    public static class BuildingsABLC
+    internal static class BuildingsABLC
     {
-        public static Dictionary<ushort, LevelRange> levelRanges; 
+        // Master dictionary.
+        internal static Dictionary<ushort, LevelRange> levelRanges;
+
+
+        /// <summary>
+        /// Updates a buildng's minimum level.
+        /// </summary>
+        /// <param name="buildingID">Building to set</param>
+        /// <param name="minLevel">New minimum level</param>
+        internal static void UpdateMinLevel(ushort buildingID, byte minLevel)
+        {
+            // See if we've already got a dictionary entry for this building.
+            if (levelRanges.ContainsKey(buildingID))
+            {
+                // We do - if this new minimum level is zero and the maximum for this building is set to the building's maximum, delete this entry.
+                if (minLevel == 0 && BuildingsABLC.levelRanges[buildingID].maxLevel == LevelUtils.GetMaxLevel(buildingID))
+                {
+                    levelRanges.Remove(buildingID);
+                }
+                else
+                {
+                    // Otherwise, just update our entry's minimum target level.
+                    levelRanges[buildingID].minLevel = minLevel;
+                }
+            }
+            else if (minLevel > 0)
+            {
+                // If the new minimum level isn't the absolute minimum, create a new dictionary entry with this minimum and default maximum levels.
+                levelRanges.Add(buildingID, new LevelRange { minLevel = minLevel, maxLevel = LevelUtils.GetMaxLevel(buildingID) });
+            }
+        }
+
+
+        /// <summary>
+        /// Updates the buildng's maximum level.
+        /// </summary>
+        /// <param name="buildingID">Building to set</param>
+        /// <param name="maxLevel">New maximum level</param>
+        internal static void UpdateMaxLevel(ushort buildingID, byte maxLevel)
+        {
+            // See if we've already got a dictionary entry for this building.
+            if (levelRanges.ContainsKey(buildingID))
+            {
+                // We do - if this new maximum level is the maximum for this building and the minimum is zero, delete this entry.
+                if (maxLevel == LevelUtils.GetMaxLevel(buildingID) && BuildingsABLC.levelRanges[buildingID].minLevel == 0)
+                {
+                    levelRanges.Remove(buildingID);
+                }
+                else
+                {
+                    // Otherwise, just update our entry's maximum target level.
+                    levelRanges[buildingID].maxLevel = maxLevel;
+                }
+            }
+            else if (maxLevel < LevelUtils.GetMaxLevel(buildingID))
+            {
+                // If the new maximum level isn't the absolute maximum for this building, create a new dictionary entry with this maximum and default minimum levels.
+                levelRanges.Add(buildingID, new LevelRange { minLevel = 0, maxLevel = maxLevel });
+            }
+        }
     }
 
 

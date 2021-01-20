@@ -57,6 +57,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Code\ExternalCalls.cs" />
     <Compile Include="Code\FileUtils.cs" />
     <Compile Include="Code\LevelControl\Buildings.cs" />
     <Compile Include="Code\LevelControl\Districts.cs" />

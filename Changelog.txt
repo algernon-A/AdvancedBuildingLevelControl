@@ -1,4 +1,5 @@
 ﻿
+- Add LockBuildingLevel method for other mods to use to lock a given building's level
 - Overhaul logging
 
 

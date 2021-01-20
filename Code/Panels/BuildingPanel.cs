@@ -198,30 +198,13 @@ namespace ABLC
         /// Updates the buildng's minimum level.
         /// </summary>
         /// <param name="minLevel">New minimum level</param>
-        public void UpdateMinLevel(byte minLevel)
+        internal void UpdateMinLevel(byte minLevel)
         {
             // Don't do anything if events are disabled.
             if (!disableEvents)
             {
-                // See if we've already got a dictionary entry for this building.
-                if (BuildingsABLC.levelRanges.ContainsKey(targetID))
-                {
-                    // We do - if this new minimum level is zero and the maximum for this building is set to the building's maximum, delete this entry.
-                    if (minLevel == 0 && BuildingsABLC.levelRanges[targetID].maxLevel == LevelUtils.GetMaxLevel(targetID))
-                    {
-                        BuildingsABLC.levelRanges.Remove(targetID);
-                    }
-                    else
-                    {
-                        // Otherwise, just update our entry's minimum target level.
-                        BuildingsABLC.levelRanges[targetID].minLevel = minLevel;
-                    }
-                }
-                else if (minLevel > 0)
-                {
-                    // If the new minimum level isn't the absolute minimum, create a new dictionary entry with this minimum and default maximum levels.
-                    BuildingsABLC.levelRanges.Add(targetID, new LevelRange { minLevel = minLevel, maxLevel = LevelUtils.GetMaxLevel(targetID) });
-                }
+                // Update minimum level.
+                BuildingsABLC.UpdateMinLevel(targetID, minLevel);
 
                 // Update the panel.
                 BuildingChanged();
@@ -233,30 +216,13 @@ namespace ABLC
         /// Updates the buildng's maximum level.
         /// </summary>
         /// <param name="maxLevel">New maximum level</param>
-        public void UpdateMaxLevel(byte maxLevel)
+        internal void UpdateMaxLevel(byte maxLevel)
         {
             // Don't do anything if events are disabled.
             if (!disableEvents)
             {
-                // See if we've already got a dictionary entry for this building.
-                if (BuildingsABLC.levelRanges.ContainsKey(targetID))
-                {
-                    // We do - if this new maximum level is the maximum for this building and the minimum is zero, delete this entry.
-                    if (maxLevel == LevelUtils.GetMaxLevel(targetID) && BuildingsABLC.levelRanges[targetID].minLevel == 0)
-                    {
-                        BuildingsABLC.levelRanges.Remove(targetID);
-                    }
-                    else
-                    {
-                        // Otherwise, just update our entry's maximum target level.
-                        BuildingsABLC.levelRanges[targetID].maxLevel = maxLevel;
-                    }
-                }
-                else if (maxLevel < LevelUtils.GetMaxLevel(targetID))
-                {
-                    // If the new maximum level isn't the absolute maximum for this building, create a new dictionary entry with this maximum and default minimum levels.
-                    BuildingsABLC.levelRanges.Add(targetID, new LevelRange { minLevel = 0, maxLevel = maxLevel });
-                }
+                // Update maximum level.
+                BuildingsABLC.UpdateMaxLevel(targetID, maxLevel);
 
                 // Update the panel.
                 BuildingChanged();
@@ -267,7 +233,7 @@ namespace ABLC
         /// <summary>
         /// Called when the selected building has changed.
         /// </summary>
-        public void BuildingChanged()
+        internal void BuildingChanged()
         {
             // Update selected building ID.
             targetID = WorldInfoPanel.GetCurrentInstanceID().Building;
@@ -324,11 +290,11 @@ namespace ABLC
             disableEvents = false;
         }
 
-        
+
         /// <summary>
         /// Updates the panel according to building's current level settings.
         /// </summary>
-        public void UpdatePanel()
+        internal void UpdatePanel()
         {
             // Make sure we have a valid builidng first.
             if (targetID == 0 || (Singleton<BuildingManager>.instance.m_buildings.m_buffer[targetID].m_flags == Building.Flags.None))
