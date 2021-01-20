@@ -89,7 +89,7 @@ namespace ABLC
             }
             catch (Exception e)
             {
-                Debugging.LogException(e);
+                Logging.LogException(e, "exception setting up panel base");
             }
         }
 

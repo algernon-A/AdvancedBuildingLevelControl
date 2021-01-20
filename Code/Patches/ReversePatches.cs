@@ -27,7 +27,7 @@ namespace ABLC
         [MethodImpl(MethodImplOptions.NoInlining)]
         internal static void EnsureCitizenUnits(object instance, ushort buildingID, ref Building data, int homeCount, int workCount, int visitCount, int studentCount)
         {
-            Debugging.Message("EnsureCitizenUnits reverse Harmony patch wasn't applied");
+            Logging.Error("EnsureCitizenUnits reverse Harmony patch wasn't applied");
             throw new NotImplementedException("Harmony reverse patch not applied");
         }
     }

@@ -26,7 +26,7 @@ namespace ABLC
             UIComponent buildingInfoPanel = UIView.library.Get<ZonedBuildingWorldInfoPanel>(typeof(ZonedBuildingWorldInfoPanel).Name)?.component;
             if (buildingInfoPanel == null)
             {
-                Debugging.Message("couldn't hook building info panel");
+                Logging.Error("couldn't hook building info panel");
             }
             else
             {
@@ -69,7 +69,7 @@ namespace ABLC
             }
             catch (Exception e)
             {
-                Debugging.LogException(e);
+                Logging.LogException(e, "exception creating ABLCBuildingPanel");
             }
         }
 
@@ -155,7 +155,7 @@ namespace ABLC
             catch
             {
                 // Don't really care; just use default relative Y.
-                Debugging.Message("couldn't find ProblemsPanel relative position");
+                Logging.Message("couldn't find ProblemsPanel relative position");
             }
 
             // Set position.
@@ -458,7 +458,7 @@ namespace ABLC
             }
             catch (Exception e)
             {
-                Debugging.LogException(e);
+                Logging.LogException(e, "exception setting up building panel");
             }
         }
     }

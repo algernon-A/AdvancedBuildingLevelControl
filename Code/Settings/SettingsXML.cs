@@ -47,22 +47,29 @@ namespace ABLC
         /// </summary>
         internal static void LoadSettings()
         {
-            // Check to see if configuration file exists.
-            if (File.Exists(SettingsFileName))
+            try
             {
-                // Read it.
-                using (StreamReader reader = new StreamReader(SettingsFileName))
+                // Check to see if configuration file exists.
+                if (File.Exists(SettingsFileName))
                 {
-                    XmlSerializer xmlSerializer = new XmlSerializer(typeof(ABLCSettingsFile));
-                    if (!(xmlSerializer.Deserialize(reader) is ABLCSettingsFile gbrSettingsFile))
+                    // Read it.
+                    using (StreamReader reader = new StreamReader(SettingsFileName))
                     {
-                        Debugging.Message("couldn't deserialize settings file");
+                        XmlSerializer xmlSerializer = new XmlSerializer(typeof(ABLCSettingsFile));
+                        if (!(xmlSerializer.Deserialize(reader) is ABLCSettingsFile gbrSettingsFile))
+                        {
+                            Logging.Error("couldn't deserialize settings file");
+                        }
                     }
                 }
+                else
+                {
+                    Logging.Message("no settings file found");
+                }
             }
-            else
+            catch (Exception e)
             {
-                Debugging.Message("no settings file found");
+                Logging.LogException(e, "exception reading XML settings file");
             }
         }
 
@@ -83,7 +90,7 @@ namespace ABLC
             }
             catch (Exception e)
             {
-                Debugging.LogException(e);
+                Logging.LogException(e, "exception saving XML settings file");
             }
         }
     }

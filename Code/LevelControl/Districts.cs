@@ -1,5 +1,4 @@
-﻿using System;
-using ColossalFramework.IO;
+﻿using ColossalFramework.IO;
 
 
 namespace ABLC
@@ -37,7 +36,7 @@ namespace ABLC
         /// <param name="serializer">Data serializer</param>
         public void Serialize(DataSerializer serializer)
         {
-            Debugging.Message("writing district settings");
+            Logging.Message("writing district settings");
 
             // Write district level arrays to savegame.
             serializer.WriteByteArray(DistrictsABLC.minResLevel);
@@ -57,7 +56,7 @@ namespace ABLC
         /// <param name="serializer">Data serializer</param>
         public void Deserialize(DataSerializer serializer)
         {
-            Debugging.Message("reading district settings");
+            Logging.Message("reading district settings");
 
             // Read data from savegame into flat arrays.
             DistrictsABLC.minResLevel = serializer.ReadByteArray();
@@ -113,7 +112,7 @@ namespace ABLC
             {
                 DistrictsABLC.flags = ResetLevels(0, "Flags");
             }
-            Debugging.Message("district settings read");
+            Logging.Message("district settings read");
         }
 
 
@@ -128,7 +127,7 @@ namespace ABLC
             // Return array.
             byte[] newArray = new byte[128];
 
-            Debugging.Message(name + " district settings incomplete; resetting");
+            Logging.Error(name, " district settings incomplete; resetting");
 
             // Populate return array with given default level.
             for (int i = 0; i < 128; ++i)

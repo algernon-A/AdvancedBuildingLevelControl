@@ -54,7 +54,7 @@ namespace ABLC
             PrivateBuildingAI buildingAI = Singleton<BuildingManager>.instance.m_buildings.m_buffer[buildingID].Info?.GetAI() as PrivateBuildingAI;
             if (buildingAI == null)
             {
-                Debugging.Message("couldn't get AI for building " + buildingID);
+                Logging.Error("couldn't get AI for building ", buildingID.ToString());
             }
             else
             {
@@ -88,7 +88,7 @@ namespace ABLC
             if (buildingInfo == null || buildingAI == null)
             {
                 // If something went wrong, abort.
-                Debugging.Message("couldn't get existing building info");
+                Logging.Error("couldn't get existing building info");
                 return;
             }
 

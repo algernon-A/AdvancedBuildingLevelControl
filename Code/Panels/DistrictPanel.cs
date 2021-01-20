@@ -26,7 +26,7 @@ namespace ABLC
             UIComponent districtInfoPanel = UIView.library.Get<DistrictWorldInfoPanel>(typeof(DistrictWorldInfoPanel).Name)?.component;
             if (districtInfoPanel == null)
             {
-                Debugging.Message("couldn't hook district info panel");
+                Logging.Error("couldn't hook district info panel");
             }
             else
             {
@@ -68,7 +68,7 @@ namespace ABLC
             }
             catch (Exception e)
             {
-                Debugging.LogException(e);
+                Logging.LogException(e, "exception creating ABLCDistrictPanel");
             }
         }
 
@@ -303,7 +303,7 @@ namespace ABLC
             }
             catch (Exception e)
             {
-                Debugging.LogException(e);
+                Logging.LogException(e, "exception setting up district panel");
             }
         }
 

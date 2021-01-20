@@ -30,7 +30,7 @@ namespace ABLC
                 {
                     if (assembly.GetName().Name.Equals(assemblyName))
                     {
-                        Debugging.Message("found mod assembly " + assemblyName);
+                        Logging.Message("found mod assembly ", assemblyName);
                         if (enabledOnly)
                         {
                             return plugin.isEnabled;
@@ -97,7 +97,7 @@ namespace ABLC
                             if (ricoPloppable != null)
                             {
                                 // Success!  We're done here.
-                                Debugging.Message("found " + methodName);
+                                Logging.Message("found ", methodName);
                                 return;
                             }
                         }
@@ -106,7 +106,7 @@ namespace ABLC
             }
 
             // If we got here, we were unsuccessful.
-            Debugging.Message("didn't find " + methodName);
+            Logging.Message("didn't find ", methodName);
         }
     }
 }

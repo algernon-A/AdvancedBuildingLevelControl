@@ -1,4 +1,8 @@
-﻿Version 0.5.1 -
+﻿
+- Overhaul logging
+
+
+Version 0.5.1 -
 
 - Level control panel no longer shows for buildings with only one level (e.g. specialized commercial or IT office)
 

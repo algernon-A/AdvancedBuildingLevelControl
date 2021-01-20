@@ -52,7 +52,7 @@ namespace ABLC
                 maxLevels[i ++] = range.maxLevel;
             }
 
-            Debugging.Message("writing building settings");
+            Logging.Message("writing building settings");
 
             // Write serialisation arrays to savegame.
             serializer.WriteUInt32Array(buildingKeys);
@@ -67,7 +67,7 @@ namespace ABLC
         /// <param name="serializer">Data serializer</param>
         public void Deserialize(DataSerializer serializer)
         {
-            Debugging.Message("reading building settings");
+            Logging.Message("reading building settings");
 
             // Read data from savegame into flat arrays.
             uint[] buildingKeys = serializer.ReadUInt32Array();

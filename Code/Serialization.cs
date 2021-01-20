@@ -39,7 +39,7 @@ namespace ABLC
                 // Write to savegame.
                 serializableDataManager.SaveData(dataID, stream.ToArray());
 
-                Debugging.Message("wrote " + stream.Length);
+                Logging.Message("wrote " + stream.Length);
             }
         }
 
@@ -76,7 +76,7 @@ namespace ABLC
             else
             {
                 // No data read - initialise empty data structures.
-                Debugging.Message("no data read");
+                Logging.Message("no data read");
 
                 // Use the post-deserialisation method of the district data serialiser to populate arrays with defaults.
                 new DistrictSerializer().AfterDeserialize(null);

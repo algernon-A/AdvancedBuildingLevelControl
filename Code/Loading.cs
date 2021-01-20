@@ -17,7 +17,7 @@ namespace ABLC
             // Don't do anything if not in game.
             if (mode != LoadMode.NewGame && mode != LoadMode.LoadGame)
             {
-                Debugging.Message("not loading into game; exiting");
+                Logging.KeyMessage("not loading into game; exiting");
                 Patcher.UnpatchAll();
                 return;
             }

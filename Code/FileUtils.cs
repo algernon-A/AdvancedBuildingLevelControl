@@ -45,7 +45,7 @@ namespace ABLC
 			}
 
 			// If we got here, then we didn't find the assembly.
-			Debugging.Message("assembly path not found");
+			Logging.Error("assembly path not found");
 			throw new FileNotFoundException(ABLCMod.ModName + ": assembly path not found!");
 		}
 
