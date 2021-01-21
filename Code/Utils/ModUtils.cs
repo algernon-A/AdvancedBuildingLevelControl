@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Reflection;
+using System.Collections.Generic;
 using ColossalFramework.Plugins;
 
 
@@ -12,6 +13,62 @@ namespace ABLC
     {
         // RICO installed and enabled flag.
         internal static MethodInfo ricoPloppable;
+        // List of conflcting mod names.
+        internal static List<string> conflictingModNames;
+
+        /// <summary>
+        ///  Flag to determine whether or not a realistic population mod is installed and enabled.
+        /// </summary>
+        internal static bool realPopEnabled = false;
+
+
+        /// <summary>
+        /// Checks for any known fatal mod conflicts.
+        /// </summary>
+        /// <returns>True if a mod conflict was detected, false otherwise</returns>
+        internal static bool IsModConflict()
+        {
+            // Initialise flag and list of conflicting mods.
+            bool conflictDetected = false;
+            conflictingModNames = new List<string>();
+
+            // Iterate through the full list of plugins.
+            foreach (PluginManager.PluginInfo plugin in PluginManager.instance.GetPluginsInfo())
+            {
+                foreach (Assembly assembly in plugin.GetAssemblies())
+                {
+                    switch (assembly.GetName().Name)
+                    {
+                        case "VanillaGarbageBinBlocker":
+                            // Garbage Bin Controller
+                            conflictDetected = true;
+                            conflictingModNames.Add("Garbage Bin Controller");
+                            break;
+                        case "Painter":
+                            // Painter - this one is trickier because both Painter and Repaint use Painter.dll (thanks to CO savegame serialization...)
+                            if (plugin.userModInstance.GetType().ToString().Equals("Painter.UserMod"))
+                            {
+                                conflictDetected = true;
+                                conflictingModNames.Add("Painter");
+                            }
+                            break;
+                    }
+                }
+            }
+
+            // Was a conflict detected?
+            if (conflictDetected)
+            {
+                // Yes - log each conflict.
+                foreach (string conflictingMod in conflictingModNames)
+                {
+                    Logging.Error("Conflicting mod found: ", conflictingMod);
+                }
+                Logging.Error("exiting due to mod conflict");
+            }
+
+            return conflictDetected;
+        }
 
 
         /// <summary>

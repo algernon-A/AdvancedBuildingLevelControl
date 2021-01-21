@@ -16,5 +16,18 @@
     <Translation ID="ABLC_OPT_RT" String="Place ABLC panel on right of game info panel (instead of on left)" />
     <Translation ID="TRN_CHOICE" String="Set language" />
     <Translation ID="TRN_SYS" String="Use system language" />
+    <Translation ID="MES_CLS" String="Close" />
+    <Translation ID="MES_DSA" String="Don't show again" />
+    <Translation ID="MES_PAGE" String="Please refer to the mod's Steam Workshop page for further information." />
+    <Translation ID="ABLC_ERR_FAT" String="This means that the mod is not able to operate, and has shut down." />
+    <Translation ID="ABLC_ERR_HAR" String="Advanced Building Level Control was unable to complete its required Harmony patches." />
+    <Translation ID="ERR_HAR0" String="Harmony patching error" />
+    <Translation ID="ERR_HAR1" String="Possible causes of this problem include:" />
+    <Translation ID="ERR_HAR2" String="The required Harmony 2 mod dependency was not installed" />
+    <Translation ID="ERR_HAR3" String="An old and/or broken mod is preventing Harmony 2 from operating properly" />
+    <Translation ID="ERR_CON0" String="Mod conflict detected!" />
+    <Translation ID="ERR_CON1" String="The conflicting mods are:" />
+    <Translation ID="ABLC_ERR_CON0" String="Advanced Building Level Control detected a conflict with at least one other mod." />
+    <Translation ID="ABLC_ERR_CON1" String="These mods must be removed before Advanced Building Level Control can operate." />
   </Translations>
 </Language>

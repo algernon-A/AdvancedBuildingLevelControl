@@ -58,14 +58,16 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Code\ExternalCalls.cs" />
-    <Compile Include="Code\FileUtils.cs" />
+    <Compile Include="Code\Utils\FileUtils.cs" />
     <Compile Include="Code\LevelControl\Buildings.cs" />
     <Compile Include="Code\LevelControl\Districts.cs" />
     <Compile Include="Code\LevelControl\LevelUpExtension.cs" />
     <Compile Include="Code\LevelControl\BuildingExtension.cs" />
     <Compile Include="Code\LevelControl\LevelUtils.cs" />
     <Compile Include="Code\Loading.cs" />
-    <Compile Include="Code\ModUtils.cs" />
+    <Compile Include="Code\MessageBox\ListMessageBox.cs" />
+    <Compile Include="Code\MessageBox\MessageBoxBase.cs" />
+    <Compile Include="Code\Utils\ModUtils.cs" />
     <Compile Include="Code\Panels\BuildingPanel.cs" />
     <Compile Include="Code\Panels\DistrictPanel.cs" />
     <Compile Include="Code\Panels\ABLCPanelBase.cs" />
@@ -82,6 +84,7 @@
     <Compile Include="Code\Settings\SettingsXML.cs" />
     <Compile Include="Code\TranslationFramework\TranslationFramework.cs" />
     <Compile Include="Code\TranslationFramework\TranslationXML.cs" />
+    <Compile Include="Code\Utils\UIControls.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
