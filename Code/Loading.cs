@@ -89,6 +89,9 @@ namespace ABLC
 
                 // Closing para.
                 harmonyBox.AddParas(Translations.Translate("MES_PAGE"));
+
+                // Exit.
+                return;
             }
 
             // Check to see if a conflicting mod has been detected.
@@ -105,18 +108,25 @@ namespace ABLC
 
                 // Closing para.
                 modConflictBox.AddParas(Translations.Translate("ABLC_ERR_CON1"));
+
+                // Exit.
+                return;
             }
 
-            // Check for Ploppable RICO Revisited.
-            ModUtils.RICOReflection();
+            // Load mod if it's enabled.
+            if (isModEnabled)
+            {
+                // Check for Ploppable RICO Revisited.
+                ModUtils.RICOReflection();
 
-            // Hook info panel events.
-            DistrictPanelManager.Hook();
-            BuildingPanelManager.Hook();
+                // Hook info panel events.
+                DistrictPanelManager.Hook();
+                BuildingPanelManager.Hook();
 
-            // Add building info panel button.
-            BuildingPanelManager.AddInfoPanelButton();
-            //DistrictPanelManager.AddInfoPanelButton();
+                // Add building info panel button.
+                BuildingPanelManager.AddInfoPanelButton();
+                //DistrictPanelManager.AddInfoPanelButton();
+            }
         }
     }
 }
