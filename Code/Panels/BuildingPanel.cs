@@ -13,8 +13,11 @@ namespace ABLC
     {
         // Instance references.
         private static GameObject uiGameObject;
-        private static ABLCBuildingPanel _panel;
-        internal static ABLCBuildingPanel Panel => _panel;
+        private static ABLCBuildingPanel panel;
+        internal static ABLCBuildingPanel Panel => panel;
+
+        // UI components.
+        internal static UIButton panelButton;
 
 
         /// <summary>
@@ -30,12 +33,21 @@ namespace ABLC
             }
             else
             {
-                // Create/destroy our panel as and when the info panel is shown or hidden.
+                // Toggle button and/or panel visibility when game building info panel visibility changes.
                 buildingInfoPanel.eventVisibilityChanged += (control, isVisible) =>
                 {
-                    if (isVisible && ModSettings.showPanel)
+
+                    Logging.Message("VisibilityChanged");
+
+                    // Create / destroy our panel as and when the info panel is shown or hidden.
+                    if (isVisible)
                     {
-                        Create();
+                       
+
+                        if (ModSettings.showPanel)
+                        {
+                            Create();
+                        }
                     }
                     else
                     {
@@ -43,6 +55,31 @@ namespace ABLC
                     }
                 };
             }
+        }
+
+
+        /// <summary>
+        /// Handles a change in target building from the WorldInfoPanel.
+        /// Sets the panel button state according to whether or not this building is 'levellable' and communicates changes to the ABLC panel.
+        /// </summary>
+        internal static void TargetChanged()
+        {
+            // Get current WorldInfoPanel building instance and determine maximum building level.
+            if (LevelUtils.GetMaxLevel(WorldInfoPanel.GetCurrentInstanceID().Building) == 1)
+            {
+                // Only one building level - not a 'levellable' building, so disable the ABLC button and update the tooltip accordingly.
+                panelButton.Disable();
+                panelButton.tooltip = Translations.Translate("ABLC_BUT_DIS");
+            }
+            else
+            {
+                // Multiple levels available - enable the ABLC button and update the tooltip accordingly.
+                panelButton.Enable();
+                panelButton.tooltip = Translations.Translate("ABLC_NAME");
+            }
+
+            // Communicate target change to the panel (if it's currently instantiated).
+            Panel?.BuildingChanged();
         }
 
 
@@ -60,7 +97,7 @@ namespace ABLC
                     uiGameObject = new GameObject("ABLCBuildingPanel");
                     uiGameObject.transform.parent = UIView.library.Get<ZonedBuildingWorldInfoPanel>(typeof(ZonedBuildingWorldInfoPanel).Name)?.component.transform;
 
-                    _panel = uiGameObject.AddComponent<ABLCBuildingPanel>();
+                    panel = uiGameObject.AddComponent<ABLCBuildingPanel>();
 
                     // Set up and show panel.
                     Panel.Setup(uiGameObject.transform.parent);
@@ -79,8 +116,11 @@ namespace ABLC
         /// </summary>
         internal static void Close()
         {
-            GameObject.Destroy(_panel);
+            GameObject.Destroy(panel);
             GameObject.Destroy(uiGameObject);
+
+            panel = null;
+            uiGameObject = null;
         }
 
 
@@ -91,7 +131,7 @@ namespace ABLC
         internal static void AddInfoPanelButton()
         {
             BuildingWorldInfoPanel infoPanel = UIView.library.Get<ZonedBuildingWorldInfoPanel>(typeof(ZonedBuildingWorldInfoPanel).Name);
-            UIButton panelButton = infoPanel.component.AddUIComponent<UIButton>();
+            panelButton = infoPanel.component.AddUIComponent<UIButton>();
 
             // Create new texture atlas for button.
             UITextureAtlas buttonAtlas = ScriptableObject.CreateInstance<UITextureAtlas>();
@@ -235,6 +275,8 @@ namespace ABLC
         /// </summary>
         internal void BuildingChanged()
         {
+            Logging.Message("BuildingChanged");
+
             // Update selected building ID.
             targetID = WorldInfoPanel.GetCurrentInstanceID().Building;
 
@@ -244,14 +286,23 @@ namespace ABLC
             // If building doesn't have more than one level, then we don't have any business to do here.
             if (maxLevel == 1)
             {
+                Logging.Message("disabling panel button for prefab ", Singleton<BuildingManager>.instance.GetBuildingName(targetID, InstanceID.Empty));
+                BuildingPanelManager.panelButton.Disable();
                 Hide();
                 return;
             }
-            else if (!isVisible)
+            else
             {
-                // Otherwise, make sure we're visible if we're not already.
-                Show();
-            }    
+                // Enable info panel button.
+                Logging.Message("enabling panel button for prefab", Singleton<BuildingManager>.instance.GetBuildingName(targetID, InstanceID.Empty));
+                BuildingPanelManager.panelButton.Enable();
+
+                // Make sure we're visible if we're not already.
+                if (!isVisible)
+                {
+                    Show();
+                }
+            }
 
             // Disable events while we make changes to avoid triggering event handler.
             disableEvents = true;

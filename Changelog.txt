@@ -1,6 +1,7 @@
 ﻿Version 0.6 -
 
-- Add LockBuildingLevel method for other mods to use to lock a given building's level
+- Panel button is now disabled (with explanatory tooltip) for buildings with only one level (e.g. specialized commercial or IT office)
+- Add LockBuildingLevel method for other mods to use
 - Add Harmony error and mod conflict notifications
 - Overhaul logging
 

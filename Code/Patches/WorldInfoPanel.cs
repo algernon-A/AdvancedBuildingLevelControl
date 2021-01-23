@@ -28,11 +28,11 @@ namespace ABLC
     internal static class BuildingPanelPatch
     {
         /// <summary>
-        /// Harmony Postfix patch to update ABLC district info panel when district selection changes.
+        /// Harmony Postfix patch to update ABLC building info panel when building selection changes.
         /// </summary>
         public static void Postfix()
         {
-            BuildingPanelManager.Panel?.BuildingChanged();
+            BuildingPanelManager.TargetChanged();
         }
     }
 }
