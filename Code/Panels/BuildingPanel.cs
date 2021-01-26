@@ -36,9 +36,6 @@ namespace ABLC
                 // Toggle button and/or panel visibility when game building info panel visibility changes.
                 buildingInfoPanel.eventVisibilityChanged += (control, isVisible) =>
                 {
-
-                    Logging.Message("VisibilityChanged");
-
                     // Create / destroy our panel as and when the info panel is shown or hidden.
                     if (isVisible)
                     {
@@ -275,8 +272,6 @@ namespace ABLC
         /// </summary>
         internal void BuildingChanged()
         {
-            Logging.Message("BuildingChanged");
-
             // Update selected building ID.
             targetID = WorldInfoPanel.GetCurrentInstanceID().Building;
 
@@ -286,7 +281,6 @@ namespace ABLC
             // If building doesn't have more than one level, then we don't have any business to do here.
             if (maxLevel == 1)
             {
-                Logging.Message("disabling panel button for prefab ", Singleton<BuildingManager>.instance.GetBuildingName(targetID, InstanceID.Empty));
                 BuildingPanelManager.panelButton.Disable();
                 Hide();
                 return;
@@ -294,7 +288,6 @@ namespace ABLC
             else
             {
                 // Enable info panel button.
-                Logging.Message("enabling panel button for prefab", Singleton<BuildingManager>.instance.GetBuildingName(targetID, InstanceID.Empty));
                 BuildingPanelManager.panelButton.Enable();
 
                 // Make sure we're visible if we're not already.

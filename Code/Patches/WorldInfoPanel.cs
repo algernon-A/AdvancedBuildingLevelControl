@@ -21,7 +21,7 @@ namespace ABLC
 
 
     /// <summary>
-    /// Harmony Postfix patch to update ABLC district info panel when district selection changes.
+    /// Harmony Postfix patch to update ABLC building info panel when building selection changes.
     /// </summary>
     [HarmonyPatch(typeof(ZonedBuildingWorldInfoPanel))]
     [HarmonyPatch("OnSetTarget")]
