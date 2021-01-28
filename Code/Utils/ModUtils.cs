@@ -131,7 +131,6 @@ namespace ABLC
 
         /// <summary>
         /// Uses reflection to find the IsRICOPopManaged method of Ploppable RICO Revisited.
-        /// If successful, sets ricoPopManaged to 
         /// </summary>
         internal static void RICOReflection()
         {
@@ -144,7 +143,7 @@ namespace ABLC
                 {
                     if (assembly.GetName().Name.Equals("ploppablerico") && plugin.isEnabled)
                     {
-                        // Found ploppablerico.dll that's part of an enabled plugin; try to get its ModUtils class.
+                        // Found ploppablerico.dll that's part of an enabled plugin; try to get its Interfaces class.
                         Type ricoModUtils = assembly.GetType("PloppableRICO.Interfaces");
 
                         if (ricoModUtils != null)
