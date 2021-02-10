@@ -97,7 +97,7 @@ namespace ABLC
         /// <returns>Building maximum level</returns>
         private Level GetTargetLevel(ushort buildingID, Level targetLevel, bool isResidential = false)
         {
-            Level maxLevel = targetLevel;
+            Level maxLevel;
             
             // Check for individual building restrictions, as they have highest priority.
             if (BuildingsABLC.levelRanges.ContainsKey(buildingID))

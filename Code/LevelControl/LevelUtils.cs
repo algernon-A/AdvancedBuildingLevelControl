@@ -93,7 +93,7 @@ namespace ABLC
             }
 
             // Check to see if this is historical or not, or is a RICO ploppable.
-            bool isHistorical = buildingAI.IsHistorical(buildingID, ref Singleton<BuildingManager>.instance.m_buildings.m_buffer[buildingID], out bool canSet) || ModUtils.CheckRICOPloppable(buildingInfo);
+            bool isHistorical = buildingAI.IsHistorical(buildingID, ref Singleton<BuildingManager>.instance.m_buildings.m_buffer[buildingID], out bool _) || ModUtils.CheckRICOPloppable(buildingInfo);
 
             // Get target prefab (if needed, i.e. not historical or RICO ploppable).
             if (!isHistorical)
@@ -150,7 +150,7 @@ namespace ABLC
             }
 
             // Check to see if this is an historical or RICO Ploppable building; if so, we just return the original building info.
-            if (((BuildingAI)thisBuilding.Info.GetAI()).IsHistorical(buildingID, ref Singleton<BuildingManager>.instance.m_buildings.m_buffer[buildingID], out bool canSet) || ModUtils.CheckRICOPloppable(thisBuilding.Info))
+            if (((BuildingAI)thisBuilding.Info.GetAI()).IsHistorical(buildingID, ref Singleton<BuildingManager>.instance.m_buildings.m_buffer[buildingID], out bool _) || ModUtils.CheckRICOPloppable(thisBuilding.Info))
             {
                 return thisBuilding.Info;
             }

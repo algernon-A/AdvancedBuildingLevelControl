@@ -12,7 +12,7 @@ namespace ABLC
     {
         // Constants.
         protected const float margin = 5.0f;
-        protected virtual float panelHeight => 360f;
+        protected virtual float PanelHeight => 360f;
 
         // Reference variables.
         protected ushort targetID;
@@ -46,7 +46,7 @@ namespace ABLC
                 isVisible = true;
                 canFocus = true;
                 isInteractive = true;
-                size = new Vector3(220f, panelHeight);
+                size = new Vector3(220f, PanelHeight);
 
                 // Set parent transform to game's district info panel.
                 transform.parent = parentTransform;
@@ -75,10 +75,10 @@ namespace ABLC
                 maxLevelDropDown.items = new string[] { "1", "2", "3", "4", "5" };
 
                 // Apply button.
-                upgradeButton = UIUtils.CreateButton(this, Translations.Translate("ABLC_TRIG_UP"), width: this.width - (margin * 2), xPos: margin, yPos: panelHeight - 80f);
+                upgradeButton = UIUtils.CreateButton(this, Translations.Translate("ABLC_TRIG_UP"), width: this.width - (margin * 2), xPos: margin, yPos: PanelHeight - 80f);
 
                 // Add 'downgrade' button.
-                downgradeButton = UIUtils.CreateButton(this, Translations.Translate("ABLC_TRIG_DWN"), width: this.width - (margin * 2), xPos: margin, yPos: panelHeight - 40f);
+                downgradeButton = UIUtils.CreateButton(this, Translations.Translate("ABLC_TRIG_DWN"), width: this.width - (margin * 2), xPos: margin, yPos: PanelHeight - 40f);
 
                 // Close button.
                 closeButton = AddUIComponent<UIButton>();

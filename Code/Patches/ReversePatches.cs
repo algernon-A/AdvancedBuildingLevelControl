@@ -3,6 +3,8 @@ using System.Runtime.CompilerServices;
 using HarmonyLib;
 
 
+#pragma warning disable IDE0060 // Remove unused parameter
+
 
 namespace ABLC
 {
@@ -32,3 +34,5 @@ namespace ABLC
         }
     }
 }
+
+#pragma warning restore IDE0060 // Remove unused parameter

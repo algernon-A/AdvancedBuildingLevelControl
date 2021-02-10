@@ -225,7 +225,7 @@ namespace ABLC
     public class ABLCBuildingPanel : ABLCPanel
     {
         // Constants.
-        protected override float panelHeight => 220f;
+        protected override float PanelHeight => 220f;
 
         // Upgrade and downgrade target levels.
         protected byte upgradeLevel, downgradeLevel;

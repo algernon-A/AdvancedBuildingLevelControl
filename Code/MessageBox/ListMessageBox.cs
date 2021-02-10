@@ -106,8 +106,8 @@ namespace ABLC.MessageBox
             private const float Padding = 3f;
 
             // Panel components.
-            private UILabel dotPoint;
-            private UILabel textLabel;
+            private readonly UILabel dotPoint;
+            private readonly UILabel textLabel;
 
 
             // Text to display.
