@@ -20,7 +20,7 @@ namespace ABLC
 
         // Language.
         [XmlElement("Language")]
-        public string language
+        public string Language
         {
             get
             {
@@ -35,11 +35,11 @@ namespace ABLC
 
         // Panel position.
         [XmlElement("PanelOnRight")]
-        public bool onRight { get => ModSettings.onRight; set => ModSettings.onRight = value; }
+        public bool OnRight { get => ModSettings.onRight; set => ModSettings.onRight = value; }
 
         // Show panel.
         [XmlElement("ShowPanel")]
-        public bool showPanel { get => ModSettings.showPanel; set => ModSettings.showPanel = value; }
+        public bool ShowPanel { get => ModSettings.showPanel; set => ModSettings.showPanel = value; }
 
 
         /// <summary>

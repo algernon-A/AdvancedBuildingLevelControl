@@ -94,8 +94,8 @@ namespace ABLC
     public class Translator
     {
         private Language systemLanguage = null;
-        private SortedList<string, Language> languages;
-        private string defaultLanguage = "en";
+        private readonly SortedList<string, Language> languages;
+        private readonly string defaultLanguage = "en";
         private int currentIndex = -1;
 
 
@@ -193,16 +193,24 @@ namespace ABLC
                 // Check that the current key is included in the translation.
                 if (currentLanguage.translationDictionary.ContainsKey(key))
                 {
-                    // All good!  Return translation.
-                    return currentLanguage.translationDictionary[key];
+                    string translation = currentLanguage.translationDictionary[key];
+
+                    if (!string.IsNullOrEmpty(translation))
+                    {
+                        // All good!  Return translation.
+                        return currentLanguage.translationDictionary[key];
+                    }
+
+                    // If we got here, there's a null key.
+                    Logging.Error("null or empty shortened fallback translation for key ", key);
                 }
                 else
                 {
                     Logging.Message("no translation for language ", currentLanguage.uniqueName, " found for key " + key);
-
-                    // Attempt fallack translation.
-                    return FallbackTranslation(currentLanguage.uniqueName, key);
                 }
+
+                // Attempt fallack translation.
+                return FallbackTranslation(currentLanguage.uniqueName, key);
             }
             else
             {
@@ -316,8 +324,16 @@ namespace ABLC
                     Language fallbackLanguage = languages[newName];
                     if (fallbackLanguage.translationDictionary.ContainsKey(key))
                     {
-                        // All good!  Return translation.
-                        return fallbackLanguage.translationDictionary[key];
+                        string fallback = fallbackLanguage.translationDictionary[key];
+
+                        if (!string.IsNullOrEmpty(fallback))
+                        {
+                            // All good!  Return translation.
+                            return fallback;
+                        }
+
+                        // If we got here, there's a null key.
+                        Logging.Error("null or empty shortened fallback translation for key ", key);
                     }
                 }
             }
@@ -327,8 +343,16 @@ namespace ABLC
             {
                 if (systemLanguage.translationDictionary.ContainsKey(key))
                 {
-                    // All good!  Return translation.
-                    return systemLanguage.translationDictionary[key];
+                    string fallback = systemLanguage.translationDictionary[key];
+
+                    if (!string.IsNullOrEmpty(fallback))
+                    {
+                        // All good!  Return translation.
+                        return fallback;
+                    }
+
+                    // If we got here, there's a null key.
+                    Logging.Error("null or empty system fallback translation for key ", key);
                 }
             }
 
@@ -336,7 +360,16 @@ namespace ABLC
             try
             {
                 Language fallbackLanguage = languages[defaultLanguage];
-                return fallbackLanguage.translationDictionary[key];
+                string fallback = fallbackLanguage.translationDictionary.ContainsKey(key) ? fallbackLanguage.translationDictionary[key] : null;
+
+                if (!string.IsNullOrEmpty(fallback))
+                {
+                    // All good!  Return translation.
+                    return fallback;
+                }
+
+                // If we got here, there's a null key.
+                Logging.Error("null or empty default fallback translation for key ", key);
             }
             catch (Exception e)
             {
@@ -358,7 +391,7 @@ namespace ABLC
             languages.Clear();
 
             // Get the current assembly path and append our locale directory name.
-            string assemblyPath = FileUtils.GetAssemblyPath();
+            string assemblyPath = GetAssemblyPath();
             if (!assemblyPath.IsNullOrWhiteSpace())
             {
                 string localePath = Path.Combine(assemblyPath, "Translations");
@@ -394,6 +427,42 @@ namespace ABLC
             {
                 Logging.Error("assembly path was empty");
             }
+        }
+
+
+        /// <summary>
+        /// Returns the filepath of the mod assembly.
+        /// </summary>
+        /// <returns>Mod assembly filepath</returns>
+        private string GetAssemblyPath()
+        {
+            // Get list of currently active plugins.
+            IEnumerable<PluginManager.PluginInfo> plugins = PluginManager.instance.GetPluginsInfo();
+
+            // Iterate through list.
+            foreach (PluginManager.PluginInfo plugin in plugins)
+            {
+                try
+                {
+                    // Get all (if any) mod instances from this plugin.
+                    IUserMod[] mods = plugin.GetInstances<IUserMod>();
+
+                    // Check to see if the primary instance is this mod.
+                    if (mods.FirstOrDefault() is ABLCMod)
+                    {
+                        // Found it! Return path.
+                        return plugin.modPath;
+                    }
+                }
+                catch
+                {
+                    // Don't care.
+                }
+            }
+
+            // If we got here, then we didn't find the assembly.
+            Logging.Error("assembly path not found");
+            throw new FileNotFoundException(ABLCMod.ModName + ": assembly path not found!");
         }
     }
 }

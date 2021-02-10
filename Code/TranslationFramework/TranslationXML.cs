@@ -25,7 +25,7 @@ namespace ABLC
         // Translation array.
         [XmlArray("Translations", IsNullable = false)]
         [XmlArrayItem("Translation", IsNullable = false)]
-        public Translation[] translations
+        public Translation[] Translations
         {
             get
             {
@@ -39,7 +39,7 @@ namespace ABLC
                     newTranslations[index++] = new Translation() { key = fileTranslation.Key, value = fileTranslation.Value };
                 }
 
-                return translations;
+                return newTranslations;
             }
 
             set

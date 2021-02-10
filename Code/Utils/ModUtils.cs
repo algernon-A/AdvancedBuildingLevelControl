@@ -116,11 +116,9 @@ namespace ABLC
             // If we haven't got the RICO method by reflection, the answer is always false.
             if (ricoPloppable != null)
             {
-                object result = ricoPloppable.Invoke(null, new object[] { prefab });
-
-                if (result is bool)
+                if (ricoPloppable.Invoke(null, new object[] { prefab }) is bool result)
                 {
-                    return (bool)result;
+                    return result;
                 }
             }
 
