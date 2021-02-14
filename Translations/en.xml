@@ -13,8 +13,11 @@
     <Translation ID="ABLC_TRIG_UP" String="Force upgrade" />
     <Translation ID="ABLC_TRIG_DWN" String="Force downgrade" />
     <Translation ID="ABLC_OPT_PNL" String="Panel options" />
+    <Translation ID="ABLC_OPT_PLY" String="Gameplay options" />
     <Translation ID="ABLC_OPT_SHO" String="Show panel on building selection" />
     <Translation ID="ABLC_OPT_RT" String="Place ABLC panel on right of game info panel (instead of on left)" />
+    <Translation ID="ABLC_OPT_ANA" String="No abandonment for all buildings" />
+    <Translation ID="ABLC_OPT_HNA" String="No abandonment for historical buildings" />
     <Translation ID="TRN_CHOICE" String="Set language" />
     <Translation ID="TRN_SYS" String="Use system language" />
     <Translation ID="MES_CLS" String="Close" />

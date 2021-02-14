@@ -49,16 +49,21 @@ namespace ABLC
         /// </summary>
         public void OnSettingsUI(UIHelperBase helper)
         {
+            // Language options.
+            UIHelperBase languageGroup = helper.AddGroup(Translations.Translate("TRN_CHOICE"));
+            UIDropDown languageDropDown = (UIDropDown)languageGroup.AddDropdown(Translations.Translate("TRN_CHOICE"), Translations.LanguageList, Translations.Index, (value) => { Translations.Index = value; ABLCSettingsFile.SaveSettings(); });
+            languageDropDown.autoSize = false;
+            languageDropDown.width = 270f;
+
             // Panel options.
             UIHelperBase panelGroup = helper.AddGroup(Translations.Translate("ABLC_OPT_PNL"));
             UICheckBox onRightCheck = (UICheckBox)panelGroup.AddCheckbox(Translations.Translate("ABLC_OPT_RT"), ModSettings.onRight, (value) => { ModSettings.onRight = value; ABLCSettingsFile.SaveSettings(); } );
             UICheckBox showPanelCheck = (UICheckBox)panelGroup.AddCheckbox(Translations.Translate("ABLC_OPT_SHO"), ModSettings.showPanel, (value) => { ModSettings.showPanel = value; ABLCSettingsFile.SaveSettings(); });
 
-            // Panel options.
-            UIHelperBase languageGroup = helper.AddGroup(Translations.Translate("TRN_CHOICE"));
-            UIDropDown languageDropDown = (UIDropDown)languageGroup.AddDropdown(Translations.Translate("TRN_CHOICE"), Translations.LanguageList, Translations.Index, (value) => { Translations.Index = value; ABLCSettingsFile.SaveSettings();  });
-            languageDropDown.autoSize = false;
-            languageDropDown.width = 270f;
+            // Gameplay options.
+            UIHelperBase gameGorup = helper.AddGroup(Translations.Translate("ABLC_OPT_PLY"));
+            UICheckBox abandonHistCheck = (UICheckBox)panelGroup.AddCheckbox(Translations.Translate("ABLC_OPT_HNA"), ModSettings.noAbandonHistorical, (value) => { ModSettings.noAbandonHistorical = value; ABLCSettingsFile.SaveSettings(); });
+            UICheckBox abandonAnyCheck = (UICheckBox)panelGroup.AddCheckbox(Translations.Translate("ABLC_OPT_ANA"), ModSettings.noAbandonAny, (value) => { ModSettings.noAbandonAny = value; if (value) abandonHistCheck.isChecked = true; ABLCSettingsFile.SaveSettings(); });
         }
     }
 }

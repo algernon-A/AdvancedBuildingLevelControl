@@ -41,6 +41,14 @@ namespace ABLC
         [XmlElement("ShowPanel")]
         public bool ShowPanel { get => ModSettings.showPanel; set => ModSettings.showPanel = value; }
 
+        // No historical abandonment.
+        [XmlElement("NoAbandonHistorical")]
+        public bool NoAbandonHistorical { get => ModSettings.noAbandonHistorical; set => ModSettings.noAbandonHistorical = value; }
+
+        // No abandonment at all.
+        [XmlElement("NoAbandonAny")]
+        public bool NoAbandonAny { get => ModSettings.noAbandonAny; set => ModSettings.noAbandonAny = value; }
+
 
         /// <summary>
         /// Load settings from XML file.
