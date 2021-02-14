@@ -1,5 +1,8 @@
-﻿- Update translation framework
-- Update bundled CitiesHarmony to 1.0.6 with Harmony 2.0.4
+﻿Version 0.7 -
+
+- Add 'no abandonment' options
+- Update translation framework
+- Update bundled CitiesHarmony to 2.0 with Harmony 2.0.4
 
 
 Version 0.6 -

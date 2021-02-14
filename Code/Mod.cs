@@ -11,7 +11,7 @@ namespace ABLC
     public class ABLCMod : IUserMod
     {
         public static string ModName => "Advanced Building Level Control";
-        public static string Version => "0.6";
+        public static string Version => "0.7";
 
         public string Name => ModName + " " + Version;
         public string Description => Translations.Translate("ABLC_DESC");
