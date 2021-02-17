@@ -61,9 +61,9 @@ namespace ABLC
             UICheckBox showPanelCheck = (UICheckBox)panelGroup.AddCheckbox(Translations.Translate("ABLC_OPT_SHO"), ModSettings.showPanel, (value) => { ModSettings.showPanel = value; ABLCSettingsFile.SaveSettings(); });
 
             // Gameplay options.
-            UIHelperBase gameGorup = helper.AddGroup(Translations.Translate("ABLC_OPT_PLY"));
-            UICheckBox abandonHistCheck = (UICheckBox)panelGroup.AddCheckbox(Translations.Translate("ABLC_OPT_HNA"), ModSettings.noAbandonHistorical, (value) => { ModSettings.noAbandonHistorical = value; ABLCSettingsFile.SaveSettings(); });
-            UICheckBox abandonAnyCheck = (UICheckBox)panelGroup.AddCheckbox(Translations.Translate("ABLC_OPT_ANA"), ModSettings.noAbandonAny, (value) => { ModSettings.noAbandonAny = value; if (value) abandonHistCheck.isChecked = true; ABLCSettingsFile.SaveSettings(); });
+            UIHelperBase gameGroup = helper.AddGroup(Translations.Translate("ABLC_OPT_PLY"));
+            UICheckBox abandonHistCheck = (UICheckBox)gameGroup.AddCheckbox(Translations.Translate("ABLC_OPT_HNA"), ModSettings.noAbandonHistorical, (value) => { ModSettings.noAbandonHistorical = value; ABLCSettingsFile.SaveSettings(); });
+            UICheckBox abandonAnyCheck = (UICheckBox)gameGroup.AddCheckbox(Translations.Translate("ABLC_OPT_ANA"), ModSettings.noAbandonAny, (value) => { ModSettings.noAbandonAny = value; if (value) abandonHistCheck.isChecked = true; ABLCSettingsFile.SaveSettings(); });
         }
     }
 }
