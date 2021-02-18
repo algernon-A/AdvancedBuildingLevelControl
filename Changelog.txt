@@ -1,4 +1,9 @@
-﻿Version 0.7 -
+﻿Version 0.7.1 -
+
+- Use Harmony Transpiler to modify PrivateBuildingAI.BuildingUpgraded to allow for downgrading (instead of using custom replacement)
+
+
+Version 0.7 -
 
 - Add 'no abandonment' options
 - Update translation framework
