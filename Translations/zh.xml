@@ -2,14 +2,36 @@
 <Language UniqueName="zh" ReadableName="中文">
   <Translations>
     <Translation ID="ABLC_DESC" String="持續開發中：允許按行政區或建築本身，控制建築物等級。" />
-    <Translation ID="ABLC_NAME" String="等級控制" />
+    <Translation ID="ABLC_NAME" String="高級建築等級控制器" />
     <Translation ID="ABLC_CTRL" String="級別控制" />
+    <Translation ID="ABLC_BUT_DIS" String="級別控制不可用於此類型建築類型" />
     <Translation ID="ABLC_LVL_MIN" String="最低等級" />
     <Translation ID="ABLC_LVL_MAX" String="最高等級" />
     <Translation ID="ABLC_CAT_RES" String="住宅建築級別" />
     <Translation ID="ABLC_CAT_WRK" String="就職建築級別" />
+    <Translation ID="ABLC_RAN_SPN" String="隨機產生級別" />
     <Translation ID="ABLC_TRIG_UP" String="強制升級" />
+    <Translation ID="ABLC_TRIG_DWN" String="強制降級" />
+    <Translation ID="ABLC_OPT_PNL" String="面板選項" />
+    <Translation ID="ABLC_OPT_PLY" String="遊戲性選項" />
+    <Translation ID="ABLC_OPT_SHO" String="顯示建築控制面板" />
+    <Translation ID="ABLC_OPT_RT" String="將建築控制面板放置在遊戲訊息面板的右側（而非默認的左側）" />
+    <Translation ID="ABLC_OPT_ANA" String="不可遺棄(所有建築)" />
+    <Translation ID="ABLC_OPT_HNA" String="不可遺棄(歷史建築)" />
     <Translation ID="TRN_CHOICE" String="語言設置" />
     <Translation ID="TRN_SYS" String="使用遊戲默認語言" />
+    <Translation ID="MES_CLS" String="關閉" />
+    <Translation ID="MES_DSA" String="不要在顯示" />
+    <Translation ID="MES_PAGE" String="請參閱模組(Mod)在Steam工作坊的頁面以獲得更多資訊。" />
+    <Translation ID="ABLC_ERR_FAT" String="這意味著模組(Mod)將無法正常使用，並且已關閉。" />
+    <Translation ID="ABLC_ERR_HAR" String="“高級建築等級控制(Advanced Building Level Control)” 模組(Mod) 無法完成因為它須要 “Harmony” 擴展文檔。" />
+    <Translation ID="ERR_HAR0" String="“Harmony” 擴展文檔錯誤" />
+    <Translation ID="ERR_HAR1" String="此問題有可能包括的原因：" />
+    <Translation ID="ERR_HAR2" String="“Harmony 2” 擴展文檔模組(Mod)沒有訂閱。" />
+    <Translation ID="ERR_HAR3" String="一些老的或壞的模組(Mod)導致 “Harmony 2” 擴展文檔模組(Mod)無法正常運轉。" />
+    <Translation ID="ERR_CON0" String="檢測到模組(Mod)衝突！" />
+    <Translation ID="ERR_CON1" String="有衝突的模組(Mod)：" />
+    <Translation ID="ABLC_ERR_CON0" String="“高級建築等級控制(Advanced Building Level Control)” 模組(Mod)檢測到與至少一個其他模組(Mod)發生衝突。" />
+    <Translation ID="ABLC_ERR_CON1" String="這些模組(Mod)必須退訂才能讓 “高級建築等級控制(Advanced Building Level Control)” 模組(Mod)正常運轉。" />
   </Translations>
 </Language>
