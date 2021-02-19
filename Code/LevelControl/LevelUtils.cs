@@ -4,12 +4,12 @@ using ColossalFramework.Math;
 
 namespace ABLC
 {
-    public static class LevelUtils
+    internal static class LevelUtils
     {
         /// <summary>
         /// Returns the maximum building level of a given building, based on subclass.
         /// </summary>
-        public static byte GetMaxLevel(ushort buildingID)
+        internal static byte GetMaxLevel(ushort buildingID)
         {
             ItemClass.SubService subService = Singleton<BuildingManager>.instance.m_buildings.m_buffer[buildingID].Info.m_class.m_subService;
 
@@ -29,13 +29,13 @@ namespace ABLC
                     return 1;
             }
         }
-        
+
 
         /// <summary>
         /// Forces a building to upgrade.
         /// </summary>
         /// <param name="buildingID">Building instance ID</param>
-        public static void TriggerLevelUp(ushort buildingID)
+        internal static void TriggerLevelUp(ushort buildingID)
         {
             // Don't force upgrade if building is already upgrading.
             if (Singleton<BuildingManager>.instance.m_buildings.m_buffer[buildingID].m_flags.IsFlagSet(Building.Flags.Upgrading))
@@ -72,17 +72,15 @@ namespace ABLC
         /// </summary>
         /// <param name="buildingID">Building instance ID</param>
         /// <param name="targetLevel">Level to upgrade/downgrade to</param>
-        public static void ForceLevel(ushort buildingID, byte targetLevel)
+        internal static void ForceLevel(ushort buildingID, byte targetLevel)
         {
             // BuildingInfo to change to, if this building isn't historical.
             BuildingInfo targetInfo = null;
 
-
-            // Get an instance reference.
+            // References.
             BuildingManager buildingManager = Singleton<BuildingManager>.instance;
-
-            // Get building references.
-            BuildingInfo buildingInfo = Singleton<BuildingManager>.instance.m_buildings.m_buffer[buildingID].Info;
+            Building[] buildingBuffer = buildingManager.m_buildings.m_buffer;
+            BuildingInfo buildingInfo = buildingBuffer[buildingID].Info;
             PrivateBuildingAI buildingAI = buildingInfo?.GetAI() as PrivateBuildingAI;
 
             if (buildingInfo == null || buildingAI == null)
@@ -98,7 +96,7 @@ namespace ABLC
             // Get target prefab (if needed, i.e. not historical or RICO ploppable).
             if (!isHistorical)
             {
-                // Get downgrade building target.
+                // Get upgrade/downgrade building target.
                 targetInfo = GetTargetInfo(buildingID, targetLevel);
                 if (targetInfo == null)
                 {
@@ -107,21 +105,34 @@ namespace ABLC
                 }
             }
 
-            // If we have a valid downgrade target, proceed.
+            // If we have a valid upgrade/downgrade target, proceed.
             if (isHistorical || targetInfo != null)
             {
                 // Apply target level to our building and cancel all level-up progress.
-                buildingManager.m_buildings.m_buffer[buildingID].m_level = targetLevel;
-                buildingManager.m_buildings.m_buffer[buildingID].m_levelUpProgress = 0;
+                buildingBuffer[buildingID].m_level = targetLevel;
+                buildingBuffer[buildingID].m_levelUpProgress = 0;
 
-                // Apply our downgrade target if not historical
+                // Apply our upgrade/downgrade target if not historical
                 if (!isHistorical)
                 {
                     buildingManager.UpdateBuildingInfo(buildingID, targetInfo);
                 }
 
-                // Call game building upgraded method.
-                buildingAI.BuildingUpgraded(buildingID, ref buildingManager.m_buildings.m_buffer[buildingID]);
+                // Post-downgrade processing to update instance values - call game method if new level is equal to or greater than info base level, otherwise use custom method.
+                BuildingInfo newInfo = targetInfo ?? buildingInfo;
+                if (newInfo.GetAI() is PrivateBuildingAI newAI)
+                {
+                    if (targetLevel < (byte)newInfo.GetClassLevel())
+                    {
+                        // New level is less than info base level; call custom method.
+                        CustomBuildingUpgraded(newAI, buildingID, ref buildingBuffer[buildingID]);
+                    }
+                    else
+                    {
+                        // New level is equal to or greater than info base level; call game method.
+                        newAI.BuildingUpgraded(buildingID, ref buildingBuffer[buildingID]);
+                    }
+                }
             }
         }
 
@@ -133,9 +144,9 @@ namespace ABLC
         /// Replacements follow the same rule as upgrades: same zoning type, same service and subservice, and same size.
         /// </summary>
         /// <param name="buildingID">Building instance ID</param>
-        /// <param name="targetLevel">Target level of the downgrade</param>
+        /// <param name="targetLevel">Target level to upgrade/downgrade to</param>
         /// <returns>BuildingInfo reference of the target building, or null if there's no valid target</returns>
-        public static BuildingInfo GetTargetInfo (ushort buildingID, byte targetLevel)
+        internal static BuildingInfo GetTargetInfo(ushort buildingID, byte targetLevel)
         {
             // Get an instance reference.
             BuildingManager buildingManager = Singleton<BuildingManager>.instance;
@@ -161,6 +172,23 @@ namespace ABLC
 
             // Get new building target, if we can.
             return buildingManager.GetRandomBuildingInfo(ref Singleton<SimulationManager>.instance.m_randomizer, thisBuilding.Info.GetService(), thisBuilding.Info.GetSubService(), (ItemClass.Level)targetLevel, thisBuilding.Width, thisBuilding.Length, thisBuilding.Info.m_zoningMode, style);
+        }
+
+
+        /// <summary>
+        /// Custom implementation of PrivateBuildingAI.BuildingUpgraded that takes into account that our levels can be upgraded OR downgraded; for use when current building level is below the set prefb leve.
+        /// </summary>
+        /// <param name="buildingAI">Building AI instance</param>
+        /// <param name="buildingID">Building instance ID</param>
+        /// <param name="data">Building data record</param>
+        private static void CustomBuildingUpgraded(PrivateBuildingAI buildingAI, ushort buildingID, ref Building data)
+        {
+            buildingAI.CalculateWorkplaceCount((ItemClass.Level)data.m_level, new Randomizer(buildingID), data.Width, data.Length, out int level, out int level2, out int level3, out int level4);
+            buildingAI.AdjustWorkplaceCount(buildingID, ref data, ref level, ref level2, ref level3, ref level4);
+            int workCount = level + level2 + level3 + level4;
+            int homeCount = buildingAI.CalculateHomeCount((ItemClass.Level)data.m_level, new Randomizer(buildingID), data.Width, data.Length);
+            int visitCount = buildingAI.CalculateVisitplaceCount((ItemClass.Level)data.m_level, new Randomizer(buildingID), data.Width, data.Length);
+            ReversePatches.EnsureCitizenUnits(buildingAI, buildingID, ref data, homeCount, workCount, visitCount, 0);
         }
     }
 }

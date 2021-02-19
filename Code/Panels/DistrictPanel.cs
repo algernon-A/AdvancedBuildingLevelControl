@@ -359,7 +359,7 @@ namespace ABLC
                                 // It needs to be upgraded; store copy of current index for action queue.
                                 ushort buildingID = i;
 
-                                // Upgrade.
+                                // Downgrade.
                                 LevelUtils.ForceLevel(buildingID, maxLevel);
                             }
                         }

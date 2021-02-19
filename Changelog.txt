@@ -1,6 +1,6 @@
 ﻿Version 0.7.1 -
 
-- Use Harmony Transpiler to modify PrivateBuildingAI.BuildingUpgraded to allow for downgrading (instead of using custom replacement)
+- Use game's PrivateBuildingAI.BuildingUpgraded method instead of custom method where possible
 
 
 Version 0.7 -
