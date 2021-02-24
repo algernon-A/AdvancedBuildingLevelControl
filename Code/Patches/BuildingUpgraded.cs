@@ -9,14 +9,34 @@ using HarmonyLib;
 namespace ABLC
 {
 	/// <summary>
-	/// Harmony Postfix patch to keep a building upgrading until it reaches the minimum controlled level.
+	/// Harmony patches (Prefix and Postfix) for PrivateBuildingAI.BuildingUpgraded.
 	/// </summary>
 	[HarmonyPatch(typeof(PrivateBuildingAI))]
 	[HarmonyPatch("BuildingUpgraded")]
 	public static class BuildingUpgradedPatch
     {
 		/// <summary>
-		/// Harmony Postfix patch to keep a building upgrading until it reaches the minimum controlled level.
+		/// Harmony Prefix patch to catch any buildings trying to upgrade beyond their maximum permitted level.
+		/// Note that this won't in itself solve any broken prefabs with illegal levels, as the game's BuildingUpgraded method will set their level to the maximum of the actual or prefab level.
+		/// </summary>
+		/// <param name="__instance">Instance reference</param>
+		/// <param name="buildingID">Building instance ID</param>
+		/// <param name="data">Building data</param>
+		public static void Prefix(PrivateBuildingAI __instance, ushort buildingID, ref Building data)
+        {
+			byte maxLevel = LevelUtils.GetMaxLevel(buildingID);
+
+			// Check against maxLevel (m_level is zero-based, maxLevel is 1-based, so >= to catch overflows).
+			if (data.m_level >= maxLevel)
+            {
+				Logging.Error("prevented building ", buildingID.ToString(), " (", __instance.m_info.name, ") from upgrading to illegal level ", (data.m_level + 1).ToString(), "; setting to ", maxLevel.ToString());
+				data.m_level = (byte)(maxLevel - 1);
+            }
+        }
+
+
+		/// <summary>
+		/// Harmony Postfix patch to ensure valid building levels and to keep a building upgrading until it reaches the minimum controlled level.
 		/// </summary>
 		/// <param name="__instance">Instance reference</param>
 		/// <param name="buildingID">Building instance ID</param>
@@ -40,7 +60,7 @@ namespace ABLC
 				minLevel = data.Info.GetService() == ItemClass.Service.Residential ? DistrictsABLC.minResLevel[districtID] : DistrictsABLC.minWorkLevel[districtID];
 			}
 
-			// If the maminimum permissible level is greater than the current building level, force another upgrade.
+			// If the minimum permissible level is greater than the current building level, force another upgrade.
 			if (minLevel > data.m_level)
 			{
 				Singleton<SimulationManager>.instance.AddAction(() =>
