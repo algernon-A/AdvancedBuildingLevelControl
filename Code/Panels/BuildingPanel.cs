@@ -222,7 +222,7 @@ namespace ABLC
     /// <summary>
     /// ABLC district settings info panel.
     /// </summary>
-    public class ABLCBuildingPanel : ABLCPanel
+    internal class ABLCBuildingPanel : ABLCPanel
     {
         // Constants.
         protected override float PanelHeight => 220f;
@@ -232,37 +232,93 @@ namespace ABLC
 
 
         /// <summary>
-        /// Updates the buildng's minimum level.
+        /// Performs initial setup for the panel; we don't use Start() as that's not sufficiently reliable (race conditions), and is not needed with the dynamic create/destroy process.
         /// </summary>
-        /// <param name="minLevel">New minimum level</param>
-        internal void UpdateMinLevel(byte minLevel)
+        /// <param name="parentTransform">Transform to attach to</param>
+        internal override void Setup(Transform parentTransform)
         {
-            // Don't do anything if events are disabled.
-            if (!disableEvents)
+            try
             {
-                // Update minimum level.
-                BuildingsABLC.UpdateMinLevel(targetID, minLevel);
+                base.Setup(parentTransform);
 
-                // Update the panel.
+                // Set initial building.
                 BuildingChanged();
+
+                // Add event handlers.
+                minLevelDropDown.eventSelectedIndexChanged += (control, index) =>
+                {
+                    // Don't do anything if events are disabled.
+                    if (!disableEvents)
+                    {
+                        // Set minimum level of building in dictionary.
+                        UpdateMinLevel((byte)index);
+
+                        // If the minimum level is now greater than the maximum level, increase the maximum to match the minimum.
+                        if (index > maxLevelDropDown.selectedIndex)
+                        {
+                            maxLevelDropDown.selectedIndex = index;
+                        }
+                    }
+                };
+
+                maxLevelDropDown.eventSelectedIndexChanged += (control, index) =>
+                {
+                    // Don't do anything if events are disabled.
+                    if (!disableEvents)
+                    {
+                        // Update maximum level.
+                        UpdateMaxLevel((byte)index);
+
+                        // If the maximum level is now less than the minimum level, reduce the minimum to match the maximum.
+                        if (index < minLevelDropDown.selectedIndex)
+                        {
+                            minLevelDropDown.selectedIndex = index;
+                        }
+                    }
+                };
+
+                upgradeButton.eventClick += (control, clickEvent) =>
+                {
+                    LevelUtils.ForceLevel(targetID, upgradeLevel);
+
+                    // Check to see if we should increase this buildings maximum level.
+                    byte newLevel = Singleton<BuildingManager>.instance.m_buildings.m_buffer[targetID].m_level;
+                    if (BuildingsABLC.levelRanges.ContainsKey(targetID) && BuildingsABLC.levelRanges[targetID].maxLevel < newLevel)
+                    {
+                        //BuildingsABLC.levelRanges[targetID].maxLevel = newLevel;
+                        maxLevelDropDown.selectedIndex = newLevel;
+                    }
+
+                    // Update the panel once done.
+                    UpdatePanel();
+                };
+
+                downgradeButton.eventClick += (control, clickEvent) =>
+                {
+                    LevelUtils.ForceLevel(targetID, downgradeLevel);
+
+                    // Check to see if we should increase this buildings maximum level.
+                    byte newLevel = Singleton<BuildingManager>.instance.m_buildings.m_buffer[targetID].m_level;
+                    if (BuildingsABLC.levelRanges.ContainsKey(targetID) && BuildingsABLC.levelRanges[targetID].minLevel > newLevel)
+                    {
+                        //BuildingsABLC.levelRanges[targetID].minLevel = newLevel;
+                        minLevelDropDown.selectedIndex = newLevel;
+                    }
+
+                    // Update the panel once done.
+                    UpdatePanel();
+                };
+
+                // Close button event handler.
+                closeButton.eventClick += (component, clickEvent) =>
+                {
+                    BuildingPanelManager.Close();
+                };
+
             }
-        }
-
-
-        /// <summary>
-        /// Updates the buildng's maximum level.
-        /// </summary>
-        /// <param name="maxLevel">New maximum level</param>
-        internal void UpdateMaxLevel(byte maxLevel)
-        {
-            // Don't do anything if events are disabled.
-            if (!disableEvents)
+            catch (Exception e)
             {
-                // Update maximum level.
-                BuildingsABLC.UpdateMaxLevel(targetID, maxLevel);
-
-                // Update the panel.
-                BuildingChanged();
+                Logging.LogException(e, "exception setting up building panel");
             }
         }
 
@@ -382,93 +438,37 @@ namespace ABLC
 
 
         /// <summary>
-        /// Performs initial setup for the panel; we don't use Start() as that's not sufficiently reliable (race conditions), and is not needed with the dynamic create/destroy process.
+        /// Updates the buildng's minimum level.
         /// </summary>
-        /// <param name="parentTransform">Transform to attach to</param>
-        internal override void Setup(Transform parentTransform)
+        /// <param name="minLevel">New minimum level</param>
+        private void UpdateMinLevel(byte minLevel)
         {
-            try
+            // Don't do anything if events are disabled.
+            if (!disableEvents)
             {
-                base.Setup(parentTransform);
+                // Update minimum level.
+                BuildingsABLC.UpdateMinLevel(targetID, minLevel);
 
-                // Set initial building.
+                // Update the panel.
                 BuildingChanged();
-
-                // Add event handlers.
-                minLevelDropDown.eventSelectedIndexChanged += (control, index) =>
-                {
-                    // Don't do anything if events are disabled.
-                    if (!disableEvents)
-                    {
-                        // Set minimum level of building in dictionary.
-                        UpdateMinLevel((byte)index);
-
-                        // If the minimum level is now greater than the maximum level, increase the maximum to match the minimum.
-                        if (index > maxLevelDropDown.selectedIndex)
-                        {
-                            maxLevelDropDown.selectedIndex = index;
-                        }
-                    }
-                };
-
-                maxLevelDropDown.eventSelectedIndexChanged += (control, index) =>
-                {
-                    // Don't do anything if events are disabled.
-                    if (!disableEvents)
-                    {
-                        // Update maximum level.
-                        UpdateMaxLevel((byte)index);
-
-                        // If the maximum level is now less than the minimum level, reduce the minimum to match the maximum.
-                        if (index < minLevelDropDown.selectedIndex)
-                        {
-                            minLevelDropDown.selectedIndex = index;
-                        }
-                    }
-                };
-
-                upgradeButton.eventClick += (control, clickEvent) =>
-                {
-                    LevelUtils.ForceLevel(targetID, upgradeLevel);
-
-                    // Check to see if we should increase this buildings maximum level.
-                    byte newLevel = Singleton<BuildingManager>.instance.m_buildings.m_buffer[targetID].m_level;
-                    if (BuildingsABLC.levelRanges.ContainsKey(targetID) && BuildingsABLC.levelRanges[targetID].maxLevel < newLevel)
-                    {
-                        //BuildingsABLC.levelRanges[targetID].maxLevel = newLevel;
-                        maxLevelDropDown.selectedIndex = newLevel;
-                    }
-
-                    // Update the panel once done.
-                    UpdatePanel();
-                };
-
-                downgradeButton.eventClick += (control, clickEvent) =>
-                {
-                    LevelUtils.ForceLevel(targetID, downgradeLevel);
-
-                    // Check to see if we should increase this buildings maximum level.
-                    byte newLevel = Singleton<BuildingManager>.instance.m_buildings.m_buffer[targetID].m_level;
-                    if (BuildingsABLC.levelRanges.ContainsKey(targetID) && BuildingsABLC.levelRanges[targetID].minLevel > newLevel)
-                    {
-                        //BuildingsABLC.levelRanges[targetID].minLevel = newLevel;
-                        minLevelDropDown.selectedIndex = newLevel;
-                    }
-
-                    // Update the panel once done.
-                    UpdatePanel();
-                };
-
-                // Close button event handler.
-                closeButton.eventClick += (component, clickEvent) =>
-                {
-                    BuildingPanelManager.Close();
-                };
-
             }
-            catch (Exception e)
+        }
+
+
+        /// <summary>
+        /// Updates the buildng's maximum level.
+        /// </summary>
+        /// <param name="maxLevel">New maximum level</param>
+        private void UpdateMaxLevel(byte maxLevel)
+        {
+            // Don't do anything if events are disabled.
+            if (!disableEvents)
             {
-                Logging.LogException(e, "exception setting up building panel");
+                // Update maximum level.
+                BuildingsABLC.UpdateMaxLevel(targetID, maxLevel);
+
+                // Update the panel.
+                BuildingChanged();
             }
         }
     }

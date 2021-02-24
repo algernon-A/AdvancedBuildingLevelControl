@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 using ColossalFramework;
 using ColossalFramework.UI;
@@ -81,82 +82,13 @@ namespace ABLC
             GameObject.Destroy(_panel);
             GameObject.Destroy(uiGameObject);
         }
-
-
-        /// <summary>
-        /// Adds an ABLC button to a building info panel to open the ABLC panel for that building.
-        /// The button will be added to the right of the panel with a small margin from the panel edge, at the relative Y position specified.
-        /// </summary>
-        /*internal static void AddInfoPanelButton()
-        {
-            DistrictWorldInfoPanel infoPanel = UIView.library.Get<DistrictWorldInfoPanel>(typeof(DistrictWorldInfoPanel).Name);
-            UIButton panelButton = infoPanel.component.AddUIComponent<UIButton>();
-
-            // Create new texture atlas for button.
-            UITextureAtlas buttonAtlas = ScriptableObject.CreateInstance<UITextureAtlas>();
-            buttonAtlas.name = "ABLCButton";
-            buttonAtlas.material = UnityEngine.Object.Instantiate<Material>(UIView.GetAView().defaultAtlas.material);
-
-            // Load texture from file.
-            Texture2D buttonTexture = FileUtils.LoadTexture("ablc_buttons.png");
-            buttonAtlas.material.mainTexture = buttonTexture;
-
-            // Setup sprites.
-            string[] spriteNames = new string[] { "disabled", "normal", "pressed", "hovered" };
-            int numSprites = spriteNames.Length;
-            float spriteWidth = 1f / spriteNames.Length;
-
-            // Iterate through each sprite (counter increment is in region setup).
-            for (int i = 0; i < numSprites; ++i)
-            {
-                UITextureAtlas.SpriteInfo sprite = new UITextureAtlas.SpriteInfo
-                {
-                    name = spriteNames[i],
-                    texture = buttonTexture,
-                    // Sprite regions are horizontally arranged, evenly spaced.
-                    region = new Rect(i * spriteWidth, 0f, spriteWidth, 1f)
-                };
-                buttonAtlas.AddSprite(sprite);
-            }
-
-            // Basic button setup.
-            panelButton.atlas = buttonAtlas;
-            panelButton.size = new Vector2(36, 36);
-            panelButton.normalFgSprite = "normal";
-            panelButton.focusedFgSprite = "hovered";
-            panelButton.hoveredFgSprite = "hovered";
-            panelButton.pressedFgSprite = "pressed";
-            panelButton.disabledFgSprite = "disabled";
-            panelButton.name = "ABLCbutton";
-            panelButton.tooltip = Translations.Translate("ABLC_NAME");
-
-            // Set position.
-            panelButton.relativePosition = new Vector3(4f, 78f, 0f);
-
-            // Event handler.
-            panelButton.eventClick += (control, clickEvent) =>
-            {
-                // Toggle panel visibility.
-                if (uiGameObject == null)
-                {
-                    Create(UIView.library.Get<DistrictWorldInfoPanel>(typeof(DistrictWorldInfoPanel).Name)?.component.transform);
-                }
-                else
-                {
-                    Close();
-                }
-
-                // Manually unfocus control, otherwise it can stay focused until next UI event (looks untidy).
-                control.Unfocus();
-            };
-        }*/
     }
 
 
     /// <summary>
     /// ABLC district settings info panel.
     /// </summary>
-    public class ABLCDistrictPanel : ABLCPanel
+    internal class ABLCDistrictPanel : ABLCPanel
     {
         // Panel components.
         protected UIDropDown minWorkLevelDropDown;
@@ -200,6 +132,11 @@ namespace ABLC
             try
             {
                 base.Setup(parentTransform);
+
+                // Extend height and add 'clear all building settings' button.
+                height += 40f;
+                UIButton clearBuildingsButton = UIUtils.CreateButton(this, Translations.Translate("ABLC_CLR_BLD"), width: this.width - (margin * 2), xPos: margin, yPos: height - 40f);
+                clearBuildingsButton.eventClicked += ClearBuildings;
 
                 // Add category labels.
                 UILabel resLabel = AddLabel(Translations.Translate("ABLC_CAT_RES"), margin, 50f, hAlign: UIHorizontalAlignment.Left);
@@ -309,11 +246,46 @@ namespace ABLC
 
 
         /// <summary>
+        /// Clear building settings button event handler.
+        /// <param name="control">Calling component (unused)</param>
+        /// <param name="mouseEvent">Mouse event (unused)</param>
+        /// </summary>
+        private void ClearBuildings(UIComponent control, UIMouseEventParameter mouseEvent)
+        {
+            // List of building IDs to remove.
+            List<ushort> buildingIDs = new List<ushort>();
+
+            // Local references.
+            Building[] buildingBuffer = Singleton<BuildingManager>.instance.m_buildings.m_buffer;
+            DistrictManager districtManager = Singleton<DistrictManager>.instance;
+
+            Logging.Message("clearing building settings from district ", districtManager.GetDistrictName(targetID));
+
+            // Iterate though each building with custom settings.
+            foreach (ushort buildingID in BuildingsABLC.levelRanges.Keys)
+            {
+                // Check if the building is in this district.
+                if (districtManager.GetDistrict(buildingBuffer[buildingID].m_position) == targetID)
+                {
+                    // It is - add to list of custom settings to remove (can't remove them now because we're enumerating).
+                    buildingIDs.Add(buildingID);
+                }
+            }
+
+            // Now remove from our custom settings dictionary all building IDs that we've collected.
+            foreach (ushort buildingID in buildingIDs)
+            {
+                BuildingsABLC.levelRanges.Remove(buildingID);
+            }    
+        }
+
+
+        /// <summary>
         /// Attempts to force all buildings in a district to meet the district's minimum or maximum target level, as specified.
         /// </summary>
         /// <param name="districtID">Target district</param>
         /// <param name="upgrade">True if we want to upgrade all buildings (below the minimum) to the minimum for this district, false if we want to downgrade (all buildings above the maximum) to the maximum</param>
-        public void LevelDistrict(ushort districtID, bool upgrade)
+        private void LevelDistrict(ushort districtID, bool upgrade)
         {
             // Instances and arrays.
             Array16<Building> buildings = Singleton<BuildingManager>.instance.m_buildings;

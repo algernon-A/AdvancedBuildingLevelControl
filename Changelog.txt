@@ -1,4 +1,8 @@
-﻿Version 0.7.1 -
+﻿- Add button to clear all building settings in selected district
+- Add Harmony Prefix to PrivateBuildingAI.BuildingUpdated to catch any attempted upgrades to invalid building levels
+
+
+Version 0.7.1 -
 
 - Use game's PrivateBuildingAI.BuildingUpgraded method instead of custom method where possible
 

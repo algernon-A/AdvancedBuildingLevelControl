@@ -8,7 +8,7 @@ namespace ABLC
     /// <summary>
     /// ABLC info panel base class.
     /// </summary>
-    public class ABLCPanel : UIPanel
+    internal class ABLCPanel : UIPanel
     {
         // Constants.
         protected const float margin = 5.0f;
