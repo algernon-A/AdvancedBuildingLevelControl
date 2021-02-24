@@ -10,8 +10,9 @@ namespace ABLC
     /// </summary>
     internal class ABLCPanel : UIPanel
     {
-        // Constants.
-        protected const float margin = 5.0f;
+        // Layout constants.
+        protected const float Margin = 5f;
+        protected const float MenuWidth = 60f;
         protected virtual float PanelHeight => 360f;
 
         // Reference variables.
@@ -22,7 +23,6 @@ namespace ABLC
 
         // Panel components.
         protected UILabel nameLabel;
-        protected UIButton closeButton;
         protected UIDropDown minLevelDropDown;
         protected UIDropDown maxLevelDropDown;
         protected UIButton upgradeButton;
@@ -63,29 +63,30 @@ namespace ABLC
                     relativePosition = new Vector2(-(width + 10f), 0f);
                 }
 
+                // Decorative icon (top-left).
+                UISprite iconSprite = AddUIComponent<UISprite>();
+                iconSprite.relativePosition = new Vector2(0f, 0f);
+                iconSprite.height = 36f;
+                iconSprite.width = 36f;
+                iconSprite.atlas = Textures.ABLCButtonSprites;
+                iconSprite.spriteName = "normal";
+
                 // Category labels
-                nameLabel = AddLabel("", 0f, 25f);
-                UILabel titleLabel = AddLabel(Translations.Translate("ABLC_NAME"), 0f, margin, 1.0f);
+                nameLabel = AddLabel("", 0f, 27f, 0.6f);
+                UILabel titleLabel = AddLabel(Translations.Translate("ABLC_SHORT"), 0f, Margin, 1.0f);
 
                 // Level dropdowns.
-                minLevelDropDown = UIUtils.CreateDropDown(this, Translations.Translate("ABLC_LVL_MIN"), yPos : 70f);
+                minLevelDropDown = UIControls.AddLabelledDropDown(this, width - Margin - MenuWidth, 70f, Translations.Translate("ABLC_LVL_MIN"), 60f, false);
                 minLevelDropDown.items = new string[] { "1", "2", "3", "4", "5" };
 
-                maxLevelDropDown = UIUtils.CreateDropDown(this, Translations.Translate("ABLC_LVL_MAX"), yPos : 100f);
+                maxLevelDropDown = UIControls.AddLabelledDropDown(this, width - Margin - MenuWidth, 100f, Translations.Translate("ABLC_LVL_MAX"), 60f, false);
                 maxLevelDropDown.items = new string[] { "1", "2", "3", "4", "5" };
 
                 // Apply button.
-                upgradeButton = UIUtils.CreateButton(this, Translations.Translate("ABLC_TRIG_UP"), width: this.width - (margin * 2), xPos: margin, yPos: PanelHeight - 80f);
+                upgradeButton = UIControls.AddButton(this, Margin, PanelHeight - 80f, Translations.Translate("ABLC_TRIG_UP"), this.width - (Margin * 2));
 
                 // Add 'downgrade' button.
-                downgradeButton = UIUtils.CreateButton(this, Translations.Translate("ABLC_TRIG_DWN"), width: this.width - (margin * 2), xPos: margin, yPos: PanelHeight - 40f);
-
-                // Close button.
-                closeButton = AddUIComponent<UIButton>();
-                closeButton.relativePosition = new Vector3(width - 35, 2);
-                closeButton.normalBgSprite = "buttonclose";
-                closeButton.hoveredBgSprite = "buttonclosehover";
-                closeButton.pressedBgSprite = "buttonclosepressed";
+                downgradeButton = UIControls.AddButton(this, Margin, PanelHeight - 40f, Translations.Translate("ABLC_TRIG_DWN"), this.width - (Margin * 2));
             }
             catch (Exception e)
             {

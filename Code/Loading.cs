@@ -125,7 +125,6 @@ namespace ABLC
 
                 // Add building info panel button.
                 BuildingPanelManager.AddInfoPanelButton();
-                //DistrictPanelManager.AddInfoPanelButton();
             }
         }
     }

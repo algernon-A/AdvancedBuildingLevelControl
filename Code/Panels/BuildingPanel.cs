@@ -130,35 +130,8 @@ namespace ABLC
             BuildingWorldInfoPanel infoPanel = UIView.library.Get<ZonedBuildingWorldInfoPanel>(typeof(ZonedBuildingWorldInfoPanel).Name);
             panelButton = infoPanel.component.AddUIComponent<UIButton>();
 
-            // Create new texture atlas for button.
-            UITextureAtlas buttonAtlas = ScriptableObject.CreateInstance<UITextureAtlas>();
-            buttonAtlas.name = "ABLCButton";
-            buttonAtlas.material = UnityEngine.Object.Instantiate<Material>(UIView.GetAView().defaultAtlas.material);
-
-            // Load texture from file.
-            Texture2D buttonTexture = FileUtils.LoadTexture("ablc_buttons.png");
-            buttonAtlas.material.mainTexture = buttonTexture;
-
-            // Setup sprites.
-            string[] spriteNames = new string[] { "disabled", "normal", "pressed", "hovered" };
-            int numSprites = spriteNames.Length;
-            float spriteWidth = 1f / spriteNames.Length;
-
-            // Iterate through each sprite (counter increment is in region setup).
-            for (int i = 0; i < numSprites; ++i)
-            {
-                UITextureAtlas.SpriteInfo sprite = new UITextureAtlas.SpriteInfo
-                {
-                    name = spriteNames[i],
-                    texture = buttonTexture,
-                    // Sprite regions are horizontally arranged, evenly spaced.
-                    region = new Rect(i * spriteWidth, 0f, spriteWidth, 1f)
-                };
-                buttonAtlas.AddSprite(sprite);
-            }
-
             // Basic button setup.
-            panelButton.atlas = buttonAtlas;
+            panelButton.atlas = Textures.ABLCButtonSprites;
             panelButton.size = new Vector2(36, 36);
             panelButton.normalFgSprite = "normal";
             panelButton.focusedFgSprite = "hovered";
@@ -308,6 +281,13 @@ namespace ABLC
                     // Update the panel once done.
                     UpdatePanel();
                 };
+
+                // Close button.
+                UIButton closeButton = AddUIComponent<UIButton>();
+                closeButton.relativePosition = new Vector3(width - 35, 2);
+                closeButton.normalBgSprite = "buttonclose";
+                closeButton.hoveredBgSprite = "buttonclosehover";
+                closeButton.pressedBgSprite = "buttonclosepressed";
 
                 // Close button event handler.
                 closeButton.eventClick += (component, clickEvent) =>

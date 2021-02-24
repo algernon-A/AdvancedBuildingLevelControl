@@ -135,22 +135,22 @@ namespace ABLC
 
                 // Extend height and add 'clear all building settings' button.
                 height += 40f;
-                UIButton clearBuildingsButton = UIUtils.CreateButton(this, Translations.Translate("ABLC_CLR_BLD"), width: this.width - (margin * 2), xPos: margin, yPos: height - 40f);
+                UIButton clearBuildingsButton = UIControls.AddButton(this, Margin, height - 40f, Translations.Translate("ABLC_CLR_BLD"), this.width - (Margin * 2));
                 clearBuildingsButton.eventClicked += ClearBuildings;
 
                 // Add category labels.
-                UILabel resLabel = AddLabel(Translations.Translate("ABLC_CAT_RES"), margin, 50f, hAlign: UIHorizontalAlignment.Left);
-                UILabel workLabel = AddLabel(Translations.Translate("ABLC_CAT_WRK"), margin, 140f, hAlign: UIHorizontalAlignment.Left);
+                UILabel resLabel = AddLabel(Translations.Translate("ABLC_CAT_RES"), Margin, 50f, hAlign: UIHorizontalAlignment.Left);
+                UILabel workLabel = AddLabel(Translations.Translate("ABLC_CAT_WRK"), Margin, 140f, hAlign: UIHorizontalAlignment.Left);
 
                 // Add workplace min and max dropdowns.
-                minWorkLevelDropDown = UIUtils.CreateDropDown(this, Translations.Translate("ABLC_LVL_MIN"), yPos: 160f);
+                minWorkLevelDropDown = UIControls.AddLabelledDropDown(this, width - Margin - MenuWidth, 160f, Translations.Translate("ABLC_LVL_MIN"), 60f, false);
                 minWorkLevelDropDown.items = new string[] { "1", "2", "3" };
 
-                maxWorkLevelDropDown = UIUtils.CreateDropDown(this, Translations.Translate("ABLC_LVL_MAX"), yPos: 190f);
+                maxWorkLevelDropDown = UIControls.AddLabelledDropDown(this, width - Margin - MenuWidth, 190f, Translations.Translate("ABLC_LVL_MAX"), 60f, false);
                 maxWorkLevelDropDown.items = new string[] { "1", "2", "3" };
 
                 // Add random level checkbox.
-                randomSpawnCheck = UIUtils.AddCheckBox(this, Translations.Translate("ABLC_RAN_SPN"), yPos: 235f);
+                randomSpawnCheck = UIControls.AddCheckBox(this, 20f, 235f, Translations.Translate("ABLC_RAN_SPN"));
 
                 // Set initial district.
                 DistrictChanged();

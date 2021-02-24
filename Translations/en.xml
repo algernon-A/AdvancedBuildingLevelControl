@@ -3,6 +3,7 @@
   <Translations>
     <Translation ID="ABLC_DESC" String="UNDER DEVELOPMENT: allows control of building levels by district and/or building." />
     <Translation ID="ABLC_NAME" String="Advanced Building Level Control" />
+    <Translation ID="ABLC_SHORT" String="Level Control" />
     <Translation ID="ABLC_CTRL" String="Control levels" />
     <Translation ID="ABLC_BUT_DIS" String="Level control not available for this building type" />
     <Translation ID="ABLC_LVL_MIN" String="Minimum level" />
