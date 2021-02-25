@@ -13,8 +13,11 @@
     <Translation ID="ABLC_TRIG_UP" String="Принудит. повышение" />
     <Translation ID="ABLC_TRIG_DWN" String="Принудит. понижение" />
     <Translation ID="ABLC_OPT_PNL" String="Настройки панели" />
+    <Translation ID="ABLC_OPT_PLY" String="Настройки игрового процесса" />
     <Translation ID="ABLC_OPT_SHO" String="Показать панель при выборе здания" />
     <Translation ID="ABLC_OPT_RT" String="Поместить панель ABLC справа от панели информации о здании (а не слева)" />
+    <Translation ID="ABLC_OPT_ANA" String="Нет заброшенных построек" />
+    <Translation ID="ABLC_OPT_HNA" String="Нет заброшенных исторических зданий" />
     <Translation ID="TRN_CHOICE" String="Установить язык" />
     <Translation ID="TRN_SYS" String="Использ. системный" />
     <Translation ID="MES_CLS" String="Закрыть" />
