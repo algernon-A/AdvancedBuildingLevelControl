@@ -9,5 +9,6 @@
         internal static bool showPanel = true;
         internal static bool noAbandonHistorical = false;
         internal static bool noAbandonAny = false;
+        internal static bool loadLevelCheck = true;
     }
 }

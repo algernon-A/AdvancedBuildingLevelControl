@@ -25,6 +25,11 @@ namespace ABLC
                 case ItemClass.SubService.OfficeGeneric:
                 case ItemClass.SubService.IndustrialGeneric:
                     return 3;
+                case ItemClass.SubService.IndustrialFarming:
+                case ItemClass.SubService.IndustrialForestry:
+                case ItemClass.SubService.IndustrialOil:
+                case ItemClass.SubService.IndustrialOre:
+                    return 2;
                 default:
                     return 1;
             }

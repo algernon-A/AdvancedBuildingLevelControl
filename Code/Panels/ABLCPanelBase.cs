@@ -42,7 +42,7 @@ namespace ABLC
                 // Basic setup.
                 autoLayout = false;
                 backgroundSprite = "MenuPanel2";
-                opacity = 0.8f;
+                opacity = 0.9f;
                 isVisible = true;
                 canFocus = true;
                 isInteractive = true;

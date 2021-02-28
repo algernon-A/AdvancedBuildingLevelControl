@@ -49,6 +49,10 @@ namespace ABLC
         [XmlElement("NoAbandonAny")]
         public bool NoAbandonAny { get => ModSettings.noAbandonAny; set => ModSettings.noAbandonAny = value; }
 
+        // Check building levels on game load.
+        [XmlElement("LoadLevelCheck")]
+        public bool LoadLevelCheck { get => ModSettings.loadLevelCheck; set => ModSettings.loadLevelCheck = value; }
+
 
         /// <summary>
         /// Load settings from XML file.
