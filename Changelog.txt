@@ -3,6 +3,8 @@
 - Add button to clear all building settings in selected district
 - Add Harmony Prefix to PrivateBuildingAI.BuildingUpdated to catch any attempted upgrades to invalid building levels
 - Add option to check all map buildings on load and fix any illegal levels
+- Add tooltips to ABLC panels
+- Update UI
 
 
 Version 0.7.1 -
