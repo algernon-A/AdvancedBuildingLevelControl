@@ -95,6 +95,12 @@ namespace ABLC
         protected UIDropDown maxWorkLevelDropDown;
         private UICheckBox randomSpawnCheck;
 
+        // Text strings.
+        protected override string MinLevelTip => Translations.Translate("ABLC_CAT_RMN_TIP");
+        protected override string MaxLevelTip => Translations.Translate("ABLC_CAT_RMX_TIP");
+        protected override string UpgradeTip => Translations.Translate("ABLC_TRIG_UPD_TIP");
+        protected override string DowngradeTip => Translations.Translate("ABLC_TRIG_DWD_TIP");
+
 
         /// <summary>
         /// Called when the selected district has changed.
@@ -135,7 +141,7 @@ namespace ABLC
 
                 // Extend height and add 'clear all building settings' button.
                 height += 40f;
-                UIButton clearBuildingsButton = UIControls.AddButton(this, Margin, height - 40f, Translations.Translate("ABLC_CLR_BLD"), this.width - (Margin * 2));
+                UIButton clearBuildingsButton = UIControls.AddButton(this, Margin, height - 40f, Translations.Translate("ABLC_CLR_BLD"), this.width - (Margin * 2), tooltip: Translations.Translate("ABLC_CLR_BLD_TIP"));
                 clearBuildingsButton.eventClicked += ClearBuildings;
 
                 // Add category labels.
@@ -143,14 +149,14 @@ namespace ABLC
                 UILabel workLabel = AddLabel(Translations.Translate("ABLC_CAT_WRK"), Margin, 140f, hAlign: UIHorizontalAlignment.Left);
 
                 // Add workplace min and max dropdowns.
-                minWorkLevelDropDown = UIControls.AddLabelledDropDown(this, width - Margin - MenuWidth, 160f, Translations.Translate("ABLC_LVL_MIN"), 60f, false);
+                minWorkLevelDropDown = UIControls.AddLabelledDropDown(this, width - Margin - MenuWidth, 160f, Translations.Translate("ABLC_LVL_MIN"), 60f, false, Translations.Translate("ABLC_CAT_WMN_TIP"));
                 minWorkLevelDropDown.items = new string[] { "1", "2", "3" };
 
-                maxWorkLevelDropDown = UIControls.AddLabelledDropDown(this, width - Margin - MenuWidth, 190f, Translations.Translate("ABLC_LVL_MAX"), 60f, false);
+                maxWorkLevelDropDown = UIControls.AddLabelledDropDown(this, width - Margin - MenuWidth, 190f, Translations.Translate("ABLC_LVL_MAX"), 60f, false, Translations.Translate("ABLC_CAT_WMX_TIP"));
                 maxWorkLevelDropDown.items = new string[] { "1", "2", "3" };
 
                 // Add random level checkbox.
-                randomSpawnCheck = UIControls.AddCheckBox(this, 20f, 235f, Translations.Translate("ABLC_RAN_SPN"));
+                randomSpawnCheck = UIControls.AddCheckBox(this, 20f, 235f, Translations.Translate("ABLC_RAN_SPN"), tooltip: Translations.Translate("ABLC_RAN_SPN_TIP"));
 
                 // Set initial district.
                 DistrictChanged();

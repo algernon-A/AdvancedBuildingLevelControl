@@ -7,13 +7,25 @@
     <Translation ID="ABLC_CTRL" String="Control levels" />
     <Translation ID="ABLC_BUT_DIS" String="Level control not available for this building type" />
     <Translation ID="ABLC_LVL_MIN" String="Minimum level" />
+    <Translation ID="ABLC_LVL_MIN_TIP" String="The minimum permitted building level for this building." />
     <Translation ID="ABLC_LVL_MAX" String="Maximum level" />
+    <Translation ID="ABLC_LVL_MAX_TIP" String="The maximum permitted building level for this building." />
     <Translation ID="ABLC_CAT_RES" String="Residential levels" />
+    <Translation ID="ABLC_CAT_RMN_TIP" String="The minimum permitted building level for residential buildings in this district." />
+    <Translation ID="ABLC_CAT_RMX_TIP" String="The maximum permitted building level for residential buildings in this district." />
     <Translation ID="ABLC_CAT_WRK" String="Workplace levels" />
+    <Translation ID="ABLC_CAT_WMN_TIP" String="The minimum permitted building level for workplace buildings (industrial/commercial/office) in this district." />
+    <Translation ID="ABLC_CAT_WMX_TIP" String="The maximum permitted building level for workplace buildings (industrial/commercial/office) in this district." />
     <Translation ID="ABLC_RAN_SPN" String="Random spawn levels" />
+    <Translation ID="ABLC_RAN_SPN_TIP" String="When set, new buildings in this district will have a starting level randomly selected between the minimum and maximum for this district." />
     <Translation ID="ABLC_TRIG_UP" String="Force upgrade" />
+    <Translation ID="ABLC_TRIG_UPB_TIP" String="Forces this building to upgrade to the specified minimum." />
+    <Translation ID="ABLC_TRIG_UPD_TIP" String="Forces all buildings in this district with levels below the specified minimum to upgrade to that minimum." />
     <Translation ID="ABLC_TRIG_DWN" String="Force downgrade" />
+    <Translation ID="ABLC_TRIG_DWB_TIP" String="Forces this building to downgrade to the specified maximum." />
+    <Translation ID="ABLC_TRIG_DWD_TIP" String="Forces all buildings in this district with levels above the specified maximum to downgrade to that maximum." />
     <Translation ID="ABLC_CLR_BLD" String="Clear building settings" />
+    <Translation ID="ABLC_CLR_BLD_TIP" String="Clears all individual building level settings in this district." />
     <Translation ID="ABLC_OPT_PNL" String="Panel options" />
     <Translation ID="ABLC_OPT_PLY" String="Gameplay options" />
     <Translation ID="ABLC_OPT_SHO" String="Show panel on building selection" />

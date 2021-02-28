@@ -28,6 +28,13 @@ namespace ABLC
         protected UIButton upgradeButton;
         protected UIButton downgradeButton;
 
+        // Text strings.
+        protected virtual string MinLevelTip => Translations.Translate("ABLC_LVL_MIN_TIP");
+        protected virtual string MaxLevelTip => Translations.Translate("ABLC_LVL_MAX_TIP");
+        protected virtual string UpgradeTip => Translations.Translate("ABLC_TRIG_UPB_TIP");
+        protected virtual string DowngradeTip => Translations.Translate("ABLC_TRIG_DWB_TIP");
+
+
 
         /// <summary>
         /// Performs initial setup for the panel; we don't use Start() as that's not sufficiently reliable (race conditions), and is not needed with the dynamic create/destroy process.
@@ -42,7 +49,7 @@ namespace ABLC
                 // Basic setup.
                 autoLayout = false;
                 backgroundSprite = "MenuPanel2";
-                opacity = 0.9f;
+                opacity = 0.95f;
                 isVisible = true;
                 canFocus = true;
                 isInteractive = true;
@@ -76,17 +83,17 @@ namespace ABLC
                 UILabel titleLabel = AddLabel(Translations.Translate("ABLC_SHORT"), 0f, Margin, 1.0f);
 
                 // Level dropdowns.
-                minLevelDropDown = UIControls.AddLabelledDropDown(this, width - Margin - MenuWidth, 70f, Translations.Translate("ABLC_LVL_MIN"), 60f, false);
+                minLevelDropDown = UIControls.AddLabelledDropDown(this, width - Margin - MenuWidth, 70f, Translations.Translate("ABLC_LVL_MIN"), 60f, false, MinLevelTip);
                 minLevelDropDown.items = new string[] { "1", "2", "3", "4", "5" };
 
-                maxLevelDropDown = UIControls.AddLabelledDropDown(this, width - Margin - MenuWidth, 100f, Translations.Translate("ABLC_LVL_MAX"), 60f, false);
+                maxLevelDropDown = UIControls.AddLabelledDropDown(this, width - Margin - MenuWidth, 100f, Translations.Translate("ABLC_LVL_MAX"), 60f, false, MaxLevelTip);
                 maxLevelDropDown.items = new string[] { "1", "2", "3", "4", "5" };
 
                 // Apply button.
-                upgradeButton = UIControls.AddButton(this, Margin, PanelHeight - 80f, Translations.Translate("ABLC_TRIG_UP"), this.width - (Margin * 2));
+                upgradeButton = UIControls.AddButton(this, Margin, PanelHeight - 80f, Translations.Translate("ABLC_TRIG_UP"), this.width - (Margin * 2), tooltip: UpgradeTip);
 
                 // Add 'downgrade' button.
-                downgradeButton = UIControls.AddButton(this, Margin, PanelHeight - 40f, Translations.Translate("ABLC_TRIG_DWN"), this.width - (Margin * 2));
+                downgradeButton = UIControls.AddButton(this, Margin, PanelHeight - 40f, Translations.Translate("ABLC_TRIG_DWN"), this.width - (Margin * 2), tooltip: DowngradeTip);
             }
             catch (Exception e)
             {
