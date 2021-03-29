@@ -6,8 +6,7 @@ namespace ABLC
     /// <summary>
     /// Harmony Postfix patch to update ABLC district info panel when district selection changes.
     /// </summary>
-    [HarmonyPatch(typeof(DistrictWorldInfoPanel))]
-    [HarmonyPatch("OnSetTarget")]
+    [HarmonyPatch(typeof(DistrictWorldInfoPanel), "OnSetTarget")]
     internal static class DistrictPanelPatch
     {
         /// <summary>
@@ -23,8 +22,7 @@ namespace ABLC
     /// <summary>
     /// Harmony Postfix patch to update ABLC building info panel when building selection changes.
     /// </summary>
-    [HarmonyPatch(typeof(ZonedBuildingWorldInfoPanel))]
-    [HarmonyPatch("OnSetTarget")]
+    [HarmonyPatch(typeof(ZonedBuildingWorldInfoPanel), "OnSetTarget")]
     internal static class BuildingPanelPatch
     {
         /// <summary>

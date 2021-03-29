@@ -1,16 +1,12 @@
 ﻿using HarmonyLib;
 
 
-#pragma warning disable IDE0060 // Remove unused parameter
-
-
 namespace ABLC
 {
 	/// <summary>
 	/// Harmony Prefix patch for PrivateBuildingAI.BuildingLoaded.
 	/// </summary>
-	[HarmonyPatch(typeof(PrivateBuildingAI))]
-	[HarmonyPatch("BuildingLoaded")]
+	[HarmonyPatch(typeof(PrivateBuildingAI), nameof(PrivateBuildingAI.BuildingLoaded))]
 	public static class BuildingLoadedPatch
 	{
 		/// <summary>
@@ -21,7 +17,7 @@ namespace ABLC
 		/// <param name="buildingID">Building instance ID</param>
 		/// <param name="data">Building data</param>
 		/// <param name="version">Data version</param>
-		public static void Prefix(PrivateBuildingAI __instance, ushort buildingID, ref Building data, uint version)
+		public static void Prefix(PrivateBuildingAI __instance, ushort buildingID, ref Building data)
 		{
 			// Only do this if settings permit.
 			if (ModSettings.loadLevelCheck)
@@ -38,5 +34,3 @@ namespace ABLC
 		}
 	}
 }
-
-#pragma warning restore IDE0060 // Remove unused parameter

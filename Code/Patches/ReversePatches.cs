@@ -3,9 +3,6 @@ using System.Runtime.CompilerServices;
 using HarmonyLib;
 
 
-#pragma warning disable IDE0060 // Remove unused parameter
-
-
 namespace ABLC
 {
     /// <summary>
@@ -29,10 +26,8 @@ namespace ABLC
         [MethodImpl(MethodImplOptions.NoInlining)]
         internal static void EnsureCitizenUnits(object instance, ushort buildingID, ref Building data, int homeCount, int workCount, int visitCount, int studentCount)
         {
-            Logging.Error("EnsureCitizenUnits reverse Harmony patch wasn't applied");
+            Logging.Error("EnsureCitizenUnits reverse Harmony patch wasn't applied, params: ", instance.ToString(), buildingID.ToString(), data.ToString(), homeCount.ToString(), workCount.ToString(), visitCount.ToString(), studentCount.ToString());
             throw new NotImplementedException("Harmony reverse patch not applied");
         }
     }
 }
-
-#pragma warning restore IDE0060 // Remove unused parameter

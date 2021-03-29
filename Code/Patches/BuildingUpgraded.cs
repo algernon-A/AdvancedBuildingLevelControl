@@ -3,16 +3,13 @@ using ColossalFramework;
 using HarmonyLib;
 
 
-#pragma warning disable IDE0060 // Remove unused parameter
-
 
 namespace ABLC
 {
 	/// <summary>
 	/// Harmony patches (Prefix and Postfix) for PrivateBuildingAI.BuildingUpgraded.
 	/// </summary>
-	[HarmonyPatch(typeof(PrivateBuildingAI))]
-	[HarmonyPatch("BuildingUpgraded")]
+	[HarmonyPatch(typeof(PrivateBuildingAI), nameof(PrivateBuildingAI.BuildingUpgraded))]
 	public static class BuildingUpgradedPatch
     {
 		/// <summary>
@@ -38,10 +35,9 @@ namespace ABLC
 		/// <summary>
 		/// Harmony Postfix patch to ensure valid building levels and to keep a building upgrading until it reaches the minimum controlled level.
 		/// </summary>
-		/// <param name="__instance">Instance reference</param>
 		/// <param name="buildingID">Building instance ID</param>
 		/// <param name="data">Building data</param>
-		public static void Postfix(PrivateBuildingAI __instance, ushort buildingID, ref Building data)
+		public static void Postfix(ushort buildingID, ref Building data)
 		{
 			byte minLevel;
 
@@ -71,5 +67,3 @@ namespace ABLC
 		}
 	}
 }
-
-#pragma warning restore IDE0060 // Remove unused parameter
