@@ -149,14 +149,14 @@ namespace ABLC
                 UILabel workLabel = AddLabel(Translations.Translate("ABLC_CAT_WRK"), Margin, 140f, hAlign: UIHorizontalAlignment.Left);
 
                 // Add workplace min and max dropdowns.
-                minWorkLevelDropDown = UIControls.AddLabelledDropDown(this, width - Margin - MenuWidth, 160f, Translations.Translate("ABLC_LVL_MIN"), 60f, false, Translations.Translate("ABLC_CAT_WMN_TIP"));
+                minWorkLevelDropDown = UIControls.AddLabelledDropDown(this, width - Margin - MenuWidth, 160f, Translations.Translate("ABLC_LVL_MIN"), 60f, accomodateLabel: false, tooltip: Translations.Translate("ABLC_CAT_WMN_TIP"));
                 minWorkLevelDropDown.items = new string[] { "1", "2", "3" };
 
-                maxWorkLevelDropDown = UIControls.AddLabelledDropDown(this, width - Margin - MenuWidth, 190f, Translations.Translate("ABLC_LVL_MAX"), 60f, false, Translations.Translate("ABLC_CAT_WMX_TIP"));
+                maxWorkLevelDropDown = UIControls.AddLabelledDropDown(this, width - Margin - MenuWidth, 190f, Translations.Translate("ABLC_LVL_MAX"), 60f, accomodateLabel: false, tooltip: Translations.Translate("ABLC_CAT_WMX_TIP"));
                 maxWorkLevelDropDown.items = new string[] { "1", "2", "3" };
 
                 // Add random level checkbox.
-                randomSpawnCheck = UIControls.AddCheckBox(this, 20f, 235f, Translations.Translate("ABLC_RAN_SPN"), tooltip: Translations.Translate("ABLC_RAN_SPN_TIP"));
+                randomSpawnCheck = UIControls.LabelledCheckBox(this, 20f, 235f, Translations.Translate("ABLC_RAN_SPN"), tooltip: Translations.Translate("ABLC_RAN_SPN_TIP"));
 
                 // Set initial district.
                 DistrictChanged();
