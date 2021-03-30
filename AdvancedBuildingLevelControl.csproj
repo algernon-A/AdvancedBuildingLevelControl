@@ -46,6 +46,9 @@
     <Reference Include="ICities">
       <HintPath>..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\Cities_Skylines\Cities_Data\Managed\ICities.dll</HintPath>
     </Reference>
+    <Reference Include="MoveItIntegration">
+      <HintPath>..\CS-MoveIt\MoveItIntegration\bin\Debug\MoveItIntegration.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -59,6 +62,7 @@
   <ItemGroup>
     <Compile Include="Code\ExternalCalls.cs" />
     <Compile Include="Code\Patches\BuildingLoaded.cs" />
+    <Compile Include="Code\Utils\MoveItIntegration.cs" />
     <Compile Include="Code\Patches\SimulationStepActive.cs" />
     <Compile Include="Code\LevelControl\Buildings.cs" />
     <Compile Include="Code\LevelControl\Districts.cs" />
