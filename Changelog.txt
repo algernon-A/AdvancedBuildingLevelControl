@@ -1,4 +1,9 @@
-﻿Version 0.8 -
+﻿Version 0.9 -
+
+- Add Move It integration
+
+
+Version 0.8 -
 
 - Add button to clear all building settings in selected district
 - Add Harmony Prefix to PrivateBuildingAI.BuildingUpdated to catch any attempted upgrades to invalid building levels
