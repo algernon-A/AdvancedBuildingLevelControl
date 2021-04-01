@@ -2,22 +2,37 @@
 <Language UniqueName="ru" ReadableName="Русский">
   <Translations>
     <Translation ID="ABLC_DESC" String="В РАЗРАБОТКЕ: позволяет контролировать уровни зданий в районах и/или независимо." />
-    <Translation ID="ABLC_NAME" String="Уровни контроля" />
+    <Translation ID="ABLC_NAME" String="Advanced Building Level Control" />
+    <Translation ID="ABLC_SHORT" String="Level Control" />
     <Translation ID="ABLC_CTRL" String="Контроль уровней" />
     <Translation ID="ABLC_BUT_DIS" String="Контроль уровней недоступен для этого типа зданий" />
     <Translation ID="ABLC_LVL_MIN" String="Мин. уровень" />
+    <Translation ID="ABLC_LVL_MIN_TIP" String="Минимально допустимый уровень для этого здания." />
     <Translation ID="ABLC_LVL_MAX" String="Макс. уровень" />
-    <Translation ID="ABLC_CAT_RES" String="Жилые уровни" />
-    <Translation ID="ABLC_CAT_WRK" String="Промышленные уровни" />
+    <Translation ID="ABLC_LVL_MAX_TIP" String="Максимально допустимый уровень для этого здания." />
+    <Translation ID="ABLC_CAT_RES" String="Уровни жилых зданий" />
+    <Translation ID="ABLC_CAT_RMN_TIP" String="Минимально допустимый уровень жилых зданий в этом районе." />
+    <Translation ID="ABLC_CAT_RMX_TIP" String="Максимально допустимый уровень жилых зданий в этом районе." />
+    <Translation ID="ABLC_CAT_WRK" String="Уровни зданий с рабочими местами" />
+    <Translation ID="ABLC_CAT_WMN_TIP" String="Минимально допустимый уровень для зданий с рабочими местами (промышленных/коммерческих/офисных) в этом районе." />
+    <Translation ID="ABLC_CAT_WMX_TIP" String="Максимально допустимый уровень для зданий с рабочими местами (промышленных/коммерческих/офисных) в этом районе." />
     <Translation ID="ABLC_RAN_SPN" String="Случ. ур. нов. зданий" />
+    <Translation ID="ABLC_RAN_SPN_TIP" String="При установке, новые здания в этом районе будут иметь начальный уровень, случайно выбранный между минимальным и максимальным для этого района." />
     <Translation ID="ABLC_TRIG_UP" String="Принудит. повышение" />
+    <Translation ID="ABLC_TRIG_UPB_TIP" String="Заставляет это здание обновиться до указанного минимума." />
+    <Translation ID="ABLC_TRIG_UPD_TIP" String="Заставляет все здания в этом районе с уровнями ниже указанного минимума обновляться до этого минимума." />
     <Translation ID="ABLC_TRIG_DWN" String="Принудит. понижение" />
+    <Translation ID="ABLC_TRIG_DWB_TIP" String="Заставляет это здание понизиться до указанного максимума." />
+    <Translation ID="ABLC_TRIG_DWD_TIP" String="Заставляет все здания в этом районе с уровнями выше указанного максимума понизиться до этого максимума." />
+    <Translation ID="ABLC_CLR_BLD" String="Очистить настройки зданий" />
+    <Translation ID="ABLC_CLR_BLD_TIP" String="Очищает все индивидуальные настройки уровней зданий в этом районе." />
     <Translation ID="ABLC_OPT_PNL" String="Настройки панели" />
     <Translation ID="ABLC_OPT_PLY" String="Настройки игрового процесса" />
     <Translation ID="ABLC_OPT_SHO" String="Показать панель при выборе здания" />
     <Translation ID="ABLC_OPT_RT" String="Поместить панель ABLC справа от панели информации о здании (а не слева)" />
     <Translation ID="ABLC_OPT_ANA" String="Нет заброшенных построек" />
     <Translation ID="ABLC_OPT_HNA" String="Нет заброшенных исторических зданий" />
+    <Translation ID="ABLC_OPT_CLL" String="Проверить все здания на карте при загрузке и исправить любые недопустимые уровни" />
     <Translation ID="TRN_CHOICE" String="Установить язык" />
     <Translation ID="TRN_SYS" String="Использ. системный" />
     <Translation ID="MES_CLS" String="Закрыть" />
