@@ -17,7 +17,7 @@ namespace ABLC
 		/// <param name="buildingData">Building instance data reference</param>
 		public static void Postfix(PrivateBuildingAI __instance, ushort buildingID, ref Building buildingData)
 		{
-			// Check to see if we have no abandonement fro any building set, or no abandonment historical and this is an historical building.
+			// Check to see if we have no abandonement for any building set, or no abandonment historical and this is an historical building.
 			if (ModSettings.noAbandonAny || (ModSettings.noAbandonHistorical && __instance.IsHistorical(buildingID, ref buildingData, out bool _)))
             {
 				// It is - simply reset the major problem timer to avoid the 'abandonment' timeout.

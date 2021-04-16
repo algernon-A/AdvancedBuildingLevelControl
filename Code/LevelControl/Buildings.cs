@@ -147,6 +147,8 @@ namespace ABLC
         /// <param name="serializer">Data serializer</param>
         public void AfterDeserialize(DataSerializer serializer)
         {
+            Logging.Message("starting building post-deserialization");
+
             // Make sure that the building manager has been initialised before proceeding.
             if(BuildingManager.exists)
             {
@@ -171,6 +173,12 @@ namespace ABLC
                 {
                     BuildingsABLC.levelRanges.Remove(key);
                 }
+
+                Logging.Message("building settings read");
+            }
+            else
+            {
+                Logging.Error("builidng manager didn't exist");
             }
         }
     }

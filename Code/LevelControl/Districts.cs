@@ -87,6 +87,8 @@ namespace ABLC
         /// <param name="serializer">Data serializer</param>
         public void AfterDeserialize(DataSerializer serializer)
         {
+            Logging.Message("starting district post-deserialization");
+
             // If any array is less than the required size, we ignore what was read and re-initialise the array with default values.
             if (DistrictsABLC.minResLevel == null || DistrictsABLC.minResLevel.Length < 128)
             {

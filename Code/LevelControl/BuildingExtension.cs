@@ -20,6 +20,12 @@ namespace ABLC
         /// <returns>Modified spawn data</returns>
         public override SpawnData OnCalculateSpawn(Vector3 position, SpawnData spawn)
         {
+            // Don't do anything for specialized industry.
+            if (spawn.subService == SubService.IndustrialForestry || spawn.subService == SubService.IndustrialFarming || spawn.subService == SubService.IndustrialOil || spawn.subService == SubService.IndustrialOre)
+            {
+                return spawn;
+            }
+
             // Get district.
             ushort districtID = Singleton<DistrictManager>.instance.GetDistrict(position);
 
