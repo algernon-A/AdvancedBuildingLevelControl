@@ -1,4 +1,9 @@
-﻿Version 0.9 -
+﻿Version 0.9.1 -
+
+- Specialized industry is now exempt from spawning level control
+
+
+Version 0.9 -
 
 - Add Move It integration
 
