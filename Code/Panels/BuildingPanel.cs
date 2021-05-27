@@ -127,12 +127,14 @@ namespace ABLC
         /// </summary>
         internal static void AddInfoPanelButton()
         {
+            const float PanelButtonSize = 36f;
+
             BuildingWorldInfoPanel infoPanel = UIView.library.Get<ZonedBuildingWorldInfoPanel>(typeof(ZonedBuildingWorldInfoPanel).Name);
             panelButton = infoPanel.component.AddUIComponent<UIButton>();
 
             // Basic button setup.
             panelButton.atlas = Textures.ABLCButtonSprites;
-            panelButton.size = new Vector2(36, 36);
+            panelButton.size = new Vector2(PanelButtonSize, PanelButtonSize);
             panelButton.normalFgSprite = "normal";
             panelButton.focusedFgSprite = "hovered";
             panelButton.hoveredFgSprite = "hovered";
@@ -160,7 +162,7 @@ namespace ABLC
             try
             {
                 // Position button vertically in the middle of the problems panel.  If wrapper panel exists, we need to add its offset as well.
-                relativeY = (wrapper == null ? 0 : wrapper.relativePosition.y) + problemsPanel.relativePosition.y + ((problemsPanel.height - 36) / 2);
+                relativeY = (wrapper == null ? 0 : wrapper.relativePosition.y) + problemsPanel.relativePosition.y + ((problemsPanel.height - PanelButtonSize) / 2f);
             }
             catch
             {
@@ -169,8 +171,8 @@ namespace ABLC
             }
 
             // Set position.
-            panelButton.AlignTo(infoPanel.component, UIAlignAnchor.TopRight);
-            panelButton.relativePosition += new Vector3(-62f, relativeY, 0f);
+            panelButton.AlignTo(infoPanel.component, UIAlignAnchor.TopLeft);
+            panelButton.relativePosition += new Vector3(infoPanel.component.width - 62f - PanelButtonSize, relativeY, 0f);
 
             // Event handler.
             panelButton.eventClick += (control, clickEvent) =>
