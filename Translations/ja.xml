@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Language UniqueName="ja" ReadableName="日本語">
+  <Translations>
+    <Translation ID="ABLC_DESC" String="開発中: 地区ごと・建物ごとに、建物レベルの制御が可能です"/>
+    <Translation ID="ABLC_NAME" String="Advanced Building Level Control"/>
+    <Translation ID="ABLC_SHORT" String="レベル制御"/>
+    <Translation ID="ABLC_CTRL" String="レベルのコントロール"/>
+    <Translation ID="ABLC_BUT_DIS" String="この建物タイプではレベル制御ができません"/>
+    <Translation ID="ABLC_LVL_MIN" String="最低レベル"/>
+    <Translation ID="ABLC_LVL_MIN_TIP" String="この建物タイプの最低レベルを指定"/>
+    <Translation ID="ABLC_LVL_MAX" String="最高レベル"/>
+    <Translation ID="ABLC_LVL_MAX_TIP" String="この建物タイプの最高レベルを指定"/>
+    <Translation ID="ABLC_CAT_RES" String="住宅のレベル"/>
+    <Translation ID="ABLC_CAT_RMN_TIP" String="この地区内にある住宅の最低レベルを指定"/>
+    <Translation ID="ABLC_CAT_RMX_TIP" String="この地区内にある住宅の最高レベルを指定"/>
+    <Translation ID="ABLC_CAT_WRK" String="職場のレベル"/>
+    <Translation ID="ABLC_CAT_WMN_TIP" String="この地区内にある、職場の建物(産業/商業/オフィス)で最低レベルを指定"/>
+    <Translation ID="ABLC_CAT_WMX_TIP" String="この地区内にある、職場の建物(産業/商業/オフィス)で最高レベルを指定"/>
+    <Translation ID="ABLC_RAN_SPN" String="ランダム建設のレベル"/>
+    <Translation ID="ABLC_RAN_SPN_TIP" String="設定すると地区内で建設される建物は、指定したレベルの範囲内でランダムに選択されます"/>
+    <Translation ID="ABLC_TRIG_UP" String="強制アップグレード"/>
+    <Translation ID="ABLC_TRIG_UPB_TIP" String="この建物タイプを指定されたレベルまで、強制的にアップグレードします"/>
+    <Translation ID="ABLC_TRIG_UPD_TIP" String="この地区内にある建物で指定したレベルを下回っている場合は、指定のレベルまで強制的にアップグレード"/>
+    <Translation ID="ABLC_TRIG_DWN" String="強制ダウングレード"/>
+    <Translation ID="ABLC_TRIG_DWB_TIP" String="この建物タイプを指定されたレベルまで、強制的にダウングレードします"/>
+    <Translation ID="ABLC_TRIG_DWD_TIP" String="この地区内にある建物で指定したレベルを超えている場合は、指定のレベルまで強制的にダウングレード"/>
+    <Translation ID="ABLC_CLR_BLD" String="建物設定をクリア"/>
+    <Translation ID="ABLC_CLR_BLD_TIP" String="この地区内で指定した、個々の建物レベルの設定をクリアします"/>
+    <Translation ID="ABLC_OPT_PNL" String="パネルの設定"/>
+    <Translation ID="ABLC_OPT_PLY" String="ゲーム設定"/>
+    <Translation ID="ABLC_OPT_SHO" String="建物選択時にパネルを表示"/>
+    <Translation ID="ABLC_OPT_RT" String="ゲーム情報のパネル右側にABLCパネルを配置(左側ではなく)"/>
+    <Translation ID="ABLC_OPT_ANA" String="全ての建物を放棄しない"/>
+    <Translation ID="ABLC_OPT_HNA" String="歴史的建造物を放棄しない"/>
+    <Translation ID="ABLC_OPT_CLL" String="マップ上の全建物をチェックして不正なレベルを修正"/>
+    <Translation ID="TRN_CHOICE" String="言語設定"/>
+    <Translation ID="TRN_SYS" String="システム言語を使用"/>
+    <Translation ID="MES_CLS" String="閉じる"/>
+    <Translation ID="MES_DSA" String="次回から非表示"/>
+    <Translation ID="MES_PAGE" String="詳細は、MODがあるSteamのワークショップを確認してください。"/>
+    <Translation ID="ABLC_ERR_FAT" String="正常にMODが起動できないため、動作をシャットダウンしました。"/>
+    <Translation ID="ABLC_ERR_HAR" String="Advanced Building Level Controlは、必要なHarmony 2.0 MODのパッチ動作を完了できません。"/>
+    <Translation ID="ERR_HAR0" String="Harmony 2.0 MODでエラーが発生しました"/>
+    <Translation ID="ERR_HAR1" String="エラーが起きる原因として、考えられるのは以下の通りです。"/>
+    <Translation ID="ERR_HAR2" String="依存関係にある、必要なHarmony 2 MODがインストールされていません。"/>
+    <Translation ID="ERR_HAR3" String="古いMODや壊れたMODが、Harmony 2.0 MODの動作を妨げています。"/>
+    <Translation ID="ERR_CON0" String="MODの競合が検出されました！"/>
+    <Translation ID="ERR_CON1" String="競合するMOD:"/>
+    <Translation ID="ABLC_ERR_CON0" String="Advanced Building Level Controlは、少なくとも1つの他のMODとの競合を検出しました。"/>
+    <Translation ID="ABLC_ERR_CON1" String="これらのMODは、Advanced Building Level Controlが動作する前に除去する必要があります。"/>
+  </Translations>
+</Language>
