@@ -103,6 +103,7 @@
     <Content Include="MoveItIntegration.dll" />
     <Content Include="Resources\ablc_buttons.png" />
     <Content Include="Translations\en.xml" />
+    <Content Include="Translations\ja.xml" />
     <Content Include="Translations\ru.xml" />
     <Content Include="Translations\zh.xml" />
   </ItemGroup>
