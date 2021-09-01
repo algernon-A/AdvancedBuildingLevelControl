@@ -1,37 +1,52 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
-<Language UniqueName="zh" ReadableName="中文">
+<Language UniqueName="zh" ReadableName="简体中文">
   <Translations>
-    <Translation ID="ABLC_DESC" String="持續開發中：允許按行政區或建築本身，控制建築物等級。" />
-    <Translation ID="ABLC_NAME" String="高級建築等級控制器" />
-    <Translation ID="ABLC_CTRL" String="級別控制" />
-    <Translation ID="ABLC_BUT_DIS" String="級別控制不可用於此類型建築類型" />
-    <Translation ID="ABLC_LVL_MIN" String="最低等級" />
-    <Translation ID="ABLC_LVL_MAX" String="最高等級" />
-    <Translation ID="ABLC_CAT_RES" String="住宅建築級別" />
-    <Translation ID="ABLC_CAT_WRK" String="就職建築級別" />
-    <Translation ID="ABLC_RAN_SPN" String="隨機產生級別" />
-    <Translation ID="ABLC_TRIG_UP" String="強制升級" />
-    <Translation ID="ABLC_TRIG_DWN" String="強制降級" />
-    <Translation ID="ABLC_OPT_PNL" String="面板選項" />
-    <Translation ID="ABLC_OPT_PLY" String="遊戲性選項" />
-    <Translation ID="ABLC_OPT_SHO" String="顯示建築控制面板" />
-    <Translation ID="ABLC_OPT_RT" String="將建築控制面板放置在遊戲訊息面板的右側（而非默認的左側）" />
-    <Translation ID="ABLC_OPT_ANA" String="不可遺棄(所有建築)" />
-    <Translation ID="ABLC_OPT_HNA" String="不可遺棄(歷史建築)" />
-    <Translation ID="TRN_CHOICE" String="語言設置" />
-    <Translation ID="TRN_SYS" String="使用遊戲默認語言" />
-    <Translation ID="MES_CLS" String="關閉" />
-    <Translation ID="MES_DSA" String="不要在顯示" />
-    <Translation ID="MES_PAGE" String="請參閱模組(Mod)在Steam工作坊的頁面以獲得更多資訊。" />
-    <Translation ID="ABLC_ERR_FAT" String="這意味著模組(Mod)將無法正常使用，並且已關閉。" />
-    <Translation ID="ABLC_ERR_HAR" String="“高級建築等級控制(Advanced Building Level Control)” 模組(Mod) 無法完成因為它須要 “Harmony” 擴展文檔。" />
-    <Translation ID="ERR_HAR0" String="“Harmony” 擴展文檔錯誤" />
-    <Translation ID="ERR_HAR1" String="此問題有可能包括的原因：" />
-    <Translation ID="ERR_HAR2" String="“Harmony 2” 擴展文檔模組(Mod)沒有訂閱。" />
-    <Translation ID="ERR_HAR3" String="一些老的或壞的模組(Mod)導致 “Harmony 2” 擴展文檔模組(Mod)無法正常運轉。" />
-    <Translation ID="ERR_CON0" String="檢測到模組(Mod)衝突！" />
-    <Translation ID="ERR_CON1" String="有衝突的模組(Mod)：" />
-    <Translation ID="ABLC_ERR_CON0" String="“高級建築等級控制(Advanced Building Level Control)” 模組(Mod)檢測到與至少一個其他模組(Mod)發生衝突。" />
-    <Translation ID="ABLC_ERR_CON1" String="這些模組(Mod)必須退訂才能讓 “高級建築等級控制(Advanced Building Level Control)” 模組(Mod)正常運轉。" />
+    <Translation ID="ABLC_DESC" String="高级建筑等级控制工具" />
+    <Translation ID="ABLC_NAME" String="高级建筑等级控制工具" />
+    <Translation ID="ABLC_SHORT" String="级别控制" />
+    <Translation ID="ABLC_CTRL" String="控制等级" />
+    <Translation ID="ABLC_BUT_DIS" String="级别控制不适用于该建筑类型" />
+    <Translation ID="ABLC_LVL_MIN" String="最低等级" />
+    <Translation ID="ABLC_LVL_MIN_TIP" String="该建筑指定的最低等级" />
+    <Translation ID="ABLC_LVL_MAX" String="最高等级" />
+    <Translation ID="ABLC_LVL_MAX_TIP" String="该建筑指定的最高等级" />
+    <Translation ID="ABLC_CAT_RES" String="住宅等级" />
+    <Translation ID="ABLC_CAT_RMN_TIP" String="指定该区域住宅建筑最低等级" />
+    <Translation ID="ABLC_CAT_RMX_TIP" String="指定该区域住宅建筑最高等级" />
+    <Translation ID="ABLC_CAT_WRK" String="就业建筑等级" />
+    <Translation ID="ABLC_CAT_WMN_TIP" String="指定该区域就业建筑最低等级（工业/商业/办公）" />
+    <Translation ID="ABLC_CAT_WMX_TIP" String="指定该区域就业建筑最高等级（工业/商业/办公）" />
+    <Translation ID="ABLC_RAN_SPN" String="随机等级" />
+    <Translation ID="ABLC_RAN_SPN_TIP" String="一旦设定，该区域的新建筑将在最低等级到最高等级之间随机设定等级" />
+    <Translation ID="ABLC_TRIG_UP" String="强制升级" />
+    <Translation ID="ABLC_TRIG_UPB_TIP" String="强制升级该建筑" />
+    <Translation ID="ABLC_TRIG_UPD_TIP" String="强制该区域所有低于指定最低等级的建筑升级到该最低等级" />
+    <Translation ID="ABLC_TRIG_DWN" String="强制降级" />
+    <Translation ID="ABLC_TRIG_DWB_TIP" String="强制降级该建筑" />
+    <Translation ID="ABLC_TRIG_DWD_TIP" String="强制该区域所有超过指定最高等级的建筑降低到该最高等级" />
+    <Translation ID="ABLC_CLR_BLD" String="清除建筑等级设定" />
+    <Translation ID="ABLC_CLR_BLD_TIP" String="清除该区域所有独立建筑的等级设定" />
+    <Translation ID="ABLC_OPT_PNL" String="面板选项" />
+    <Translation ID="ABLC_OPT_PLY" String="游戏选项" />
+    <Translation ID="ABLC_OPT_SHO" String="显示面板上建筑等级控制按钮" />
+    <Translation ID="ABLC_OPT_RT" String="将等级控制按钮放置在游戏信息面板的右侧（而不是左侧）" />
+    <Translation ID="ABLC_OPT_ANA" String="所有建筑禁止遗弃" />
+    <Translation ID="ABLC_OPT_HNA" String="所有历史建筑禁止遗弃" />
+    <Translation ID="ABLC_OPT_CLL" String="载入地图时检查地图所有建筑并修正任何不正确等级" />
+    <Translation ID="TRN_CHOICE" String="语言设定" />
+    <Translation ID="TRN_SYS" String="使用游戏默认语言" />
+    <Translation ID="MES_CLS" String="关闭" />
+    <Translation ID="MES_DSA" String="不再提醒" />
+    <Translation ID="MES_PAGE" String="如需了解更多信息，请前往创意工坊该模组详细页面了解" />
+    <Translation ID="ABLC_ERR_FAT" String="出现该信息表明模组无法使用，请重启游戏" />
+    <Translation ID="ABLC_ERR_HAR" String="高级建筑等级控制工具无法请求Harmony模组的调用" />
+    <Translation ID="ERR_HAR0" String="Harmony模组调用错误" />
+    <Translation ID="ERR_HAR1" String="出现该问题可能是:" />
+    <Translation ID="ERR_HAR2" String="前置模组Harmony 2并未安装" />
+    <Translation ID="ERR_HAR3" String="出现问题的模组导致Harmony 2无法正常使用" />
+    <Translation ID="ERR_CON0" String="出现模组冲突!" />
+    <Translation ID="ERR_CON1" String="冲突模组为:" />
+    <Translation ID="ABLC_ERR_CON0" String="高级建筑等级控制工具检测到至少有一个模组与其冲突" />
+    <Translation ID="ABLC_ERR_CON1" String="在高级建筑等级控制工具正常工作前需移除与其冲突的模组" />
   </Translations>
 </Language>
