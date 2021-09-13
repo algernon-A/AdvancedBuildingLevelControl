@@ -309,14 +309,44 @@ namespace ABLC
                     // Building exists; get its district and see if it matches the target district.
                     if (districtManager.GetDistrict(thisBuilding.m_position) == districtID)
                     {
-                        // It's in our district.
+                        // It's in our district; get service.
+                        ItemClass.Service service = thisBuilding.Info.GetService();
+
                         // Are we upgrading or downgrading?
                         if (upgrade)
                         {
                             // Upgrading.
-                            byte minLevel = (thisBuilding.Info?.GetService() == ItemClass.Service.Residential ? DistrictsABLC.minResLevel[districtID] : DistrictsABLC.minWorkLevel[districtID]);
+                            byte minLevel;
 
-                            // It's in our district; check if its level is less than the relevant minimum.
+                            // Check to see if there's a maximum level set for this building.
+                            if (BuildingsABLC.levelRanges.ContainsKey(i))
+                            {
+                                // Building record available: use that.
+                                minLevel = BuildingsABLC.levelRanges[i].minLevel;
+                            }
+                            else
+                            {
+                                // No building record; use district record instead.
+                                // Determine which level array to use based on service type.
+                                switch (service)
+                                {
+                                    case ItemClass.Service.Residential:
+                                        // Residential.
+                                        minLevel = DistrictsABLC.minResLevel[districtID];
+                                        break;
+                                    case ItemClass.Service.Industrial:
+                                    case ItemClass.Service.Commercial:
+                                    case ItemClass.Service.Office:
+                                        // Workplace.
+                                        minLevel = DistrictsABLC.minWorkLevel[districtID];
+                                        break;
+                                    default:
+                                        // Ignore buildings with services other than those specified above.
+                                        continue;
+                                }
+                            }
+
+                            // Check if building level is less than the relevant minimum.
                             if (buildings.m_buffer[i].m_level < minLevel)
                             {
                                 // It needs to be upgraded; store copy of current index for action queue.
@@ -329,12 +359,40 @@ namespace ABLC
                         else
                         {
                             // Downgrading.
-                            byte maxLevel = (thisBuilding.Info?.GetService() == ItemClass.Service.Residential ? DistrictsABLC.maxResLevel[districtID] : DistrictsABLC.maxWorkLevel[districtID]);
+                            byte maxLevel;
 
-                            // It's in our district; check if its level is less than the relevant minimum.
+                            // Check to see if there's a maximum level set for this building.
+                            if (BuildingsABLC.levelRanges.ContainsKey(i))
+                            {
+                                // Building record available: use that.
+                                maxLevel = BuildingsABLC.levelRanges[i].maxLevel;
+                            }
+                            else
+                            {
+                                // No building record; use district record instead.
+                                // Determine which level array to use based on service type.
+                                switch (service)
+                                {
+                                    case ItemClass.Service.Residential:
+                                        // Residential.
+                                        maxLevel = DistrictsABLC.maxResLevel[districtID];
+                                        break;
+                                    case ItemClass.Service.Industrial:
+                                    case ItemClass.Service.Commercial:
+                                    case ItemClass.Service.Office:
+                                        // Workplace.
+                                        maxLevel = DistrictsABLC.maxWorkLevel[districtID];
+                                        break;
+                                    default:
+                                        // Ignore buildings with services other than those specified above.
+                                        continue;
+                                }
+                            }
+
+                            // Check if building level is greater than the relevant maximum.
                             if (buildings.m_buffer[i].m_level > maxLevel)
                             {
-                                // It needs to be upgraded; store copy of current index for action queue.
+                                // It needs to be downgraded; store copy of current index for action queue.
                                 ushort buildingID = i;
 
                                 // Downgrade.
