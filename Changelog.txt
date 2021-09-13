@@ -1,4 +1,9 @@
-﻿Version 0.9.2 -
+﻿Version 0.9.3 -
+
+- Ensure district force upgrade/downgrade processes give priority to any individual building settings
+
+
+Version 0.9.2 -
 
 - Ensure availability of MoveIt integration library
 
