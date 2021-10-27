@@ -349,11 +349,12 @@ namespace ABLC
                             // Check if building level is less than the relevant minimum.
                             if (buildings.m_buffer[i].m_level < minLevel)
                             {
-                                // It needs to be upgraded; store copy of current index for action queue.
+                                // It needs to be upgraded; store copy of current index and minimum level for action queue.
                                 ushort buildingID = i;
+                                byte thisMInLevel = minLevel;
 
                                 // Upgrade.
-                                LevelUtils.ForceLevel(buildingID, minLevel);
+                                Singleton<SimulationManager>.instance.AddAction(delegate { LevelUtils.ForceLevel(buildingID, thisMInLevel); });
                             }
                         }
                         else
@@ -392,11 +393,12 @@ namespace ABLC
                             // Check if building level is greater than the relevant maximum.
                             if (buildings.m_buffer[i].m_level > maxLevel)
                             {
-                                // It needs to be downgraded; store copy of current index for action queue.
+                                // It needs to be downgraded; store copy of current index and maximum level for action queue.
                                 ushort buildingID = i;
+                                byte thisMaxLevel = maxLevel;
 
                                 // Downgrade.
-                                LevelUtils.ForceLevel(buildingID, maxLevel);
+                                Singleton<SimulationManager>.instance.AddAction(delegate { LevelUtils.ForceLevel(buildingID, thisMaxLevel); });
                             }
                         }
                     }
