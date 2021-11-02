@@ -59,6 +59,24 @@ namespace ABLC
 
 
         /// <summary>
+        /// Sets building's initial historical state accoding to district settings.
+        /// Called by the game after building has spawned.
+        /// </summary>
+        /// <param name="id"></param>
+        public override void OnBuildingCreated(ushort id)
+        {
+            // Get building record.
+            Building[] buildingBuffer = Singleton<BuildingManager>.instance.m_buildings.m_buffer;
+
+            // Get district.
+            ushort districtID = Singleton<DistrictManager>.instance.GetDistrict(buildingBuffer[id].m_position);
+
+            // Set historical state.
+            (buildingBuffer[id].Info.GetAI() as BuildingAI)?.SetHistorical(id, ref buildingBuffer[id], (DistrictsABLC.flags[districtID] & (byte)DistrictFlags.spawnHistorical) != 0);
+        }
+
+
+        /// <summary>
         /// Checks to see if a released building has a custom level settting, and if so, removes that setting.
         /// Called by the game when a building instance is released.
         /// </summary>

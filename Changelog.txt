@@ -1,4 +1,8 @@
-﻿Version 0.9.3 -
+﻿- Add district make/clear historical button
+- Add district option to make newly-created buildings historical
+
+
+Version 0.9.3 -
 
 - Ensure district force upgrade/downgrade processes give priority to any individual building settings
 

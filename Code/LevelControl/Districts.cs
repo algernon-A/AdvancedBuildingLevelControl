@@ -6,8 +6,9 @@ namespace ABLC
     // District flags enum.
     internal enum DistrictFlags
     {
-        none = 0,
-        randomSpawnLevels
+        none = 0x0,
+        randomSpawnLevels = 0x1,
+        spawnHistorical = 0x2
     }
 
 

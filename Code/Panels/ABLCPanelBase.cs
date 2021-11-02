@@ -13,7 +13,7 @@ namespace ABLC
         // Layout constants.
         protected const float Margin = 5f;
         protected const float MenuWidth = 60f;
-        protected virtual float PanelHeight => 360f;
+        protected virtual float PanelHeight => 350f;
 
         // Reference variables.
         protected ushort targetID;

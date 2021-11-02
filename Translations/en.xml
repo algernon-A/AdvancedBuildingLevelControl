@@ -18,12 +18,19 @@
     <Translation ID="ABLC_CAT_WMX_TIP" String="The maximum permitted building level for workplace buildings (industrial/commercial/office) in this district." />
     <Translation ID="ABLC_RAN_SPN" String="Random spawn levels" />
     <Translation ID="ABLC_RAN_SPN_TIP" String="When set, new buildings in this district will have a starting level randomly selected between the minimum and maximum for this district." />
+    <Translation ID="ABLC_HIS_SPN" String="New buildings historical" />
+    <Translation ID="ABLC_HIS_SPN_TIP" String="When set, new buildings in this district will be automatically marked as historical.  Does not affect existing buildings." />
     <Translation ID="ABLC_TRIG_UP" String="Force upgrade" />
     <Translation ID="ABLC_TRIG_UPB_TIP" String="Forces this building to upgrade to the specified minimum." />
     <Translation ID="ABLC_TRIG_UPD_TIP" String="Forces all buildings in this district with levels below the specified minimum to upgrade to that minimum." />
     <Translation ID="ABLC_TRIG_DWN" String="Force downgrade" />
     <Translation ID="ABLC_TRIG_DWB_TIP" String="Forces this building to downgrade to the specified maximum." />
     <Translation ID="ABLC_TRIG_DWD_TIP" String="Forces all buildings in this district with levels above the specified maximum to downgrade to that maximum." />
+    <Translation ID="ABLC_HIS" String="Historical settings" />
+    <Translation ID="ABLC_TRIG_HIS" String="Force historical" />
+    <Translation ID="ABLC_TRIG_HIS_TIP" String="Makes all buildings in this district historical." />
+    <Translation ID="ABLC_TRIG_NHS" String="Clear historical" />
+    <Translation ID="ABLC_TRIG_NHS_TIP" String="Makes all buildings in this district not historical." />
     <Translation ID="ABLC_CLR_BLD" String="Clear building settings" />
     <Translation ID="ABLC_CLR_BLD_TIP" String="Clears all individual building level settings in this district." />
     <Translation ID="ABLC_OPT_PNL" String="Panel options" />

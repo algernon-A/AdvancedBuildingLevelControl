@@ -93,7 +93,8 @@ namespace ABLC
         // Panel components.
         protected UIDropDown minWorkLevelDropDown;
         protected UIDropDown maxWorkLevelDropDown;
-        private UICheckBox randomSpawnCheck;
+        private UICheckBox randomSpawnCheck, spawnHistoricalCheck;
+        UIButton makeHistoricalButton, removeHistoricalButton;
 
         // Text strings.
         protected override string MinLevelTip => Translations.Translate("ABLC_CAT_RMN_TIP");
@@ -124,6 +125,7 @@ namespace ABLC
 
             // Set flags.
             randomSpawnCheck.isChecked = (DistrictsABLC.flags[targetID] & (byte)DistrictFlags.randomSpawnLevels) != 0;
+            spawnHistoricalCheck.isChecked = (DistrictsABLC.flags[targetID] & (byte)DistrictFlags.spawnHistorical) != 0;
 
             // All done: re-enable events.
             disableEvents = false;
@@ -139,11 +141,6 @@ namespace ABLC
             {
                 base.Setup(parentTransform);
 
-                // Extend height and add 'clear all building settings' button.
-                height += 40f;
-                UIButton clearBuildingsButton = UIControls.AddButton(this, Margin, height - 40f, Translations.Translate("ABLC_CLR_BLD"), this.width - (Margin * 2), tooltip: Translations.Translate("ABLC_CLR_BLD_TIP"));
-                clearBuildingsButton.eventClicked += ClearBuildings;
-
                 // Add category labels.
                 UILabel resLabel = AddLabel(Translations.Translate("ABLC_CAT_RES"), Margin, 50f, hAlign: UIHorizontalAlignment.Left);
                 UILabel workLabel = AddLabel(Translations.Translate("ABLC_CAT_WRK"), Margin, 140f, hAlign: UIHorizontalAlignment.Left);
@@ -157,6 +154,34 @@ namespace ABLC
 
                 // Add random level checkbox.
                 randomSpawnCheck = UIControls.LabelledCheckBox(this, 20f, 235f, Translations.Translate("ABLC_RAN_SPN"), tooltip: Translations.Translate("ABLC_RAN_SPN_TIP"));
+
+                // Extend height to fit 'clear all building settings' button and historical settings section.
+                height += 200f;
+
+                // Button to clear all building settings in district.
+                UIButton clearBuildingsButton = UIControls.AddButton(this, Margin, height - 200f, Translations.Translate("ABLC_CLR_BLD"), this.width - (Margin * 2), tooltip: Translations.Translate("ABLC_CLR_BLD_TIP"));
+                clearBuildingsButton.eventClicked += ClearBuildings;
+
+                // Spacer panel.
+                UIPanel spacerPanel = AddUIComponent<UIPanel>();
+                spacerPanel.width = this.width - (Margin * 2);
+                spacerPanel.height = 5f;
+                spacerPanel.relativePosition = new Vector2(Margin, height - 155f);
+                spacerPanel.backgroundSprite = "GenericPanelDark";
+
+                // Add historical section label.
+                AddLabel(Translations.Translate("ABLC_HIS"), 0f, height - 140f, 1.0f);
+
+                // Add historical spawning checkbox.
+                spawnHistoricalCheck = UIControls.LabelledCheckBox(this, 20f, height - 110f, Translations.Translate("ABLC_HIS_SPN"), tooltip: Translations.Translate("ABLC_HIS_SPN_TIP"));
+
+                // Button to make all buildings in district historical.
+                makeHistoricalButton = UIControls.AddButton(this, Margin, height - 80f, Translations.Translate("ABLC_TRIG_HIS"), this.width - (Margin * 2), tooltip: Translations.Translate("ABLC_TRIG_HIS_TIP"));
+                makeHistoricalButton.eventClicked += MakeHistorical;
+
+                // Button to remove historical status from all buildings in district.
+                removeHistoricalButton = UIControls.AddButton(this, Margin, height - 40f, Translations.Translate("ABLC_TRIG_NHS"), this.width - (Margin * 2), tooltip: Translations.Translate("ABLC_TRIG_NHS_TIP"));
+                removeHistoricalButton.eventClicked += MakeHistorical;
 
                 // Set initial district.
                 DistrictChanged();
@@ -233,6 +258,16 @@ namespace ABLC
                     }
                 };
 
+                spawnHistoricalCheck.eventCheckChanged += (control, isChecked) =>
+                {
+                    // Don't do anything if events are disabled.
+                    if (!disableEvents)
+                    {
+                        // XOR relevant flag to toggle.
+                        DistrictsABLC.flags[targetID] ^= (byte)DistrictFlags.spawnHistorical;
+                    }
+                };
+
                 upgradeButton.eventClicked += (control, clickEvent) =>
                 {
                     LevelDistrict(targetID, true);
@@ -282,7 +317,45 @@ namespace ABLC
             foreach (ushort buildingID in buildingIDs)
             {
                 BuildingsABLC.levelRanges.Remove(buildingID);
-            }    
+            }
+        }
+
+
+        /// <summary>
+        /// Clear building settings button event handler.
+        /// <param name="control">Calling component</param>
+        /// <param name="mouseEvent">Mouse event (unused)</param>
+        /// </summary>
+        private void MakeHistorical(UIComponent control, UIMouseEventParameter mouseEvent)
+        {
+            // Store copy of current target district ID for simulation thread action.
+            ushort districtID = targetID;
+
+            // Set historical target via determining calling component.
+            bool setHistorical = control == makeHistoricalButton;
+
+            // Add 'set historical' action to simulation thread.
+            Singleton<SimulationManager>.instance.AddAction(delegate
+            {
+                // Local references.
+                Building[] buildingBuffer = Singleton<BuildingManager>.instance.m_buildings.m_buffer;
+                DistrictManager districtManager = Singleton<DistrictManager>.instance;
+
+                // Iterate through all buildings in building manager.
+                for (ushort i = 0; i < buildingBuffer.Length; ++i)
+                {
+                    // Check to see if this building exists and has a valid AI.
+                    if (buildingBuffer[i].m_flags != Building.Flags.None && buildingBuffer[i].Info?.GetAI() is BuildingAI buildingAI)
+                    {
+                        // Check to see if this building is in the targeted district.
+                        if (districtManager.GetDistrict(buildingBuffer[i].m_position) == districtID)
+                        {
+                            // Building is within district - set it according to required historical state.
+                            buildingAI.SetHistorical(i, ref buildingBuffer[i], setHistorical);
+                        }
+                    }
+                }
+            });
         }
 
 
