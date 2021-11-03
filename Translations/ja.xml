@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Language UniqueName="ja" ReadableName="日本語">
   <Translations>
-    <Translation ID="ABLC_DESC" String="開発中: 地区ごと・建物ごとに、建物レベルの制御が可能です"/>
+    <Translation ID="ABLC_DESC" String="地区ごと・建物ごとに、建物レベルの制御が可能です"/>
     <Translation ID="ABLC_NAME" String="Advanced Building Level Control"/>
     <Translation ID="ABLC_SHORT" String="レベル制御"/>
     <Translation ID="ABLC_CTRL" String="レベルのコントロール"/>

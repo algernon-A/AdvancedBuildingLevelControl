@@ -163,11 +163,7 @@ namespace ABLC
                 clearBuildingsButton.eventClicked += ClearBuildings;
 
                 // Spacer panel.
-                UIPanel spacerPanel = AddUIComponent<UIPanel>();
-                spacerPanel.width = this.width - (Margin * 2);
-                spacerPanel.height = 5f;
-                spacerPanel.relativePosition = new Vector2(Margin, height - 155f);
-                spacerPanel.backgroundSprite = "GenericPanelDark";
+                UIControls.OptionsSpacer(this, Margin, height - 155f, width - (Margin * 2));
 
                 // Add historical section label.
                 AddLabel(Translations.Translate("ABLC_HIS"), 0f, height - 140f, 1.0f);

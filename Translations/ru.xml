@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <Language UniqueName="ru" ReadableName="Русский">
   <Translations>
-    <Translation ID="ABLC_DESC" String="В РАЗРАБОТКЕ: позволяет контролировать уровни зданий в районах и/или независимо." />
+    <Translation ID="ABLC_DESC" String="позволяет контролировать уровни зданий в районах и/или независимо." />
     <Translation ID="ABLC_NAME" String="Advanced Building Level Control" />
     <Translation ID="ABLC_SHORT" String="Level Control" />
     <Translation ID="ABLC_CTRL" String="Контроль уровней" />

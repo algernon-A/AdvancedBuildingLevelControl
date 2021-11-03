@@ -291,5 +291,22 @@ namespace ABLC
 
             return newScrollbar;
         }
+
+
+        /// <summary>
+        /// Adds an options-panel-style spacer bar across the specified UIComponent.
+        /// </summary>
+        /// <param name="parent">Parent component</param>
+        /// <param name="xPos">Relative y-position</param>
+        /// <param name="yPos">Relative y-position</param>
+        /// <param name="width">Spacer width</param>
+        public static void OptionsSpacer(UIComponent parent, float xPos, float yPos, float width)
+        {
+            UIPanel spacerPanel = parent.AddUIComponent<UIPanel>();
+            spacerPanel.width = width; ;
+            spacerPanel.height = 5f;
+            spacerPanel.relativePosition = new Vector2(xPos, yPos);
+            spacerPanel.backgroundSprite = "ContentManagerItemBackground";
+        }
     }
 }
