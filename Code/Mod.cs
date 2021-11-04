@@ -27,7 +27,7 @@ namespace ABLC
             HarmonyHelper.DoOnHarmonyReady(() => Patcher.PatchAll());
 
             // Load the settings file.
-            ABLCSettingsFile.LoadSettings();
+            ModSettings.Load();
         }
 
 
@@ -51,20 +51,20 @@ namespace ABLC
         {
             // Language options.
             UIHelperBase languageGroup = helper.AddGroup(Translations.Translate("TRN_CHOICE"));
-            UIDropDown languageDropDown = (UIDropDown)languageGroup.AddDropdown(Translations.Translate("TRN_CHOICE"), Translations.LanguageList, Translations.Index, (value) => { Translations.Index = value; ABLCSettingsFile.SaveSettings(); });
+            UIDropDown languageDropDown = (UIDropDown)languageGroup.AddDropdown(Translations.Translate("TRN_CHOICE"), Translations.LanguageList, Translations.Index, (value) => { Translations.Index = value; ModSettings.Save(); });
             languageDropDown.autoSize = false;
             languageDropDown.width = 270f;
 
             // Panel options.
             UIHelperBase panelGroup = helper.AddGroup(Translations.Translate("ABLC_OPT_PNL"));
-            UICheckBox onRightCheck = (UICheckBox)panelGroup.AddCheckbox(Translations.Translate("ABLC_OPT_RT"), ModSettings.onRight, (value) => { ModSettings.onRight = value; ABLCSettingsFile.SaveSettings(); } );
-            UICheckBox showPanelCheck = (UICheckBox)panelGroup.AddCheckbox(Translations.Translate("ABLC_OPT_SHO"), ModSettings.showPanel, (value) => { ModSettings.showPanel = value; ABLCSettingsFile.SaveSettings(); });
+            UICheckBox onRightCheck = (UICheckBox)panelGroup.AddCheckbox(Translations.Translate("ABLC_OPT_RT"), ModSettings.onRight, (value) => { ModSettings.onRight = value; ModSettings.Save(); } );
+            UICheckBox showPanelCheck = (UICheckBox)panelGroup.AddCheckbox(Translations.Translate("ABLC_OPT_SHO"), ModSettings.showPanel, (value) => { ModSettings.showPanel = value; ModSettings.Save(); });
 
             // Gameplay options.
             UIHelperBase gameGroup = helper.AddGroup(Translations.Translate("ABLC_OPT_PLY"));
-            UICheckBox abandonHistCheck = (UICheckBox)gameGroup.AddCheckbox(Translations.Translate("ABLC_OPT_HNA"), ModSettings.noAbandonHistorical, (value) => { ModSettings.noAbandonHistorical = value; ABLCSettingsFile.SaveSettings(); });
-            UICheckBox abandonAnyCheck = (UICheckBox)gameGroup.AddCheckbox(Translations.Translate("ABLC_OPT_ANA"), ModSettings.noAbandonAny, (value) => { ModSettings.noAbandonAny = value; if (value) abandonHistCheck.isChecked = true; ABLCSettingsFile.SaveSettings(); });
-            UICheckBox loadLevelCheck = (UICheckBox)gameGroup.AddCheckbox(Translations.Translate("ABLC_OPT_CLL"), ModSettings.loadLevelCheck, (value) => { ModSettings.loadLevelCheck = value; ABLCSettingsFile.SaveSettings(); });
+            UICheckBox abandonHistCheck = (UICheckBox)gameGroup.AddCheckbox(Translations.Translate("ABLC_OPT_HNA"), ModSettings.noAbandonHistorical, (value) => { ModSettings.noAbandonHistorical = value; ModSettings.Save(); });
+            UICheckBox abandonAnyCheck = (UICheckBox)gameGroup.AddCheckbox(Translations.Translate("ABLC_OPT_ANA"), ModSettings.noAbandonAny, (value) => { ModSettings.noAbandonAny = value; if (value) abandonHistCheck.isChecked = true; ModSettings.Save(); });
+            UICheckBox loadLevelCheck = (UICheckBox)gameGroup.AddCheckbox(Translations.Translate("ABLC_OPT_CLL"), ModSettings.loadLevelCheck, (value) => { ModSettings.loadLevelCheck = value; ModSettings.Save(); });
         }
     }
 }
