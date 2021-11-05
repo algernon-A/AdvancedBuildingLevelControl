@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Language UniqueName="ja" ReadableName="日本語">
   <Translations>
-    <Translation ID="ABLC_DESC" String="地区ごと・建物ごとに、建物レベルの制御が可能です"/>
+    <Translation ID="ABLC_DESC" String="地区ごとや建物ごとに、建物レベルの制御が出来ます"/>
     <Translation ID="ABLC_NAME" String="Advanced Building Level Control"/>
     <Translation ID="ABLC_SHORT" String="レベル制御"/>
     <Translation ID="ABLC_CTRL" String="レベルのコントロール"/>
@@ -18,13 +18,20 @@
     <Translation ID="ABLC_CAT_WMX_TIP" String="この地区内にある、職場の建物(産業/商業/オフィス)で最高レベルを指定"/>
     <Translation ID="ABLC_RAN_SPN" String="ランダム建設のレベル"/>
     <Translation ID="ABLC_RAN_SPN_TIP" String="設定すると地区内で建設される建物は、指定したレベルの範囲内でランダムに選択されます"/>
+    <Translation ID="ABLC_HIS_SPN" String="新しい建物を歴史的建造物に指定"/>
+    <Translation ID="ABLC_HIS_SPN_TIP" String="設定すると地区内の新しい建物は、自動的に歴史的建造物で指定します。 既存の建物には影響しません。"/>
     <Translation ID="ABLC_TRIG_UP" String="強制アップグレード"/>
     <Translation ID="ABLC_TRIG_UPB_TIP" String="この建物タイプを指定されたレベルまで、強制的にアップグレードします"/>
     <Translation ID="ABLC_TRIG_UPD_TIP" String="この地区内にある建物で指定したレベルを下回っている場合は、指定のレベルまで強制的にアップグレード"/>
     <Translation ID="ABLC_TRIG_DWN" String="強制ダウングレード"/>
     <Translation ID="ABLC_TRIG_DWB_TIP" String="この建物タイプを指定されたレベルまで、強制的にダウングレードします"/>
     <Translation ID="ABLC_TRIG_DWD_TIP" String="この地区内にある建物で指定したレベルを超えている場合は、指定のレベルまで強制的にダウングレード"/>
-    <Translation ID="ABLC_CLR_BLD" String="建物設定をクリア"/>
+    <Translation ID="ABLC_HIS" String="歴史的建造物の設定"/>
+    <Translation ID="ABLC_TRIG_HIS" String="歴史的建造物を強制"/>
+    <Translation ID="ABLC_TRIG_HIS_TIP" String="地区内にある全ての建物を、歴史的建造物に指定します"/>
+    <Translation ID="ABLC_TRIG_NHS" String="歴史的建造物を解除"/>
+    <Translation ID="ABLC_TRIG_NHS_TIP" String="地区内にある全ての建物から、歴史的建造物を解除します"/>
+    <Translation ID="ABLC_CLR_BLD" String="建物レベルの設定をクリア"/>
     <Translation ID="ABLC_CLR_BLD_TIP" String="この地区内で指定した、個々の建物レベルの設定をクリアします"/>
     <Translation ID="ABLC_OPT_PNL" String="パネルの設定"/>
     <Translation ID="ABLC_OPT_PLY" String="ゲーム設定"/>
