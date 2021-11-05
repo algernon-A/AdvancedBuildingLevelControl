@@ -85,7 +85,6 @@
     <Compile Include="Code\Mod.cs" />
     <Compile Include="Code\Serialization.cs" />
     <Compile Include="Code\Settings\ModSettings.cs" />
-    <Compile Include="Code\Settings\SettingsXML.cs" />
     <Compile Include="Code\TranslationFramework\TranslationFramework.cs" />
     <Compile Include="Code\TranslationFramework\TranslationXML.cs" />
     <Compile Include="Code\Utils\Textures.cs" />
