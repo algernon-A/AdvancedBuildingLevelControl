@@ -59,7 +59,7 @@ namespace ABLC
             PrivateBuildingAI buildingAI = Singleton<BuildingManager>.instance.m_buildings.m_buffer[buildingID].Info?.GetAI() as PrivateBuildingAI;
             if (buildingAI == null)
             {
-                Logging.Error("couldn't get AI for building ", buildingID.ToString());
+                Logging.Error("couldn't get AI for building ", buildingID);
             }
             else
             {

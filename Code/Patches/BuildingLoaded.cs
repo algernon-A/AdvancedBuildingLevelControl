@@ -27,7 +27,7 @@ namespace ABLC
 				// Check against maxLevel (m_level is zero-based, maxLevel is 1-based, so >= to catch overflows).
 				if (data.m_level >= maxLevel)
 				{
-					Logging.Error("building ", buildingID.ToString(), " (", __instance.m_info.name, ") had illegal level ", (data.m_level + 1).ToString(), "; setting to ", maxLevel.ToString());
+					Logging.Error("building ", buildingID, " (", __instance.m_info.name, ") had illegal level ", data.m_level + 1, "; setting to ", maxLevel);
 					data.m_level = (byte)(maxLevel - 1);
 				}
 			}
