@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
-<Language UniqueName="DE" ReadableName="Deutsch">
+<Language UniqueName="de" ReadableName="Deutsch">
   <Translations>
     <Translation ID="ABLC_DESC" String="Erlaubt die Kontrolle von Gebäude-Leveln basierend auf einem Distrikt und/oder einzelnen Gebäuden." />
     <Translation ID="ABLC_NAME" String="Advanced Building Level Control" />
