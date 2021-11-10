@@ -18,12 +18,19 @@
     <Translation ID="ABLC_CAT_WMX_TIP" String="Максимально допустимый уровень для зданий с рабочими местами (промышленных/коммерческих/офисных) в этом районе." />
     <Translation ID="ABLC_RAN_SPN" String="Случ. ур. нов. зданий" />
     <Translation ID="ABLC_RAN_SPN_TIP" String="При установке, новые здания в этом районе будут иметь начальный уровень, случайно выбранный между минимальным и максимальным для этого района." />
+    <Translation ID="ABLC_HIS_SPN" String="Новые здания исторические" />
+    <Translation ID="ABLC_HIS_SPN_TIP" String="Если отмечено, новые здания в этом районе будут автоматически помечены как исторические. Не влияет на существующие здания." />
     <Translation ID="ABLC_TRIG_UP" String="Принудит. повышение" />
     <Translation ID="ABLC_TRIG_UPB_TIP" String="Заставляет это здание обновиться до указанного минимума." />
     <Translation ID="ABLC_TRIG_UPD_TIP" String="Заставляет все здания в этом районе с уровнями ниже указанного минимума обновляться до этого минимума." />
     <Translation ID="ABLC_TRIG_DWN" String="Принудит. понижение" />
     <Translation ID="ABLC_TRIG_DWB_TIP" String="Заставляет это здание понизиться до указанного максимума." />
     <Translation ID="ABLC_TRIG_DWD_TIP" String="Заставляет все здания в этом районе с уровнями выше указанного максимума понизиться до этого максимума." />
+    <Translation ID="ABLC_HIS" String="Настройки историчности" />
+    <Translation ID="ABLC_TRIG_HIS" String="Все исторические" />
+    <Translation ID="ABLC_TRIG_HIS_TIP" String="Делает все здания в этом районе историческими." />
+    <Translation ID="ABLC_TRIG_NHS" String="Все неисторические" />
+    <Translation ID="ABLC_TRIG_NHS_TIP" String="Делает все здания в этом районе неисторическими." />
     <Translation ID="ABLC_CLR_BLD" String="Очистить настройки зданий" />
     <Translation ID="ABLC_CLR_BLD_TIP" String="Очищает все индивидуальные настройки уровней зданий в этом районе." />
     <Translation ID="ABLC_OPT_PNL" String="Настройки панели" />
