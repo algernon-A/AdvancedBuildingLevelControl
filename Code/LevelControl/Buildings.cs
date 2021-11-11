@@ -18,6 +18,13 @@ namespace ABLC
         /// <param name="minLevel">New minimum level</param>
         internal static void UpdateMinLevel(ushort buildingID, byte minLevel)
         {
+            // Safety check.
+            if (levelRanges == null)
+            {
+                Logging.Error("levelRanges dictionary not initialized at BuildingsABLC.UpdateMinLevel");
+                levelRanges = new Dictionary<ushort, LevelRange>();
+            }
+
             // See if we've already got a dictionary entry for this building.
             if (levelRanges.ContainsKey(buildingID))
             {
@@ -47,6 +54,13 @@ namespace ABLC
         /// <param name="maxLevel">New maximum level</param>
         internal static void UpdateMaxLevel(ushort buildingID, byte maxLevel)
         {
+            // Safety check.
+            if (levelRanges == null)
+            {
+                Logging.Error("levelRanges dictionary not initialized at BuildingsABLC.UpdateMaxLevel");
+                levelRanges = new Dictionary<ushort, LevelRange>();
+            }
+
             // See if we've already got a dictionary entry for this building.
             if (levelRanges.ContainsKey(buildingID))
             {

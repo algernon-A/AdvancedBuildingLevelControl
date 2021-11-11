@@ -72,7 +72,7 @@ namespace ABLC
             ushort districtID = Singleton<DistrictManager>.instance.GetDistrict(buildingBuffer[id].m_position);
 
             // Set historical state.
-            (buildingBuffer[id].Info.GetAI() as BuildingAI)?.SetHistorical(id, ref buildingBuffer[id], (DistrictsABLC.flags[districtID] & (byte)DistrictFlags.spawnHistorical) != 0);
+            (buildingBuffer[id].Info?.GetAI() as BuildingAI)?.SetHistorical(id, ref buildingBuffer[id], (DistrictsABLC.flags[districtID] & (byte)DistrictFlags.spawnHistorical) != 0);
         }
 
 
