@@ -1,4 +1,9 @@
-﻿Version 1.0 -
+﻿Version 1.0.1 -
+
+- Add additional checks for invalid game data
+
+
+Version 1.0 -
 
 - Add district make/clear historical button
 - Add district option to make newly-created buildings historical
