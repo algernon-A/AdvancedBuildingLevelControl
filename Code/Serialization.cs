@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Collections.Generic;
 using System.Runtime.Serialization.Formatters.Binary;
 using ICities;
@@ -55,31 +56,38 @@ namespace ABLC
             // Initialise building dictionary.
             BuildingsABLC.levelRanges = new Dictionary<ushort, LevelRange>();
 
-            // Read data from savegame.
-            byte[] data = serializableDataManager.LoadData(dataID);
-
-            // Check to see if anything was read.
-            if (data != null && data.Length != 0)
+            try
             {
-                // Data was read - go ahead and deserialise.
-                using (MemoryStream stream = new MemoryStream(data))
+                // Read data from savegame.
+                byte[] data = serializableDataManager.LoadData(dataID);
+
+                // Check to see if anything was read.
+                if (data != null && data.Length != 0)
                 {
-                    BinaryFormatter formatter = new BinaryFormatter();
+                    // Data was read - go ahead and deserialise.
+                    using (MemoryStream stream = new MemoryStream(data))
+                    {
+                        BinaryFormatter formatter = new BinaryFormatter();
 
-                    // Deserialise district arrays.
-                    DataSerializer.Deserialize<DistrictSerializer>(stream, DataSerializer.Mode.Memory);
+                        // Deserialise district arrays.
+                        DataSerializer.Deserialize<DistrictSerializer>(stream, DataSerializer.Mode.Memory);
 
-                    // Deserialise building list.
-                    DataSerializer.Deserialize<BuildingSerializer>(stream, DataSerializer.Mode.Memory);
+                        // Deserialise building list.
+                        DataSerializer.Deserialize<BuildingSerializer>(stream, DataSerializer.Mode.Memory);
+                    }
+                }
+                else
+                {
+                    // No data read - initialise empty data structures.
+                    Logging.Message("no data read");
+
+                    // Use the post-deserialisation method of the district data serialiser to populate arrays with defaults.
+                    new DistrictSerializer().AfterDeserialize(null);
                 }
             }
-            else
+            catch (Exception e)
             {
-                // No data read - initialise empty data structures.
-                Logging.Message("no data read");
-
-                // Use the post-deserialisation method of the district data serialiser to populate arrays with defaults.
-                new DistrictSerializer().AfterDeserialize(null);
+                Logging.LogException(e, "exception deserializing savegame data");
             }
         }
     }
