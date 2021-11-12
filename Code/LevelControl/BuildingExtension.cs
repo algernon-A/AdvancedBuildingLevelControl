@@ -65,6 +65,12 @@ namespace ABLC
         /// <param name="id"></param>
         public override void OnBuildingCreated(ushort id)
         {
+            // Don't do anything if we haven't yet loaded into game or district data hasn't been set.
+            if (!Loading.isLoaded || DistrictsABLC.flags == null)
+            {
+                return;
+            }
+
             // Get building record.
             Building[] buildingBuffer = Singleton<BuildingManager>.instance.m_buildings.m_buffer;
 

@@ -10,6 +10,7 @@ namespace ABLC
     public class Loading : LoadingExtensionBase
     {
         // Internal flags.
+        internal static bool isLoaded = false;
         private static bool isModEnabled = false;
         private bool harmonyLoaded = false;
 
@@ -125,6 +126,9 @@ namespace ABLC
 
                 // Add building info panel button.
                 BuildingPanelManager.AddInfoPanelButton();
+
+                // Set loaded status flag.
+                isLoaded = true;
             }
         }
     }
