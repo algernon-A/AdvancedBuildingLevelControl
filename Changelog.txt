@@ -1,4 +1,5 @@
-﻿
+﻿Version 1.0.2 -
+
 - Ensure district historical settings aren't applied to all buildings on load
 
 
