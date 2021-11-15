@@ -97,22 +97,8 @@ namespace ABLC
         /// <returns>Building maximum level</returns>
         private Level GetTargetLevel(ushort buildingID, Level targetLevel, bool isResidential = false)
         {
-            Level maxLevel;
-            
-            // Check for individual building restrictions, as they have highest priority.
-            if (BuildingsABLC.levelRanges.ContainsKey(buildingID))
-            {
-                // Get individual building maximum level.
-                maxLevel = (Level)BuildingsABLC.levelRanges[buildingID].maxLevel;
-            }
-            else
-            {
-                // No building restrictions; check district for restrictions.
-                ushort districtID = Singleton<DistrictManager>.instance.GetDistrict(Singleton<BuildingManager>.instance.m_buildings.m_buffer[buildingID].m_position);
-
-                // Get our maximum level for this district for this type of building.
-                maxLevel = isResidential ? (Level)DistrictsABLC.maxResLevel[districtID] : (Level)DistrictsABLC.maxWorkLevel[districtID];
-            }
+            // Get building maximum level, if any.
+            Level maxLevel = (Level)BuildingsABLC.GetMaxLevel(buildingID, isResidential);
 
             // If the maximum permissible level is less than the original target level, return the maximum level; otherwise, return original target level.
             return maxLevel < targetLevel ? maxLevel : targetLevel;

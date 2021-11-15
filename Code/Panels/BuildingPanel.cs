@@ -254,13 +254,19 @@ namespace ABLC
 
                 upgradeButton.eventClick += (control, clickEvent) =>
                 {
-                    LevelUtils.ForceLevel(targetID, upgradeLevel);
+
+                    // Local references for SimulationManager action.
+                    ushort buildingID = targetID;
+                    byte targetLevel = upgradeLevel;
+                    Singleton<SimulationManager>.instance.AddAction(delegate
+                    {
+                        LevelUtils.ForceLevel(targetID, targetLevel);
+                    });
 
                     // Check to see if we should increase this buildings maximum level.
                     byte newLevel = Singleton<BuildingManager>.instance.m_buildings.m_buffer[targetID].m_level;
-                    if (BuildingsABLC.levelRanges.ContainsKey(targetID) && BuildingsABLC.levelRanges[targetID].maxLevel < newLevel)
+                    if (BuildingsABLC.GetMaxLevel(targetID) < newLevel)
                     {
-                        //BuildingsABLC.levelRanges[targetID].maxLevel = newLevel;
                         maxLevelDropDown.selectedIndex = newLevel;
                     }
 
@@ -270,13 +276,19 @@ namespace ABLC
 
                 downgradeButton.eventClick += (control, clickEvent) =>
                 {
-                    LevelUtils.ForceLevel(targetID, downgradeLevel);
+
+                    // Local references for SimulationManager action.
+                    ushort buildingID = targetID;
+                    byte targetLevel = downgradeLevel;
+                    Singleton<SimulationManager>.instance.AddAction(delegate
+                    {
+                        LevelUtils.ForceLevel(targetID, targetLevel);
+                    });
 
                     // Check to see if we should increase this buildings maximum level.
                     byte newLevel = Singleton<BuildingManager>.instance.m_buildings.m_buffer[targetID].m_level;
-                    if (BuildingsABLC.levelRanges.ContainsKey(targetID) && BuildingsABLC.levelRanges[targetID].minLevel > newLevel)
+                    if (BuildingsABLC.GetMinLevel(targetID) > newLevel)
                     {
-                        //BuildingsABLC.levelRanges[targetID].minLevel = newLevel;
                         minLevelDropDown.selectedIndex = newLevel;
                     }
 
@@ -350,20 +362,9 @@ namespace ABLC
                 maxLevelDropDown.items[i] = (i + 1).ToString();
             }
 
-
-            // Check to see if we have custom settings for this building.
-            if (BuildingsABLC.levelRanges.ContainsKey(targetID))
-            {
-                // Update dropdown selection to match building's settings.
-                minLevelDropDown.selectedIndex = BuildingsABLC.levelRanges[targetID].minLevel;
-                maxLevelDropDown.selectedIndex = BuildingsABLC.levelRanges[targetID].maxLevel;
-            }
-            else
-            {
-                // Set min and max to default.
-                minLevelDropDown.selectedIndex = 0;
-                maxLevelDropDown.selectedIndex = maxLevelDropDown.items.Length - 1;
-            }
+            // Update dropdown selection to match building's settings.
+            minLevelDropDown.selectedIndex = BuildingsABLC.GetMinLevel(targetID);
+            maxLevelDropDown.selectedIndex = Mathf.Min(BuildingsABLC.GetMaxLevel(targetID), maxLevelDropDown.items.Length - 1);
 
             // Initialise panel with correct level settings.
             UpdatePanel();

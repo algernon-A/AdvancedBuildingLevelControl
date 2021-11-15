@@ -53,9 +53,6 @@ namespace ABLC
         {
             base.OnLoadData();
 
-            // Initialise building dictionary.
-            BuildingsABLC.levelRanges = new Dictionary<ushort, LevelRange>();
-
             try
             {
                 // Read data from savegame.

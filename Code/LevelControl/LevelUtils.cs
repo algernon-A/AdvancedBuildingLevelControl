@@ -7,7 +7,8 @@ namespace ABLC
     internal static class LevelUtils
     {
         /// <summary>
-        /// Returns the maximum building level of a given building, based on subclass.
+        /// Returns the maximum building level of a given building, based on subclass (1-based).
+        /// <param name="buildingID">Building instance ID</param>
         /// </summary>
         internal static byte GetMaxLevel(ushort buildingID)
         {

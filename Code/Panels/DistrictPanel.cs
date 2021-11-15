@@ -287,34 +287,7 @@ namespace ABLC
         /// <param name="control">Calling component (unused)</param>
         /// <param name="mouseEvent">Mouse event (unused)</param>
         /// </summary>
-        private void ClearBuildings(UIComponent control, UIMouseEventParameter mouseEvent)
-        {
-            // List of building IDs to remove.
-            List<ushort> buildingIDs = new List<ushort>();
-
-            // Local references.
-            Building[] buildingBuffer = Singleton<BuildingManager>.instance.m_buildings.m_buffer;
-            DistrictManager districtManager = Singleton<DistrictManager>.instance;
-
-            Logging.Message("clearing building settings from district ", districtManager.GetDistrictName(targetID));
-
-            // Iterate though each building with custom settings.
-            foreach (ushort buildingID in BuildingsABLC.levelRanges.Keys)
-            {
-                // Check if the building is in this district.
-                if (districtManager.GetDistrict(buildingBuffer[buildingID].m_position) == targetID)
-                {
-                    // It is - add to list of custom settings to remove (can't remove them now because we're enumerating).
-                    buildingIDs.Add(buildingID);
-                }
-            }
-
-            // Now remove from our custom settings dictionary all building IDs that we've collected.
-            foreach (ushort buildingID in buildingIDs)
-            {
-                BuildingsABLC.levelRanges.Remove(buildingID);
-            }
-        }
+        private void ClearBuildings(UIComponent control, UIMouseEventParameter mouseEvent) => BuildingsABLC.ClearDistrict(targetID);
 
 
         /// <summary>
@@ -379,85 +352,46 @@ namespace ABLC
                     if (districtManager.GetDistrict(thisBuilding.m_position) == districtID)
                     {
                         // It's in our district; get service.
+                        bool isResidential = false;
                         ItemClass.Service service = thisBuilding.Info.GetService();
+
+                        // Check service type.
+                        switch (service)
+                        {
+                            case ItemClass.Service.Residential:
+                                // Residential; set residential flag.
+                                isResidential = true;
+                                break;
+                            case ItemClass.Service.Industrial:
+                            case ItemClass.Service.Commercial:
+                            case ItemClass.Service.Office:
+                                break;
+                            default:
+                                // Ignore buildings with services other than those specified above.
+                                continue;
+                        }
 
                         // Are we upgrading or downgrading?
                         if (upgrade)
                         {
-                            // Upgrading.
-                            byte minLevel;
-
-                            // Check to see if there's a maximum level set for this building.
-                            if (BuildingsABLC.levelRanges.ContainsKey(i))
-                            {
-                                // Building record available: use that.
-                                minLevel = BuildingsABLC.levelRanges[i].minLevel;
-                            }
-                            else
-                            {
-                                // No building record; use district record instead.
-                                // Determine which level array to use based on service type.
-                                switch (service)
-                                {
-                                    case ItemClass.Service.Residential:
-                                        // Residential.
-                                        minLevel = DistrictsABLC.minResLevel[districtID];
-                                        break;
-                                    case ItemClass.Service.Industrial:
-                                    case ItemClass.Service.Commercial:
-                                    case ItemClass.Service.Office:
-                                        // Workplace.
-                                        minLevel = DistrictsABLC.minWorkLevel[districtID];
-                                        break;
-                                    default:
-                                        // Ignore buildings with services other than those specified above.
-                                        continue;
-                                }
-                            }
+                            // Upgrading - get the minimum level for this building.
+                            byte minLevel = BuildingsABLC.GetMinLevel(i, isResidential);
 
                             // Check if building level is less than the relevant minimum.
                             if (buildings.m_buffer[i].m_level < minLevel)
                             {
                                 // It needs to be upgraded; store copy of current index and minimum level for action queue.
                                 ushort buildingID = i;
-                                byte thisMInLevel = minLevel;
+                                byte thisMinLevel = minLevel;
 
                                 // Upgrade.
-                                Singleton<SimulationManager>.instance.AddAction(delegate { LevelUtils.ForceLevel(buildingID, thisMInLevel); });
+                                Singleton<SimulationManager>.instance.AddAction(delegate { LevelUtils.ForceLevel(buildingID, thisMinLevel); });
                             }
                         }
                         else
                         {
-                            // Downgrading.
-                            byte maxLevel;
-
-                            // Check to see if there's a maximum level set for this building.
-                            if (BuildingsABLC.levelRanges.ContainsKey(i))
-                            {
-                                // Building record available: use that.
-                                maxLevel = BuildingsABLC.levelRanges[i].maxLevel;
-                            }
-                            else
-                            {
-                                // No building record; use district record instead.
-                                // Determine which level array to use based on service type.
-                                switch (service)
-                                {
-                                    case ItemClass.Service.Residential:
-                                        // Residential.
-                                        maxLevel = DistrictsABLC.maxResLevel[districtID];
-                                        break;
-                                    case ItemClass.Service.Industrial:
-                                    case ItemClass.Service.Commercial:
-                                    case ItemClass.Service.Office:
-                                        // Workplace.
-                                        maxLevel = DistrictsABLC.maxWorkLevel[districtID];
-                                        break;
-                                    default:
-                                        // Ignore buildings with services other than those specified above.
-                                        continue;
-                                }
-                            }
+                            // Downgrading - get the maximum level for this building..
+                            byte maxLevel = BuildingsABLC.GetMaxLevel(i, isResidential);
 
                             // Check if building level is greater than the relevant maximum.
                             if (buildings.m_buffer[i].m_level > maxLevel)

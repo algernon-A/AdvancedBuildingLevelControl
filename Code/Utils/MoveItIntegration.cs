@@ -54,13 +54,13 @@ namespace ABLC
             foreach (KeyValuePair<InstanceID, InstanceID> entry in sourceMap)
             {
                 // Check if the original building has an ABLC custom level entry.
-                ushort originalBuilding = entry.Key.Building;
-                if (BuildingsABLC.levelRanges.ContainsKey(originalBuilding))
+                LevelRange levelRange = BuildingsABLC.GetRecord(entry.Key.Building);
+                if (levelRange != null)
                 {
                     // Original building has an ABLC level entry - apply those same settings to the new building.
                     ushort newBuilding = entry.Value.Building;
-                    BuildingsABLC.UpdateMinLevel(newBuilding, BuildingsABLC.levelRanges[originalBuilding].minLevel);
-                    BuildingsABLC.UpdateMaxLevel(newBuilding, BuildingsABLC.levelRanges[originalBuilding].maxLevel);
+                    BuildingsABLC.UpdateMinLevel(newBuilding, levelRange.minLevel);
+                    BuildingsABLC.UpdateMaxLevel(newBuilding, levelRange.maxLevel);
                 }
             }
         }

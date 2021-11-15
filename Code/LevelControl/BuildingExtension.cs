@@ -87,14 +87,6 @@ namespace ABLC
         /// Called by the game when a building instance is released.
         /// </summary>
         /// <param name="id">Building instance ID</param>
-        public override void OnBuildingReleased(ushort id)
-        {
-            // Check to see if our dictionary is ready, and if it contains this building ID.
-            if (BuildingsABLC.levelRanges != null && BuildingsABLC.levelRanges.ContainsKey(id))
-            {
-                // It does; delete the entry.
-                BuildingsABLC.levelRanges.Remove(id);
-            }
-        }
+        public override void OnBuildingReleased(ushort id) => BuildingsABLC.DeleteEntry(id);
     }
 }

@@ -1,4 +1,5 @@
-﻿using ColossalFramework.IO;
+﻿using ColossalFramework;
+using ColossalFramework.IO;
 
 
 namespace ABLC
@@ -14,7 +15,6 @@ namespace ABLC
 
     /// <summary>
     /// Static class to hold the level control data for districts.
-    /// Class, not struct, as this is mutable, and Mutable Structs Are Evil.
     /// </summary>
     internal static class DistrictsABLC
     {
@@ -23,6 +23,80 @@ namespace ABLC
 
         // District flags.
         internal static byte[] flags;
+
+
+        /// <summary>
+        /// Gets the maximum level set for the given building's current district.
+        /// </summary>
+        /// <param name="buildingID">Building ID to check</param>
+        /// <param name="isResidential">True if this building uses residential level restrictions, false if workplace</param>
+        /// <returns>Maximum level for building set in the current district, if set (4 (residential) or 2 (workplace) if no value is set)</returns>
+        internal static byte GetMaxLevel(ushort buildingID, bool isResidential)
+        {
+            // Get district from building location.
+            ushort districtID = Singleton<DistrictManager>.instance.GetDistrict(Singleton<BuildingManager>.instance.m_buildings.m_buffer[buildingID].m_position);
+
+            // Residential or workplace?
+            if (isResidential)
+            {
+                // Residential - check that array has ben initialised, and if so, return the relevant district maximum.
+                if (maxResLevel != null)
+                {
+                    return maxResLevel[districtID];
+                }
+
+                // If we got here, no value was retrieved; return the default.
+                return 4;
+            }
+            else
+            {
+                // Workplace - check that array has ben initialised, and if so, return the relevant district maximum.
+                if (maxWorkLevel != null)
+                {
+                    return maxWorkLevel[districtID];
+                }
+
+                // If we got here, no value was retrieved; return the default.
+                return 2;
+            }
+        }
+
+
+        /// <summary>
+        /// Gets the minimum level set for the given building's current district.
+        /// </summary>
+        /// <param name="buildingID">Building ID to check</param>
+        /// <param name="isResidential">True if this building uses residential level restrictions, false (default) if workplace</param>
+        /// <returns>minimum level for building set in the current district, if set (0 if no value is set)</returns>
+        internal static byte GetMinLevel(ushort buildingID, bool isResidential)
+        {
+            // Get district from building location.
+            ushort districtID = Singleton<DistrictManager>.instance.GetDistrict(Singleton<BuildingManager>.instance.m_buildings.m_buffer[buildingID].m_position);
+
+            // Residential or workplace?
+            if (isResidential)
+            {
+                // Residential - check that array has ben initialised, and if so, return the relevant district maximum.
+                if (minResLevel != null)
+                {
+                    return minResLevel[districtID];
+                }
+
+                // If we got here, no value was retrieved; return the default.
+                return 0;
+            }
+            else
+            {
+                // Workplace - check that array has ben initialised, and if so, return the relevant district maximum.
+                if (minWorkLevel != null)
+                {
+                    return minWorkLevel[districtID];
+                }
+
+                // If we got here, no value was retrieved; return the default.
+                return 0;
+            }
+        }
     }
 
 
