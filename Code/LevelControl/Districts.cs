@@ -246,20 +246,17 @@ namespace ABLC
         /// <summary>
         /// Deserialises savegame data into the arrays.
         /// <summary>
-        /// Deserializes savegame data ino the arrays.
-        /// </summary>
-        /// <param name="resMinLevels">Minimum residential level array (from save data)</param>
-        /// <param name="resMaxLevels">Maximum residential level array (from save data)</param>
-        /// <param name="workMinLevels">Minimum workplace level array (from save data)</param>
-        /// <param name="workMaxLevels">Maximum workplace level array (from save data)</param>
+        /// <param name="savedMinResLevels">Minimum residential level array (from save data)</param>
+        /// <param name="savedMaxResLevels">Maximum residential level array (from save data)</param>
+        /// <param name="savedWorkMinLevels">Minimum workplace level array (from save data)</param>
+        /// <param name="savedWorkMaxLevels">Maximum workplace level array (from save data)</param>
         /// <param name="savedFlags">District attribute flags (from save data)</param>
-        internal static void Deserialize(byte[] resMinLevels, byte[] resMaxLevels, byte[] workMinLevels, byte[] workMaxLevels, byte[] savedFlags)
+        internal static void Deserialize(byte[] savedMinResLevels, byte[] savedMaxResLevels, byte[] savedWorkMinLevels, byte[] savedWorkMaxLevels, byte[] savedFlags)
         {
             // Populate arrays, checking data validity before we do.
-
-            if (minResLevels != null && minResLevels.Length == NumDistricts)
+            if (savedMinResLevels != null && savedMinResLevels.Length == NumDistricts)
             {
-                minResLevels = resMinLevels;
+                minResLevels = savedMinResLevels;
             }
             else
             {
@@ -267,9 +264,9 @@ namespace ABLC
                 minResLevels = ResetLevels(0, "minResLevels");
             }
 
-            if (maxResLevels != null && maxResLevels.Length == NumDistricts)
+            if (savedMaxResLevels != null && savedMaxResLevels.Length == NumDistricts)
             {
-                maxResLevels = resMaxLevels;
+                maxResLevels = savedMaxResLevels;
             }
             else
             {
@@ -277,9 +274,9 @@ namespace ABLC
                 maxResLevels = ResetLevels(MaxResLevel, "maxResLevels");
             }
 
-            if (minWorkLevels != null && minWorkLevels.Length == NumDistricts)
+            if (savedWorkMinLevels != null && savedWorkMinLevels.Length == NumDistricts)
             {
-                minWorkLevels = workMinLevels;
+                minWorkLevels = savedWorkMinLevels;
             }
             else
             {
@@ -287,9 +284,9 @@ namespace ABLC
                 minWorkLevels = ResetLevels(0, "minWorkLevels");
             }
 
-            if (maxWorkLevels != null && maxWorkLevels.Length == NumDistricts)
+            if (savedWorkMaxLevels != null && savedWorkMaxLevels.Length == NumDistricts)
             {
-                maxWorkLevels = workMaxLevels;
+                maxWorkLevels = savedWorkMaxLevels;
             }
             else
             {
@@ -320,7 +317,7 @@ namespace ABLC
             // Return array.
             byte[] newArray = new byte[128];
 
-            Logging.Error(name, " district settings incomplete; resetting");
+            Logging.Message(name, " district settings incomplete; resetting");
 
             // Populate return array with given default level.
             for (int i = 0; i < 128; ++i)
