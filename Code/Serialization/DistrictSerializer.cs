@@ -24,7 +24,7 @@ namespace ABLC
 
             // Extended attributes - starting with version flag.
             serializer.WriteInt16(0);
-            serializer.WriteByteArray(DistrictsABLC.flags);
+            serializer.WriteByteArray(DistrictsABLC.Flags);
         }
 
 
@@ -41,22 +41,24 @@ namespace ABLC
             byte[] maxResLevel = serializer.ReadByteArray();
             byte[] minWorkLevel = serializer.ReadByteArray();
             byte[] maxWorkLevel = serializer.ReadByteArray();
-            DistrictsABLC.Deserialize(minResLevel, maxResLevel, minWorkLevel, maxWorkLevel);
 
             // Try to read extended attributes - original version didn't have these.
+            byte[] flags = null;
             try
             {
                 // Read version, but ignore it for now.
                 int version = serializer.ReadInt16();
 
                 // Read flags.
-                DistrictsABLC.flags = serializer.ReadByteArray();
+                flags = serializer.ReadByteArray();
             }
             catch
             {
-                // Don't care if we can't read them; 
-                DistrictsABLC.flags = null;
+                // Don't care if we can't read them.
             }
+
+            // Load read data into arrays.
+            DistrictsABLC.Deserialize(minResLevel, maxResLevel, minWorkLevel, maxWorkLevel, flags);
         }
 
 

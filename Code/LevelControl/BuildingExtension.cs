@@ -33,7 +33,7 @@ namespace ABLC
             Level spawnLevel =  (Level)DistrictsABLC.GetDistrictMin(districtID, spawn.service == Service.Residential);
 
             // See if we have random spawning levels.
-            if ((DistrictsABLC.flags[districtID] & (byte)DistrictFlags.randomSpawnLevels) != 0)
+            if (DistrictsABLC.GetFlag(districtID, (byte)DistrictFlags.randomSpawnLevels))
             {
                 // Yes - get max level then choose a random level between min and max.
                 Level maxLevel = (Level)DistrictsABLC.GetDistrictMax(districtID, spawn.service == Service.Residential);
@@ -66,7 +66,7 @@ namespace ABLC
         public override void OnBuildingCreated(ushort id)
         {
             // Don't do anything if we haven't yet loaded into game or district data hasn't been set.
-            if (!Loading.isLoaded || DistrictsABLC.flags == null)
+            if (!Loading.isLoaded)
             {
                 return;
             }
@@ -78,7 +78,7 @@ namespace ABLC
             ushort districtID = Singleton<DistrictManager>.instance.GetDistrict(buildingBuffer[id].m_position);
 
             // Set historical state.
-            (buildingBuffer[id].Info?.GetAI() as BuildingAI)?.SetHistorical(id, ref buildingBuffer[id], (DistrictsABLC.flags[districtID] & (byte)DistrictFlags.spawnHistorical) != 0);
+            (buildingBuffer[id].Info?.GetAI() as BuildingAI)?.SetHistorical(id, ref buildingBuffer[id], DistrictsABLC.GetFlag(districtID, (byte)DistrictFlags.spawnHistorical));
         }
 
 

@@ -30,14 +30,37 @@ namespace ABLC
         private static byte[] minResLevels, maxResLevels, minWorkLevels, maxWorkLevels;
 
         // District flags.
-        internal static byte[] flags;
+        private static byte[] districtFlags;
 
 
-        // Accessors.
+        /// <summary>
+        /// Accessor - minimum residential level array.
+        /// </summary>
         internal static byte[] MinResLevels => minResLevels;
+
+
+        /// <summary>
+        /// Accessor - maximum residential level array.
+        /// </summary>
         internal static byte[] MaxResLevels => maxResLevels;
+
+
+        /// <summary>
+        /// Accessor - minimum workplace level array.
+        /// </summary>
         internal static byte[] MinWorkLevels => minWorkLevels;
+
+
+        /// <summary>
+        /// Accessor - maximum workplace level array.
+        /// </summary>
         internal static byte[] MaxWorkLevels => maxWorkLevels;
+
+
+        /// <summary>
+        /// Accessor - distric flag array.
+        /// </summary>
+        internal static byte[] Flags => districtFlags;
 
 
         /// <summary>
@@ -177,6 +200,50 @@ namespace ABLC
 
 
         /// <summary>
+        /// Checks the given flag for the given district.
+        /// </summary>
+        /// <param name="districtID">District ID</param>
+        /// <param name="flag">Flag to check</param>
+        /// <returns>True if flag set, false otherwise</returns>
+        internal static bool GetFlag(ushort districtID, byte flag)
+        {
+            // Safety check.
+            if (districtID <= NumDistricts && districtFlags != null)
+            {
+                return (districtFlags[NumDistricts] & flag) != (byte)DistrictFlags.none;
+            }
+
+            // Fallback is to return false.
+            return false;
+        }
+
+
+        /// <summary>
+        /// Sets or clears the given flag for the given district.
+        /// </summary>
+        /// <param name="districtID">District ID</param>
+        /// <param name="flag">Flag to set</param>
+        /// <param name="bool">True to set the flag, false to clear</param>
+        internal static void SetFlag(ushort districtID, byte flag, bool flagState)
+        {
+            // Safety check.
+            if (districtID <= NumDistricts && districtFlags != null)
+            {
+                if (flagState)
+                {
+                    // Set flag by OR.
+                    districtFlags[NumDistricts] |= flag;
+                }
+                else
+                {
+                    // Clear flag by AND NOT.
+                    districtFlags[NumDistricts] &= (byte)~flag;
+                }
+            }
+        }
+
+
+        /// <summary>
         /// Deserialises savegame data into the arrays.
         /// <summary>
         /// Deserializes savegame data ino the arrays.
@@ -185,7 +252,8 @@ namespace ABLC
         /// <param name="resMaxLevels">Maximum residential level array (from save data)</param>
         /// <param name="workMinLevels">Minimum workplace level array (from save data)</param>
         /// <param name="workMaxLevels">Maximum workplace level array (from save data)</param>
-        internal static void Deserialize(byte[] resMinLevels, byte[] resMaxLevels, byte[] workMinLevels, byte[] workMaxLevels)
+        /// <param name="savedFlags">District attribute flags (from save data)</param>
+        internal static void Deserialize(byte[] resMinLevels, byte[] resMaxLevels, byte[] workMinLevels, byte[] workMaxLevels, byte[] savedFlags)
         {
             // Populate arrays, checking data validity before we do.
 
@@ -227,6 +295,16 @@ namespace ABLC
             {
                 // Invalid data - reset the district array to default.
                 maxWorkLevels = ResetLevels(MaxWorkLevel, "maxWorkLevels");
+            }
+
+            if (savedFlags != null && savedFlags.Length == NumDistricts)
+            {
+                districtFlags = savedFlags;
+            }
+            else
+            {
+                // Invalid data - reset the district array to default.
+                districtFlags = ResetLevels(0, "flags");
             }
         }
 

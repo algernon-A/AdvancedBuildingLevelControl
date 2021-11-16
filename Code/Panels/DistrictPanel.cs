@@ -123,9 +123,9 @@ namespace ABLC
             minWorkLevelDropDown.selectedIndex = DistrictsABLC.GetDistrictMin(targetID, false);
             maxWorkLevelDropDown.selectedIndex = DistrictsABLC.GetDistrictMax(targetID, false);
 
-            // Set flags.
-            randomSpawnCheck.isChecked = (DistrictsABLC.flags[targetID] & (byte)DistrictFlags.randomSpawnLevels) != 0;
-            spawnHistoricalCheck.isChecked = (DistrictsABLC.flags[targetID] & (byte)DistrictFlags.spawnHistorical) != 0;
+            // Set check state based on district flags.
+            randomSpawnCheck.isChecked = DistrictsABLC.GetFlag(targetID, (byte)DistrictFlags.randomSpawnLevels);
+            spawnHistoricalCheck.isChecked = DistrictsABLC.GetFlag(targetID, (byte)DistrictFlags.spawnHistorical);
 
             // All done: re-enable events.
             disableEvents = false;
@@ -253,8 +253,8 @@ namespace ABLC
                     // Don't do anything if events are disabled.
                     if (!disableEvents)
                     {
-                        // XOR relevant flag to toggle.
-                        DistrictsABLC.flags[targetID] ^= (byte)DistrictFlags.randomSpawnLevels;
+                        // Set/clear relevant flag.
+                        DistrictsABLC.SetFlag(targetID, (byte)DistrictFlags.randomSpawnLevels, isChecked);
                     }
                 };
 
@@ -263,8 +263,8 @@ namespace ABLC
                     // Don't do anything if events are disabled.
                     if (!disableEvents)
                     {
-                        // XOR relevant flag to toggle.
-                        DistrictsABLC.flags[targetID] ^= (byte)DistrictFlags.spawnHistorical;
+                        // Set/clear relevant flag.
+                        DistrictsABLC.SetFlag(targetID, (byte)DistrictFlags.spawnHistorical, isChecked);
                     }
                 };
 
