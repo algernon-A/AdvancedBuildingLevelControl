@@ -64,6 +64,7 @@
     <Compile Include="Code\ExternalCalls.cs" />
     <Compile Include="Code\Patches\BuildingLoaded.cs" />
     <Compile Include="Code\Serialization\BuildingSerializer.cs" />
+    <Compile Include="Code\Serialization\DistrictSerializer.cs" />
     <Compile Include="Code\Utils\MoveItIntegration.cs" />
     <Compile Include="Code\Patches\SimulationStepActive.cs" />
     <Compile Include="Code\LevelControl\Buildings.cs" />

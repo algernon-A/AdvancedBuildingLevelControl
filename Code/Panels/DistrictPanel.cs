@@ -118,10 +118,10 @@ namespace ABLC
             nameLabel.text = Singleton<DistrictManager>.instance.GetDistrictName(targetID);
 
             // Set min and max levels.
-            minLevelDropDown.selectedIndex = DistrictsABLC.minResLevel[targetID];
-            maxLevelDropDown.selectedIndex = DistrictsABLC.maxResLevel[targetID];
-            minWorkLevelDropDown.selectedIndex = DistrictsABLC.minWorkLevel[targetID];
-            maxWorkLevelDropDown.selectedIndex = DistrictsABLC.maxWorkLevel[targetID];
+            minLevelDropDown.selectedIndex = DistrictsABLC.GetDistrictMin(targetID, true);
+            maxLevelDropDown.selectedIndex = DistrictsABLC.GetDistrictMax(targetID, true);
+            minWorkLevelDropDown.selectedIndex = DistrictsABLC.GetDistrictMin(targetID, false);
+            maxWorkLevelDropDown.selectedIndex = DistrictsABLC.GetDistrictMax(targetID, false);
 
             // Set flags.
             randomSpawnCheck.isChecked = (DistrictsABLC.flags[targetID] & (byte)DistrictFlags.randomSpawnLevels) != 0;
@@ -189,7 +189,8 @@ namespace ABLC
                     // Don't do anything if events are disabled.
                     if (!disableEvents)
                     {
-                        DistrictsABLC.minResLevel[targetID] = (byte)index;
+                        // Set new minimum residential level.
+                        DistrictsABLC.SetDistrictMin(targetID, true, (byte)index);
 
                         // If the minimum level is now greater than the maximum level, increase the maximum to match the minimum.
                         if (index > maxLevelDropDown.selectedIndex)
@@ -204,7 +205,8 @@ namespace ABLC
                     // Don't do anything if events are disabled.
                     if (!disableEvents)
                     {
-                        DistrictsABLC.maxResLevel[targetID] = (byte)index;
+                        // Set new maximum residential level.
+                        DistrictsABLC.SetDistrictMax(targetID, true, (byte)index);
 
                         // If the maximum level is now less than the minimum level, reduce the minimum to match the maximum.
                         if (index < minLevelDropDown.selectedIndex)
@@ -219,7 +221,8 @@ namespace ABLC
                     // Don't do anything if events are disabled.
                     if (!disableEvents)
                     {
-                        DistrictsABLC.minWorkLevel[targetID] = (byte)index;
+                        // Set new minimum workplace level.
+                        DistrictsABLC.SetDistrictMin(targetID, false, (byte)index);
 
                         // If the minimum level is now greater than the maximum level, increase the maximum to match the minimum.
                         if (index > maxWorkLevelDropDown.selectedIndex)
@@ -234,7 +237,8 @@ namespace ABLC
                     // Don't do anything if events are disabled.
                     if (!disableEvents)
                     {
-                        DistrictsABLC.maxWorkLevel[targetID] = (byte)index;
+                        // Set new maximum workplace level.
+                        DistrictsABLC.SetDistrictMax(targetID, false, (byte)index);
 
                         // If the maximum level is now less than the minimum level, reduce the minimum to match the maximum.
                         if (index < minWorkLevelDropDown.selectedIndex)

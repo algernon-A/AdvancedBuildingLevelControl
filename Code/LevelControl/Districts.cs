@@ -1,5 +1,5 @@
-﻿using ColossalFramework;
-using ColossalFramework.IO;
+﻿using System;
+using ColossalFramework;
 
 
 namespace ABLC
@@ -18,11 +18,26 @@ namespace ABLC
     /// </summary>
     internal static class DistrictsABLC
     {
+        // Level constants.
+        private const byte MaxResLevel = 4;
+        private const byte MaxWorkLevel = 2;
+
+        // District size constant.
+        private const byte NumDistricts = DistrictManager.MAX_DISTRICT_COUNT;
+
+
         // Level data arrays.
-        internal static byte[] minResLevel, maxResLevel, minWorkLevel, maxWorkLevel;
+        private static byte[] minResLevels, maxResLevels, minWorkLevels, maxWorkLevels;
 
         // District flags.
         internal static byte[] flags;
+
+
+        // Accessors.
+        internal static byte[] MinResLevels => minResLevels;
+        internal static byte[] MaxResLevels => maxResLevels;
+        internal static byte[] MinWorkLevels => minWorkLevels;
+        internal static byte[] MaxWorkLevels => maxWorkLevels;
 
 
         /// <summary>
@@ -31,35 +46,7 @@ namespace ABLC
         /// <param name="buildingID">Building ID to check</param>
         /// <param name="isResidential">True if this building uses residential level restrictions, false if workplace</param>
         /// <returns>Maximum level for building set in the current district, if set (4 (residential) or 2 (workplace) if no value is set)</returns>
-        internal static byte GetMaxLevel(ushort buildingID, bool isResidential)
-        {
-            // Get district from building location.
-            ushort districtID = Singleton<DistrictManager>.instance.GetDistrict(Singleton<BuildingManager>.instance.m_buildings.m_buffer[buildingID].m_position);
-
-            // Residential or workplace?
-            if (isResidential)
-            {
-                // Residential - check that array has ben initialised, and if so, return the relevant district maximum.
-                if (maxResLevel != null)
-                {
-                    return maxResLevel[districtID];
-                }
-
-                // If we got here, no value was retrieved; return the default.
-                return 4;
-            }
-            else
-            {
-                // Workplace - check that array has ben initialised, and if so, return the relevant district maximum.
-                if (maxWorkLevel != null)
-                {
-                    return maxWorkLevel[districtID];
-                }
-
-                // If we got here, no value was retrieved; return the default.
-                return 2;
-            }
-        }
+        internal static byte GetMaxLevel(ushort buildingID, bool isResidential) => GetDistrictMax(Singleton<DistrictManager>.instance.GetDistrict(Singleton<BuildingManager>.instance.m_buildings.m_buffer[buildingID].m_position), isResidential);
 
 
         /// <summary>
@@ -68,18 +55,58 @@ namespace ABLC
         /// <param name="buildingID">Building ID to check</param>
         /// <param name="isResidential">True if this building uses residential level restrictions, false (default) if workplace</param>
         /// <returns>minimum level for building set in the current district, if set (0 if no value is set)</returns>
-        internal static byte GetMinLevel(ushort buildingID, bool isResidential)
-        {
-            // Get district from building location.
-            ushort districtID = Singleton<DistrictManager>.instance.GetDistrict(Singleton<BuildingManager>.instance.m_buildings.m_buffer[buildingID].m_position);
+        internal static byte GetMinLevel(ushort buildingID, bool isResidential) => GetDistrictMin(Singleton<DistrictManager>.instance.GetDistrict(Singleton<BuildingManager>.instance.m_buildings.m_buffer[buildingID].m_position), isResidential);
 
+
+        /// <summary>
+        /// Gets the maximum level set for the given district.
+        /// </summary>
+        /// <param name="districtID">District ID</param>
+        /// <param name="isResidential">True if this building uses residential level restrictions, false (default) if workplace</param>
+        /// <returns>Maximum level for this type of building in the given district</returns>
+        internal static byte GetDistrictMax(ushort districtID, bool isResidential)
+        {
             // Residential or workplace?
             if (isResidential)
             {
                 // Residential - check that array has ben initialised, and if so, return the relevant district maximum.
-                if (minResLevel != null)
+                if (minResLevels != null)
                 {
-                    return minResLevel[districtID];
+                    return maxResLevels[districtID];
+                }
+
+                // If we got here, no value was retrieved; return the default.
+                return MaxResLevel;
+            }
+            else
+            {
+                // Workplace - check that array has ben initialised, and if so, return the relevant district maximum.
+                if (minWorkLevels != null)
+                {
+                    return maxWorkLevels[districtID];
+                }
+
+                // If we got here, no value was retrieved; return the default.
+                return MaxWorkLevel;
+            }
+        }
+
+
+        /// <summary>
+        /// Gets the minimum level set for the given district.
+        /// </summary>
+        /// <param name="districtID">District ID</param>
+        /// <param name="isResidential">True if this building uses residential level restrictions, false (default) if workplace</param>
+        /// <returns>Minimum level for this type of building in the given district</returns>
+        internal static byte GetDistrictMin(ushort districtID, bool isResidential)
+        {
+            // Residential or workplace?
+            if (isResidential)
+            {
+                // Residential - check that array has ben initialised, and if so, return the relevant district minimum.
+                if (minResLevels != null)
+                {
+                    return minResLevels[districtID];
                 }
 
                 // If we got here, no value was retrieved; return the default.
@@ -87,109 +114,120 @@ namespace ABLC
             }
             else
             {
-                // Workplace - check that array has ben initialised, and if so, return the relevant district maximum.
-                if (minWorkLevel != null)
+                // Workplace - check that array has ben initialised, and if so, return the relevant district minimum.
+                if (minWorkLevels != null)
                 {
-                    return minWorkLevel[districtID];
+                    return minWorkLevels[districtID];
                 }
 
                 // If we got here, no value was retrieved; return the default.
                 return 0;
             }
         }
-    }
-
-
-    /// <summary>
-    ///  Savegame (de)serialisation for district level settings.
-    /// </summary>
-    public class DistrictSerializer : IDataContainer
-    {
-        /// <summary>
-        /// Serialise to savegame.
-        /// </summary>
-        /// <param name="serializer">Data serializer</param>
-        public void Serialize(DataSerializer serializer)
-        {
-            Logging.Message("writing district settings");
-
-            // Write district level arrays to savegame.
-            serializer.WriteByteArray(DistrictsABLC.minResLevel);
-            serializer.WriteByteArray(DistrictsABLC.maxResLevel);
-            serializer.WriteByteArray(DistrictsABLC.minWorkLevel);
-            serializer.WriteByteArray(DistrictsABLC.maxWorkLevel);
-
-            // Extended attributes - starting with version flag.
-            serializer.WriteInt16(0);
-            serializer.WriteByteArray(DistrictsABLC.flags);
-        }
 
 
         /// <summary>
-        /// Deseralise from savegame.
+        /// Sets the minimum level for the given district.
         /// </summary>
-        /// <param name="serializer">Data serializer</param>
-        public void Deserialize(DataSerializer serializer)
+        /// <param name="districtID">District ID</param>
+        /// <param name="isResidential">True if this building uses residential level restrictions, false (default) if workplace</param>
+        /// <param name="level">New minimum level</param>
+        internal static void SetDistrictMin(ushort districtID, bool isResidential, byte level)
         {
-            Logging.Message("reading district settings");
-
-            // Read data from savegame into flat arrays.
-            DistrictsABLC.minResLevel = serializer.ReadByteArray();
-            DistrictsABLC.maxResLevel = serializer.ReadByteArray();
-            DistrictsABLC.minWorkLevel = serializer.ReadByteArray();
-            DistrictsABLC.maxWorkLevel = serializer.ReadByteArray();
-
-            // Try to extended attributes - original version didn't have these.
-            try
+            if (districtID > NumDistricts)
             {
-                // Read version, but ignore it for now.
-                int version = serializer.ReadInt16();
-
-                // Read flags.
-                DistrictsABLC.flags = serializer.ReadByteArray();
+                Logging.Error("invalid district passed to SetDistrictMin");
+                return;
             }
-            catch
+
+            if (isResidential)
             {
-                // Don't care if we can't read them; 
-                DistrictsABLC.flags = null;
+                minResLevels[districtID] = Math.Min(level, MaxResLevel);
+            }
+            else
+            {
+                minWorkLevels[districtID] = Math.Min(level, MaxWorkLevel);
             }
         }
 
 
         /// <summary>
-        /// Performs post-deserialisation check, ensuring that arrays are of correct size.
+        /// Sets the maximum level for the given district.
         /// </summary>
-        /// <param name="serializer">Data serializer</param>
-        public void AfterDeserialize(DataSerializer serializer)
+        /// <param name="districtID">District ID</param>
+        /// <param name="isResidential">True if this building uses residential level restrictions, false (default) if workplace</param>
+        /// <param name="level">New maximum level</param>
+        internal static void  SetDistrictMax(ushort districtID, bool isResidential, byte level)
         {
-            Logging.Message("starting district post-deserialization");
+            if (districtID > NumDistricts)
+            {
+                Logging.Error("invalid district passed to SetDistrictMax");
+                return;
+            }
 
-            // If any array is less than the required size, we ignore what was read and re-initialise the array with default values.
-            if (DistrictsABLC.minResLevel == null || DistrictsABLC.minResLevel.Length < 128)
+            if (isResidential)
             {
-                DistrictsABLC.minResLevel = ResetLevels(0, "MinResLevel");
+                maxResLevels[districtID] = Math.Min(level, MaxResLevel);
             }
-            if (DistrictsABLC.maxResLevel == null || DistrictsABLC.maxResLevel.Length < 128)
+            else
             {
-                DistrictsABLC.maxResLevel = ResetLevels(4, "MaxResLevel");
+                maxWorkLevels[districtID] = Math.Min(level, MaxWorkLevel);
             }
-            if (DistrictsABLC.minWorkLevel == null || DistrictsABLC.minResLevel.Length < 128)
+        }
+
+
+        /// <summary>
+        /// Deserialises savegame data into the arrays.
+        /// <summary>
+        /// Deserializes savegame data ino the arrays.
+        /// </summary>
+        /// <param name="resMinLevels">Minimum residential level array (from save data)</param>
+        /// <param name="resMaxLevels">Maximum residential level array (from save data)</param>
+        /// <param name="workMinLevels">Minimum workplace level array (from save data)</param>
+        /// <param name="workMaxLevels">Maximum workplace level array (from save data)</param>
+        internal static void Deserialize(byte[] resMinLevels, byte[] resMaxLevels, byte[] workMinLevels, byte[] workMaxLevels)
+        {
+            // Populate arrays, checking data validity before we do.
+
+            if (minResLevels != null && minResLevels.Length == NumDistricts)
             {
-                DistrictsABLC.minWorkLevel = ResetLevels(0, "MinWorkLevel");
+                minResLevels = resMinLevels;
             }
-            if (DistrictsABLC.maxWorkLevel == null || DistrictsABLC.minResLevel.Length < 128)
+            else
             {
-                DistrictsABLC.maxWorkLevel = ResetLevels(2, "MaxWorkLevel");
+                // Invalid data - reset the district array to default.
+                minResLevels = ResetLevels(0, "minResLevels");
             }
-            if (DistrictsABLC.maxWorkLevel == null || DistrictsABLC.minResLevel.Length < 128)
+
+            if (maxResLevels != null && maxResLevels.Length == NumDistricts)
             {
-                DistrictsABLC.maxWorkLevel = ResetLevels(2, "MaxWorkLevel");
+                maxResLevels = resMaxLevels;
             }
-            if (DistrictsABLC.flags == null || DistrictsABLC.flags.Length < 128)
+            else
             {
-                DistrictsABLC.flags = ResetLevels(0, "Flags");
+                // Invalid data - reset the district array to default.
+                maxResLevels = ResetLevels(MaxResLevel, "maxResLevels");
             }
-            Logging.Message("district settings read");
+
+            if (minWorkLevels != null && minWorkLevels.Length == NumDistricts)
+            {
+                minWorkLevels = workMinLevels;
+            }
+            else
+            {
+                // Invalid data - reset the district array to default.
+                minWorkLevels = ResetLevels(0, "minWorkLevels");
+            }
+
+            if (maxWorkLevels != null && maxWorkLevels.Length == NumDistricts)
+            {
+                maxWorkLevels = workMaxLevels;
+            }
+            else
+            {
+                // Invalid data - reset the district array to default.
+                maxWorkLevels = ResetLevels(MaxWorkLevel, "maxWorkLevels");
+            }
         }
 
 
@@ -199,7 +237,7 @@ namespace ABLC
         /// <param name="level">Default level to appluy</param>
         /// <param name="name">Name of district level array (for logging)</param>
         /// <returns>New district level array of 128 bytes pre-populated with the given default level</returns>
-        private byte[] ResetLevels(byte level, string name)
+        private static byte[] ResetLevels(byte level, string name)
         {
             // Return array.
             byte[] newArray = new byte[128];

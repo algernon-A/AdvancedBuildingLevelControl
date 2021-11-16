@@ -30,13 +30,13 @@ namespace ABLC
             ushort districtID = Singleton<DistrictManager>.instance.GetDistrict(position);
 
             // Get our minimum level for this district for this type of building - our default is for this to be the spawn level.
-            Level spawnLevel = spawn.service == Service.Residential ? (Level)DistrictsABLC.minResLevel[districtID] : (Level)DistrictsABLC.minWorkLevel[districtID];
+            Level spawnLevel =  (Level)DistrictsABLC.GetDistrictMin(districtID, spawn.service == Service.Residential);
 
             // See if we have random spawning levels.
             if ((DistrictsABLC.flags[districtID] & (byte)DistrictFlags.randomSpawnLevels) != 0)
             {
                 // Yes - get max level then choose a random level between min and max.
-                Level maxLevel = spawn.service == Service.Residential ? (Level)DistrictsABLC.maxResLevel[districtID] : (Level)DistrictsABLC.maxWorkLevel[districtID];
+                Level maxLevel = (Level)DistrictsABLC.GetDistrictMax(districtID, spawn.service == Service.Residential);
 
                 // Get our possible range.
                 uint levelRange = (uint)(maxLevel - spawnLevel);
