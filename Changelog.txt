@@ -1,4 +1,9 @@
-﻿Version 1.0.2 -
+﻿Version 1.0.3 -
+
+- Code cleanups and refactoring
+
+
+Version 1.0.2 -
 
 - Ensure district historical settings aren't applied to buildings before save has finished loading properly
 
