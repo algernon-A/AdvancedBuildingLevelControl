@@ -210,7 +210,7 @@ namespace ABLC
             // Safety check.
             if (districtID <= NumDistricts && districtFlags != null)
             {
-                return (districtFlags[NumDistricts] & flag) != (byte)DistrictFlags.none;
+                return (districtFlags[districtID] & flag) != (byte)DistrictFlags.none;
             }
 
             // Fallback is to return false.
@@ -232,12 +232,12 @@ namespace ABLC
                 if (flagState)
                 {
                     // Set flag by OR.
-                    districtFlags[NumDistricts] |= flag;
+                    districtFlags[districtID] |= flag;
                 }
                 else
                 {
                     // Clear flag by AND NOT.
-                    districtFlags[NumDistricts] &= (byte)~flag;
+                    districtFlags[districtID] &= (byte)~flag;
                 }
             }
         }
