@@ -48,7 +48,7 @@
     </Reference>
     <Reference Include="MoveItIntegration, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\Program Files (x86)\Steam\steamapps\workshop\content\255710\1619685021\MoveItIntegration.dll</HintPath>
+      <HintPath>Libraries\MoveItIntegration.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -101,8 +101,8 @@
   <ItemGroup>
     <Content Include="Changelog.txt" />
     <Content Include="Images\PreviewImage.png" />
+    <Content Include="Libraries\MoveItIntegration.dll" />
     <Content Include="License.txt" />
-    <Content Include="MoveItIntegration.dll" />
     <Content Include="Resources\ablc_buttons.png" />
     <Content Include="Translations\de.xml" />
     <Content Include="Translations\en.xml" />
