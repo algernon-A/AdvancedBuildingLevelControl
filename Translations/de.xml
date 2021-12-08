@@ -18,7 +18,7 @@
     <Translation ID="ABLC_CAT_WMX_TIP" String="Das höchste erlaubte Level für Arbeitsgebäude (Industrie/Gewerbe/Büro) in diesem Distrikt." />
     <Translation ID="ABLC_RAN_SPN" String="Zufälliges Bau-Level" />
     <Translation ID="ABLC_RAN_SPN_TIP" String="Wenn aktiviert, werden neue Gebäude in diesem Distrikt ein zufälliges Bau-Level zwischen den Minimal- und Maximal-Werten für diesen Distrikt haben." />
-    <Translation ID="ABLC_HIS_SPN" String="Neue Gebäude werden historisch" />
+    <Translation ID="ABLC_HIS_SPN" String="Nur neue Gebäude" />
     <Translation ID="ABLC_HIS_SPN_TIP" String="Wenn aktiviert, werden neue Gebäude in diesem Distrikt automatisch als historisch markiert. Beeinflusst nicht schon bestehende Gebäude." />
     <Translation ID="ABLC_TRIG_UP" String="Verbesserung erzwingen" />
     <Translation ID="ABLC_TRIG_UPB_TIP" String="Zwingt dieses Gebäude zur Verbesserung auf das festgelegte minimale Level." />
@@ -26,7 +26,7 @@
     <Translation ID="ABLC_TRIG_DWN" String="Herabstufung erzwingen" />
     <Translation ID="ABLC_TRIG_DWB_TIP" String="Zwingt dieses Gebäude zum Herabstufen auf das festgelegte maximale Level." />
     <Translation ID="ABLC_TRIG_DWD_TIP" String="Zwingt alle Gebäude in diesem Distrikt mit einem Level über dem festgelegtem Maximum sich auf das Maximum herabzustufen." />
-    <Translation ID="ABLC_HIS" String="Historisch-Einstellungen settings" />
+    <Translation ID="ABLC_HIS" String="Historisch festlegen" />
     <Translation ID="ABLC_TRIG_HIS" String="Historisch erzwingen" />
     <Translation ID="ABLC_TRIG_HIS_TIP" String="Stellt alle Gebäude in diesem Distrikt unter Denkmalschutz." />
     <Translation ID="ABLC_TRIG_NHS" String="Historisch zurücksetzen" />
