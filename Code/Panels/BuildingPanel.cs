@@ -7,7 +7,7 @@ using ColossalFramework.UI;
 namespace ABLC
 {
     /// <summary>
-    /// Static class to manage the ABLC district panel.
+    /// Static class to manage the ABLC building panel.
     /// </summary>
     internal static class BuildingPanelManager
     {
@@ -39,8 +39,6 @@ namespace ABLC
                     // Create / destroy our panel as and when the info panel is shown or hidden.
                     if (isVisible)
                     {
-                       
-
                         if (ModSettings.showPanel)
                         {
                             Create();
