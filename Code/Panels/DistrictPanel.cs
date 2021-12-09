@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using UnityEngine;
 using ColossalFramework;
 using ColossalFramework.UI;
@@ -7,84 +6,6 @@ using ColossalFramework.UI;
 
 namespace ABLC
 {
-    /// <summary>
-    /// Static class to manage the ABLC district panel.
-    /// </summary>
-    internal static class DistrictPanelManager
-    {
-        // Instance references.
-        private static GameObject uiGameObject;
-        private static ABLCDistrictPanel _panel;
-        internal static ABLCDistrictPanel Panel => _panel;
-
-
-        /// <summary>
-        /// Adds event handler to show/hide district panel as appropriate (in line with DistrictWorldInfoPanel).
-        /// </summary>
-        internal static void Hook()
-        {
-
-            UIComponent districtInfoPanel = UIView.library.Get<DistrictWorldInfoPanel>(typeof(DistrictWorldInfoPanel).Name)?.component;
-            if (districtInfoPanel == null)
-            {
-                Logging.Error("couldn't hook district info panel");
-            }
-            else
-            {
-                districtInfoPanel.eventVisibilityChanged += (control, isVisible) =>
-                {
-                    if (isVisible)
-                    {
-                        Create(districtInfoPanel.transform);
-                    }
-                    else
-                    {
-                        Close();
-                    }
-                };
-            }
-        }
-
-
-        /// <summary>
-        /// Creates the panel object in-game and displays it.
-        /// </summary>
-        internal static void Create(Transform parentTransform)
-        {
-            try
-            {
-                // If no instance already set, create one.
-                if (uiGameObject == null)
-                {
-                    // Give it a unique name for easy finding with ModTools.
-                    uiGameObject = new GameObject("ABLCDistrictPanel");
-                    uiGameObject.transform.parent = parentTransform;
-
-                    _panel = uiGameObject.AddComponent<ABLCDistrictPanel>();
-
-                    // Set up and show panel.
-                    Panel.Setup(parentTransform);
-                    Panel.Show();
-                }
-            }
-            catch (Exception e)
-            {
-                Logging.LogException(e, "exception creating ABLCDistrictPanel");
-            }
-        }
-
-
-        /// <summary>
-        /// Closes the panel by destroying the object (removing any ongoing UI overhead).
-        /// </summary>
-        internal static void Close()
-        {
-            GameObject.Destroy(_panel);
-            GameObject.Destroy(uiGameObject);
-        }
-    }
-
-
     /// <summary>
     /// ABLC district settings info panel.
     /// </summary>
@@ -135,11 +56,11 @@ namespace ABLC
         /// <summary>
         /// Performs initial setup for the panel; we don't use Start() as that's not sufficiently reliable (race conditions), and is not needed with the dynamic create/destroy process.
         /// </summary>
-        internal override void Setup(Transform parentTransform)
+        internal override void Setup()
         {
             try
             {
-                base.Setup(parentTransform);
+                base.Setup();
 
                 // Add category labels.
                 UILabel resLabel = AddLabel(Translations.Translate("ABLC_CAT_RES"), Margin, 50f, hAlign: UIHorizontalAlignment.Left);

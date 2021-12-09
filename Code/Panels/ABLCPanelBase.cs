@@ -39,7 +39,7 @@ namespace ABLC
         /// <summary>
         /// Performs initial setup for the panel; we don't use Start() as that's not sufficiently reliable (race conditions), and is not needed with the dynamic create/destroy process.
         /// </summary>
-        internal virtual void Setup(Transform parentTransform)
+        internal virtual void Setup()
         {
             try
             {
@@ -54,9 +54,6 @@ namespace ABLC
                 canFocus = true;
                 isInteractive = true;
                 size = new Vector3(220f, PanelHeight);
-
-                // Set parent transform to game's district info panel.
-                transform.parent = parentTransform;
 
                 // Set position according to setting.
                 if (ModSettings.onRight)

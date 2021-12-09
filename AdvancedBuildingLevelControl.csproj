@@ -62,6 +62,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Code\ExternalCalls.cs" />
+    <Compile Include="Code\Panels\BuildingPanelManager.cs" />
+    <Compile Include="Code\Panels\DistrictPanelManager.cs" />
     <Compile Include="Code\Patches\BuildingLoaded.cs" />
     <Compile Include="Code\Serialization\BuildingSerializer.cs" />
     <Compile Include="Code\Serialization\DistrictSerializer.cs" />

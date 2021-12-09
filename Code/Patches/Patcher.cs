@@ -43,6 +43,9 @@ namespace ABLC
         }
 
 
+        /// <summary>
+        /// Remove all Harmony patches.
+        /// </summary>
         public static void UnpatchAll()
         {
             // Only unapply if patches appplied.
