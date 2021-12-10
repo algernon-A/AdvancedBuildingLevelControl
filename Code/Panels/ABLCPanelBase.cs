@@ -43,9 +43,6 @@ namespace ABLC
         {
             try
             {
-                // Hide while we're setting up.
-                isVisible = false;
-
                 // Basic setup.
                 autoLayout = false;
                 backgroundSprite = "MenuPanel2";
@@ -53,7 +50,7 @@ namespace ABLC
                 isVisible = true;
                 canFocus = true;
                 isInteractive = true;
-                size = new Vector3(220f, PanelHeight);
+                size = new Vector2(220f, PanelHeight);
 
                 // Set position according to setting.
                 if (ModSettings.onRight)
@@ -115,7 +112,7 @@ namespace ABLC
             newLabel.size = new Vector2(this.width - xPos, scale * 30f);
             newLabel.textScale = scale;
             newLabel.text = text;
-            newLabel.relativePosition = new Vector3(xPos, yPos);
+            newLabel.relativePosition = new Vector2(xPos, yPos);
 
             return newLabel;
         }

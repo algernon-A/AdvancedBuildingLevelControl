@@ -104,7 +104,7 @@ namespace ABLC
             checkBox.width = size;
             checkBox.height = size;
             checkBox.clipChildren = false;
-            checkBox.relativePosition = new Vector3(xPos, yPos);
+            checkBox.relativePosition = new Vector2(xPos, yPos);
 
             // Sprites.
             UISprite sprite = checkBox.AddUIComponent<UISprite>();
@@ -160,7 +160,7 @@ namespace ABLC
             // Move dropdown to accomodate label if that setting is set.
             if (accomodateLabel)
             {
-                dropDown.relativePosition += new Vector3(labelWidth, 0f);
+                dropDown.relativePosition += new Vector2(labelWidth, 0f);
             }
 
             return dropDown;
@@ -200,7 +200,7 @@ namespace ABLC
             dropDown.textFieldPadding = new RectOffset(8, 0, itemVertPadding, 0);
             dropDown.itemPadding = new RectOffset(14, 0, itemVertPadding, 0);
 
-            dropDown.relativePosition = new Vector3(xPos, yPos);
+            dropDown.relativePosition = new Vector2(xPos, yPos);
 
             // Dropdown size parameters.
             dropDown.size = new Vector2(width, height);
