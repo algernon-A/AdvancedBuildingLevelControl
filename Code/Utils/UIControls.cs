@@ -160,7 +160,7 @@ namespace ABLC
             // Move dropdown to accomodate label if that setting is set.
             if (accomodateLabel)
             {
-                dropDown.relativePosition += new Vector2(labelWidth, 0f);
+                dropDown.relativePosition += new Vector3(labelWidth, 0f);
             }
 
             return dropDown;
