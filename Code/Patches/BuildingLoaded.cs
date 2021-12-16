@@ -1,4 +1,6 @@
-﻿using HarmonyLib;
+﻿using System.Collections.Generic;
+using System.Reflection.Emit;
+using HarmonyLib;
 
 
 namespace ABLC
@@ -19,7 +21,7 @@ namespace ABLC
 		/// <param name="version">Data version</param>
 		public static void Prefix(PrivateBuildingAI __instance, ushort buildingID, ref Building data)
 		{
-			// Only do this if settings permit.
+			// Check for buildings with illegal levels - only do this if settings permit.
 			if (ModSettings.loadLevelCheck)
 			{
 				byte maxLevel = LevelUtils.GetMaxLevel(buildingID);
@@ -32,5 +34,60 @@ namespace ABLC
 				}
 			}
 		}
-	}
+
+        /// <summary>
+        /// Harmony transpiler to remove building level check, where building level is set to be minimum of saved level and prefab level;
+        /// we want buildings to be able to be below prefab level.
+        /// Drops instructions corresponding to the code "data.m_level = (byte)Mathf.Max(data.m_level, (int)m_info.m_class.m_level);"
+        /// </summary>
+        /// <param name="instructions">Original ILCode</param>
+        /// <returns>Patched ILCode</returns>
+        public static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions)
+        {
+            // Instruction parsing.
+            IEnumerator<CodeInstruction> instructionsEnumerator = instructions.GetEnumerator();
+            CodeInstruction instruction;
+
+            // Status flags.
+            bool completed = false;
+
+            // Iterate through all instructions in original method.
+            while (instructionsEnumerator.MoveNext())
+            {
+                // Get next instruction.
+                instruction = instructionsEnumerator.Current;
+
+                if (!completed)
+                {
+                    // Look for a call instruction - we start dropping after the first call instruction of the method (call instance void BuildingAI::BuildingLoaded(uint16, valuetype Building&, uint32)
+                    if (instruction.opcode == OpCodes.Call)
+                    {
+                        yield return instruction;
+
+                        // Now just skip over all instructions until stfld (stfld uint8 Building::m_level)
+                        while (instructionsEnumerator.MoveNext())
+                        {
+                            if (instructionsEnumerator.Current.opcode == OpCodes.Stfld)
+                            {
+                                // Found our target - get next instruction, set flag and resume flow.
+                                instructionsEnumerator.MoveNext();
+                                instruction = instructionsEnumerator.Current;
+                                completed = true;
+                                break;
+                            }
+                        }
+                    }
+                }
+
+                // Output instruction.
+                yield return instruction;
+            }
+
+            // If we got here without finding our target, something went wrong.
+            if (!completed)
+            {
+                Logging.Error("transpiler patching failed for PrivateBuildingAI.BuildingLoaded");
+            }
+        }
+    }
 }
