@@ -1,4 +1,6 @@
-﻿- Ensure buildings with levels below the prefab default don't have their levels reset by the game
+﻿Version 1.0.4 -
+
+- Ensure buildings with levels below the prefab default don't have their levels reset by the game
 - Code cleanups and refactoring
 
 
