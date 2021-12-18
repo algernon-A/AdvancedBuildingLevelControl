@@ -307,6 +307,31 @@ namespace ABLC
 
 
         /// <summary>
+        /// Checks that district arrays have been properly initialized; if not, initializes them with default values.
+        /// </summary>
+        internal static void CheckArrays()
+        {
+            Logging.KeyMessage("Performing post-load array checks");
+            if (minResLevels == null || minResLevels.Length != 128)
+            {
+                minResLevels = ResetLevels(0, "residential minimum ");
+            }
+            if (maxResLevels == null || maxResLevels.Length != 128)
+            {
+                maxResLevels = ResetLevels(MaxResLevel, "residential maximum ");
+            }
+            if (minWorkLevels == null || minWorkLevels.Length != 128)
+            {
+                minWorkLevels = ResetLevels(0, "workplace minimum ");
+            }
+            if (maxWorkLevels == null || maxWorkLevels.Length != 128)
+            {
+                maxWorkLevels = ResetLevels(MaxWorkLevel, "workplace maximum ");
+            }
+        }
+
+
+        /// <summary>
         /// Resets a district level array to 128 bytes with the given default level.
         /// </summary>
         /// <param name="level">Default level to appluy</param>

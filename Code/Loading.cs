@@ -120,6 +120,9 @@ namespace ABLC
                 // Check for Ploppable RICO Revisited.
                 ModUtils.RICOReflection();
 
+                // Check that district arrays have been properly initialised.
+                DistrictsABLC.CheckArrays();
+
                 // Hook info panel events.
                 DistrictPanelManager.Hook();
                 BuildingPanelManager.Hook();
