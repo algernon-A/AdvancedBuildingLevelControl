@@ -86,12 +86,12 @@
     <Compile Include="Code\Patches\ReversePatches.cs" />
     <Compile Include="Code\Patches\WorldInfoPanel.cs" />
     <Compile Include="Code\Patches\Patcher.cs" />
-    <Compile Include="Code\Logging.cs" />
+    <Compile Include="Code\Utils\Logging.cs" />
     <Compile Include="Code\Mod.cs" />
     <Compile Include="Code\Serialization\Serialization.cs" />
     <Compile Include="Code\Settings\ModSettings.cs" />
     <Compile Include="Code\TranslationFramework\TranslationFramework.cs" />
-    <Compile Include="Code\TranslationFramework\TranslationXML.cs" />
+    <Compile Include="Code\TranslationFramework\Language.cs" />
     <Compile Include="Code\Utils\Textures.cs" />
     <Compile Include="Code\Utils\TextureUtils.cs" />
     <Compile Include="Code\Utils\UIControls.cs" />
@@ -99,6 +99,11 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+    <None Include="Translations\de.csv" />
+    <None Include="Translations\en.csv" />
+    <None Include="Translations\ja.csv" />
+    <None Include="Translations\ru.csv" />
+    <None Include="Translations\zh.csv" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Changelog.txt" />
@@ -106,11 +111,6 @@
     <Content Include="Libraries\MoveItIntegration.dll" />
     <Content Include="License.txt" />
     <Content Include="Resources\ablc_buttons.png" />
-    <Content Include="Translations\de.xml" />
-    <Content Include="Translations\en.xml" />
-    <Content Include="Translations\ja.xml" />
-    <Content Include="Translations\ru.xml" />
-    <Content Include="Translations\zh.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
@@ -128,7 +128,7 @@ xcopy /y "$(ProjectDir)MoveItIntegration.dll" "%25LOCALAPPDATA%25\Colossal Order
 
 
 mkdir "$(LOCALAPPDATA)\Colossal Order\Cities_Skylines\Addons\Mods\$(ProjectName)\Translations"
-del "%25LOCALAPPDATA%25\Colossal Order\Cities_Skylines\Addons\Mods\$(ProjectName)\Translations\*"
+del "%25LOCALAPPDATA%25\Colossal Order\Cities_Skylines\Addons\Mods\$(ProjectName)\Translations\*.csv"
 xcopy /y "$(SolutionDir)\Translations\" "$(LOCALAPPDATA)\Colossal Order\Cities_Skylines\Addons\Mods\$(ProjectName)\Translations" /s /e
 mkdir "$(LOCALAPPDATA)\Colossal Order\Cities_Skylines\Addons\Mods\$(ProjectName)\Resources"
 del "%25LOCALAPPDATA%25\Colossal Order\Cities_Skylines\Addons\Mods\$(ProjectName)\Resources\*"
