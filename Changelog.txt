@@ -1,4 +1,7 @@
-﻿Version 1.0.4.1 -
+﻿- Fix MoveIt import error
+
+
+Version 1.0.4.1 -
 
 - Ensure district arrays are properly initialized even in the event of loading failure
 

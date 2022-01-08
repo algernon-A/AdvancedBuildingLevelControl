@@ -72,16 +72,7 @@ namespace ABLC
         /// </summary>
         /// <param name="record">Record to encode</param>
         /// <returns>Encoded data as string</returns>
-        public override string Encode64(object record)
-        {
-            if (record == null)
-            {
-                return null;
-            }
-
-            // Generic encoding.
-            return EncodeUtil.BinaryEncode64(record.ToString());
-        }
+        public override string Encode64(object record) => null;
 
 
         /// <summary>
@@ -91,30 +82,6 @@ namespace ABLC
         /// <param name="record">String to decode</param>
         /// <param name="dataVersion">Data version</param>
         /// <returns>Decoded record</returns>
-        public override object Decode64(string record, Version dataVersion)
-        {
-            // Safety check.
-            if (record == null || record.Length == 0)
-            {
-                return null;
-            }
-
-            // Generic xml encoding.
-            XElement xml;
-            using (StringReader input = new StringReader((string)EncodeUtil.BinaryDecode64(record)))
-            {
-                XmlReaderSettings xmlReaderSettings = new XmlReaderSettings
-                {
-                    IgnoreWhitespace = true,
-                    ProhibitDtd = false,
-                    XmlResolver = null
-                };
-                using (XmlReader reader = XmlReader.Create(input, xmlReaderSettings))
-                {
-                    xml = XElement.Load(reader, LoadOptions.None);
-                }
-            }
-            return xml;
-        }
+        public override object Decode64(string record, Version dataVersion) => null;
     }
 }
