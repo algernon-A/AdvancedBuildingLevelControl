@@ -1,4 +1,7 @@
-﻿- Fix MoveIt import error
+﻿Version 1.0.5 -
+
+- Convert translation framework to CSV (for CrowdIn)
+- Fix MoveIt import error
 
 
 Version 1.0.4.1 -
