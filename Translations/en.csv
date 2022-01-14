@@ -44,7 +44,7 @@ TRN_SYS,Use system language
 MES_CLS,Close
 MES_DSA,Don't show again
 MES_PAGE,Please refer to the mod's Steam Workshop page for further information.
-ABLC_ERR_FAT,"This means that the mod is not able to operate, and has shut down."
+ABLC_ERR_FAT,"This means that the mod is not able to operate and has shut down."
 ABLC_ERR_HAR,Advanced Building Level Control was unable to complete its required Harmony patches.
 ERR_HAR0,Harmony patching error
 ERR_HAR1,Possible causes of this problem include:
