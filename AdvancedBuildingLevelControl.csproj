@@ -103,7 +103,6 @@
     <None Include="Translations\en.csv" />
     <None Include="Translations\es-ES.csv" />
     <None Include="Translations\ja-JP.csv" />
-    <None Include="Translations\nl-NL.csv" />
     <None Include="Translations\ru-RU.csv" />
     <None Include="Translations\zh-CN.csv" />
   </ItemGroup>
