@@ -1,4 +1,7 @@
-﻿Version 1.0.5 -
+﻿- Move settings file location from application directory to user directory
+
+
+Version 1.0.5 -
 
 - Convert translation framework to CSV (for CrowdIn)
 - Fix MoveIt import error

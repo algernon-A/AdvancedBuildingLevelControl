@@ -11,6 +11,14 @@ namespace ABLC
     [XmlRoot(ElementName = "AdvancedBuildingLevelControl", Namespace = "", IsNullable = false)]
     public class ModSettings
     {
+        // Settings file name.
+        [XmlIgnore]
+        private static readonly string SettingsFileName = "AdvancedBuildingLevelControl.xml";
+
+        // User settings directory.
+        [XmlIgnore]
+        private static readonly string UserSettingsDir = ColossalFramework.IO.DataLocation.localApplicationData;
+
         // Panel on right side of info panel, not left.
         [XmlIgnore]
         internal static bool onRight = false;
@@ -30,9 +38,6 @@ namespace ABLC
         // Check building prfabs on load for illegal levels (and fix them).
         [XmlIgnore]
         internal static bool loadLevelCheck = true;
-
-        [XmlIgnore]
-        private static readonly string SettingsFileName = "AdvancedBuildingLevelControl.xml";
 
         // Version.
         [XmlAttribute("Version")]
@@ -74,6 +79,7 @@ namespace ABLC
         public bool LoadLevelCheck { get => ModSettings.loadLevelCheck; set => ModSettings.loadLevelCheck = value; }
 
 
+
         /// <summary>
         /// Load settings from XML file.
         /// </summary>
@@ -81,14 +87,22 @@ namespace ABLC
         {
             try
             {
+                // Attempt to read new settings file (in user settings directory).
+                string fileName = Path.Combine(UserSettingsDir, SettingsFileName);
+                if (!File.Exists(fileName))
+                {
+                    // No settings file in user directory; use application directory instead.
+                    fileName = SettingsFileName;
+                }
+
                 // Check to see if configuration file exists.
-                if (File.Exists(SettingsFileName))
+                if (File.Exists(fileName))
                 {
                     // Read it.
-                    using (StreamReader reader = new StreamReader(SettingsFileName))
+                    using (StreamReader reader = new StreamReader(fileName))
                     {
                         XmlSerializer xmlSerializer = new XmlSerializer(typeof(ModSettings));
-                        if (!(xmlSerializer.Deserialize(reader) is ModSettings gbrSettingsFile))
+                        if (!(xmlSerializer.Deserialize(reader) is ModSettings settingsFile))
                         {
                             Logging.Error("couldn't deserialize settings file");
                         }
@@ -113,11 +127,17 @@ namespace ABLC
         {
             try
             {
-                // Pretty straightforward.  Serialisation is within GBRSettingsFile class.
-                using (StreamWriter writer = new StreamWriter(SettingsFileName))
+                // Save into user local settings.
+                using (StreamWriter writer = new StreamWriter(Path.Combine(UserSettingsDir, SettingsFileName)))
                 {
                     XmlSerializer xmlSerializer = new XmlSerializer(typeof(ModSettings));
                     xmlSerializer.Serialize(writer, new ModSettings());
+                }
+
+                // Cleaning up after ourselves - delete any old config file in the application directory.
+                if (File.Exists(SettingsFileName))
+                {
+                    File.Delete(SettingsFileName);
                 }
             }
             catch (Exception e)
