@@ -168,6 +168,52 @@ namespace ABLC
 
 
         /// <summary>
+        /// Uses reflection to find key methods for the Building Themes mod.
+        /// </summary>
+        /// <param name="randomBuildingInfo">RandomBuildingInfo_Upgrade method info (for delegate creation)</param>
+        /// <returns>Array of BuildingThemes GetUpgrdadeInfo method infos, one for each AI type</returns>
+        internal static MethodInfo[] BuildingThemesReflection(out MethodInfo randomBuildingInfo)
+        {
+            string methodName = "GetUpgradeInfo";
+
+            // Iterate through each loaded plugin assembly.
+            foreach (PluginManager.PluginInfo plugin in PluginManager.instance.GetPluginsInfo())
+            {
+                foreach (Assembly assembly in plugin.GetAssemblies())
+                {
+                    if (assembly.GetName().Name.Equals("BuildingThemes") && plugin.isEnabled)
+                    {
+                        // Found BuildingThemes.dll that's part of an enabled plugin; try to get its Detours class.
+                        Logging.Message("found Building Themes");
+                        Type themesDetours = assembly.GetType("BuildingThemes.Detour.PrivateBuildingAIDetour`1");
+                        if (themesDetours != null)
+                        {
+                            Logging.Message("found Building Themes Detours");
+
+                            // Get RandomBuildingInfo_Upgrade MethodInfo.
+                            randomBuildingInfo = assembly.GetType("BuildingThemes.RandomBuildings").GetMethod("GetRandomBuildingInfo_Upgrade", BindingFlags.Public | BindingFlags.Static);
+
+                            // Return the methodinfo for each of the four types.
+                            return new MethodInfo[]
+                            {
+                                themesDetours.MakeGenericType(typeof(ResidentialBuildingAI)).GetMethod(methodName),
+                                themesDetours.MakeGenericType(typeof(IndustrialBuildingAI)).GetMethod(methodName),
+                                themesDetours.MakeGenericType(typeof(CommercialBuildingAI)).GetMethod(methodName),
+                                themesDetours.MakeGenericType(typeof(OfficeBuildingAI)).GetMethod(methodName)
+                            };
+                        }
+                    }
+                }
+            }
+
+            // If we got here, we were unsuccessful.
+            Logging.Message("didn't find ", methodName);
+            randomBuildingInfo = null;
+            return null;
+        }
+
+
+        /// <summary>
         /// Returns the filepath of the current mod assembly.
         /// </summary>
         /// <returns>Mod assembly filepath</returns>

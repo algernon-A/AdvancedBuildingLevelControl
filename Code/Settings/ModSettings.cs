@@ -39,6 +39,10 @@ namespace ABLC
         [XmlIgnore]
         internal static bool loadLevelCheck = true;
 
+        // Randomise building model levels +/- 1 level from intended target (for greater physical variation).
+        [XmlIgnore]
+        internal static bool randomLevels = false;
+
         // Version.
         [XmlAttribute("Version")]
         public int version = 0;
@@ -60,23 +64,27 @@ namespace ABLC
 
         // Panel position.
         [XmlElement("PanelOnRight")]
-        public bool OnRight { get => ModSettings.onRight; set => ModSettings.onRight = value; }
+        public bool OnRight { get => onRight; set => onRight = value; }
 
         // Show panel.
         [XmlElement("ShowPanel")]
-        public bool ShowPanel { get => ModSettings.showPanel; set => ModSettings.showPanel = value; }
+        public bool ShowPanel { get => showPanel; set => showPanel = value; }
 
         // No historical abandonment.
         [XmlElement("NoAbandonHistorical")]
-        public bool NoAbandonHistorical { get => ModSettings.noAbandonHistorical; set => ModSettings.noAbandonHistorical = value; }
+        public bool NoAbandonHistorical { get => noAbandonHistorical; set => noAbandonHistorical = value; }
 
         // No abandonment at all.
         [XmlElement("NoAbandonAny")]
-        public bool NoAbandonAny { get => ModSettings.noAbandonAny; set => ModSettings.noAbandonAny = value; }
+        public bool NoAbandonAny { get => noAbandonAny; set => noAbandonAny = value; }
 
         // Check building levels on game load.
         [XmlElement("LoadLevelCheck")]
-        public bool LoadLevelCheck { get => ModSettings.loadLevelCheck; set => ModSettings.loadLevelCheck = value; }
+        public bool LoadLevelCheck { get => loadLevelCheck; set => loadLevelCheck = value; }
+
+        // Randomise building model levels.
+        [XmlElement("RandomLevels")]
+        public bool LoadLevelRandomLevelsCheck { get => randomLevels; set => randomLevels = value; }
 
 
 

@@ -1,4 +1,5 @@
-﻿- Move settings file location from application directory to user directory
+﻿- Add option to randomize building apperance to include models from one level lower or higher
+- Move settings file location from application directory to user directory
 
 
 Version 1.0.5 -
