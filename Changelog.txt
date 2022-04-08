@@ -1,4 +1,6 @@
-﻿- Add option to randomize building apperance to include models from one level lower or higher
+﻿Version 1.1 -
+
+- Add option to randomize building apperance to include models from one level lower or higher
 - Move settings file location from application directory to user directory
 
 
