@@ -52,8 +52,6 @@ namespace ABLC
                 finalLevel = maxLevel;
             }
 
-            Logging.Message("Building ", buildingID, " upgrade from ", (ItemClass.Level)data.m_level, " assigned random final level ", (ItemClass.Level)finalLevel);
-
             // Get target info.
             DistrictManager instance = Singleton<DistrictManager>.instance;
             byte district = instance.GetDistrict(data.m_position);
