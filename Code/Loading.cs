@@ -66,6 +66,9 @@ namespace ABLC
             {
                 isModEnabled = true;
                 Logging.KeyMessage("v " + ABLCMod.Version + " loading");
+
+                // Patch Building Themes, if it's active.
+                Patcher.PatchBuildingThemes();
             }
         }
 

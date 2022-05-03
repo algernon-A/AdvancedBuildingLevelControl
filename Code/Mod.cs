@@ -11,7 +11,7 @@ namespace ABLC
     public class ABLCMod : IUserMod
     {
         public static string ModName => "Advanced Building Level Control";
-        public static string Version => "1.0.5";
+        public static string Version => "1.1";
 
         public string Name => ModName + " " + Version;
         public string Description => Translations.Translate("ABLC_DESC");
@@ -64,6 +64,7 @@ namespace ABLC
             UIHelperBase gameGroup = helper.AddGroup(Translations.Translate("ABLC_OPT_PLY"));
             UICheckBox abandonHistCheck = (UICheckBox)gameGroup.AddCheckbox(Translations.Translate("ABLC_OPT_HNA"), ModSettings.noAbandonHistorical, (value) => { ModSettings.noAbandonHistorical = value; ModSettings.Save(); });
             UICheckBox abandonAnyCheck = (UICheckBox)gameGroup.AddCheckbox(Translations.Translate("ABLC_OPT_ANA"), ModSettings.noAbandonAny, (value) => { ModSettings.noAbandonAny = value; if (value) abandonHistCheck.isChecked = true; ModSettings.Save(); });
+            UICheckBox randomLevelCheck = (UICheckBox)gameGroup.AddCheckbox(Translations.Translate("ABLC_OPT_RND"), ModSettings.randomLevels, (value) => { ModSettings.randomLevels = value; ModSettings.Save(); });
             UICheckBox loadLevelCheck = (UICheckBox)gameGroup.AddCheckbox(Translations.Translate("ABLC_OPT_CLL"), ModSettings.loadLevelCheck, (value) => { ModSettings.loadLevelCheck = value; ModSettings.Save(); });
         }
     }

@@ -10,10 +10,18 @@ namespace ABLC
         /// Returns the maximum building level of a given building, based on subclass (1-based).
         /// <param name="buildingID">Building instance ID</param>
         /// </summary>
-        internal static byte GetMaxLevel(ushort buildingID)
-        {
-            ItemClass.SubService subService = Singleton<BuildingManager>.instance.m_buildings.m_buffer[buildingID].Info.m_class.m_subService;
+        /// <returns>Maximum building level (1-based)</returns>
+        internal static byte GetMaxLevel(ushort buildingID) => GetMaxLevel(Singleton<BuildingManager>.instance.m_buildings.m_buffer[buildingID].Info.m_class.m_subService);
 
+
+        /// <summary>
+        /// Returns the maximum building level of a given building, based on subclass (1-based).
+        /// <param name="subService">Building subservice</param>
+        /// </summary>
+        /// <param name="subService">Building subservice</param>
+        /// <returns>Maximum building level (1-based)</returns>
+        internal static byte GetMaxLevel(ItemClass.SubService subService)
+        {
             switch (subService)
             {
                 case ItemClass.SubService.ResidentialLow:

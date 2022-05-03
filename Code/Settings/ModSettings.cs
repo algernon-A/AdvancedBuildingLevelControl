@@ -11,6 +11,14 @@ namespace ABLC
     [XmlRoot(ElementName = "AdvancedBuildingLevelControl", Namespace = "", IsNullable = false)]
     public class ModSettings
     {
+        // Settings file name.
+        [XmlIgnore]
+        private static readonly string SettingsFileName = "AdvancedBuildingLevelControl.xml";
+
+        // User settings directory.
+        [XmlIgnore]
+        private static readonly string UserSettingsDir = ColossalFramework.IO.DataLocation.localApplicationData;
+
         // Panel on right side of info panel, not left.
         [XmlIgnore]
         internal static bool onRight = false;
@@ -31,8 +39,9 @@ namespace ABLC
         [XmlIgnore]
         internal static bool loadLevelCheck = true;
 
+        // Randomise building model levels +/- 1 level from intended target (for greater physical variation).
         [XmlIgnore]
-        private static readonly string SettingsFileName = "AdvancedBuildingLevelControl.xml";
+        internal static bool randomLevels = false;
 
         // Version.
         [XmlAttribute("Version")]
@@ -55,23 +64,28 @@ namespace ABLC
 
         // Panel position.
         [XmlElement("PanelOnRight")]
-        public bool OnRight { get => ModSettings.onRight; set => ModSettings.onRight = value; }
+        public bool OnRight { get => onRight; set => onRight = value; }
 
         // Show panel.
         [XmlElement("ShowPanel")]
-        public bool ShowPanel { get => ModSettings.showPanel; set => ModSettings.showPanel = value; }
+        public bool ShowPanel { get => showPanel; set => showPanel = value; }
 
         // No historical abandonment.
         [XmlElement("NoAbandonHistorical")]
-        public bool NoAbandonHistorical { get => ModSettings.noAbandonHistorical; set => ModSettings.noAbandonHistorical = value; }
+        public bool NoAbandonHistorical { get => noAbandonHistorical; set => noAbandonHistorical = value; }
 
         // No abandonment at all.
         [XmlElement("NoAbandonAny")]
-        public bool NoAbandonAny { get => ModSettings.noAbandonAny; set => ModSettings.noAbandonAny = value; }
+        public bool NoAbandonAny { get => noAbandonAny; set => noAbandonAny = value; }
 
         // Check building levels on game load.
         [XmlElement("LoadLevelCheck")]
-        public bool LoadLevelCheck { get => ModSettings.loadLevelCheck; set => ModSettings.loadLevelCheck = value; }
+        public bool LoadLevelCheck { get => loadLevelCheck; set => loadLevelCheck = value; }
+
+        // Randomise building model levels.
+        [XmlElement("RandomLevels")]
+        public bool LoadLevelRandomLevelsCheck { get => randomLevels; set => randomLevels = value; }
+
 
 
         /// <summary>
@@ -81,14 +95,22 @@ namespace ABLC
         {
             try
             {
+                // Attempt to read new settings file (in user settings directory).
+                string fileName = Path.Combine(UserSettingsDir, SettingsFileName);
+                if (!File.Exists(fileName))
+                {
+                    // No settings file in user directory; use application directory instead.
+                    fileName = SettingsFileName;
+                }
+
                 // Check to see if configuration file exists.
-                if (File.Exists(SettingsFileName))
+                if (File.Exists(fileName))
                 {
                     // Read it.
-                    using (StreamReader reader = new StreamReader(SettingsFileName))
+                    using (StreamReader reader = new StreamReader(fileName))
                     {
                         XmlSerializer xmlSerializer = new XmlSerializer(typeof(ModSettings));
-                        if (!(xmlSerializer.Deserialize(reader) is ModSettings gbrSettingsFile))
+                        if (!(xmlSerializer.Deserialize(reader) is ModSettings settingsFile))
                         {
                             Logging.Error("couldn't deserialize settings file");
                         }
@@ -113,11 +135,17 @@ namespace ABLC
         {
             try
             {
-                // Pretty straightforward.  Serialisation is within GBRSettingsFile class.
-                using (StreamWriter writer = new StreamWriter(SettingsFileName))
+                // Save into user local settings.
+                using (StreamWriter writer = new StreamWriter(Path.Combine(UserSettingsDir, SettingsFileName)))
                 {
                     XmlSerializer xmlSerializer = new XmlSerializer(typeof(ModSettings));
                     xmlSerializer.Serialize(writer, new ModSettings());
+                }
+
+                // Cleaning up after ourselves - delete any old config file in the application directory.
+                if (File.Exists(SettingsFileName))
+                {
+                    File.Delete(SettingsFileName);
                 }
             }
             catch (Exception e)

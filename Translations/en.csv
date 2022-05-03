@@ -38,6 +38,7 @@ ABLC_OPT_SHO,Show panel on building selection
 ABLC_OPT_RT,Place ABLC panel on right of game info panel (instead of on left)
 ABLC_OPT_ANA,No abandonment for all buildings
 ABLC_OPT_HNA,No abandonment for historical buildings
+ABLC_OPT_RND,Randomize building appearance within +/- 1 building level
 ABLC_OPT_CLL,Check all map buildings on load and fix any illegal levels
 TRN_CHOICE,Set language
 TRN_SYS,Use system language

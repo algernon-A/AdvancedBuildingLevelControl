@@ -13,6 +13,10 @@ namespace ABLC
         // Logging detail flag.
         internal static bool detailLogging = true;
 
+        // Stringbuilder for messaging.
+        private static StringBuilder message = new StringBuilder(128);
+
+
         /// <summary>
         /// Prints a single-line debugging message to the Unity output log with an "ERROR: " prefix, regardless of the 'detailed logging' setting.
         /// </summary>
@@ -49,7 +53,8 @@ namespace ABLC
         {
             // Use StringBuilder for efficiency since we're doing a lot of manipulation here.
             // Start with mod name (to easily identify relevant messages), followed by colon to indicate start of actual message.
-            StringBuilder message = new StringBuilder(ABLCMod.ModName);
+            message.Length = 0;
+            message.Append(ABLCMod.ModName);
             message.Append(": ");
 
             // Add each message parameter.
@@ -88,7 +93,8 @@ namespace ABLC
         {
             // Use StringBuilder for efficiency since we're doing a lot of manipulation here.
             // Start with mod name (to easily identify relevant messages), followed by colon to indicate start of actual message.
-            StringBuilder message = new StringBuilder(ABLCMod.ModName);
+            message.Length = 0;
+            message.Append(ABLCMod.ModName);
             message.Append(": ");
 
             // Append prefix.

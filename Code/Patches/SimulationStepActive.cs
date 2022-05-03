@@ -22,6 +22,9 @@ namespace ABLC
             {
 				// It is - simply reset the major problem timer to avoid the 'abandonment' timeout.
 				buildingData.m_majorProblemTimer = 0;
+
+				// Clear abandonment flag just in case.
+				buildingData.m_flags &= ~Building.Flags.Abandoned;
 			}
 		}
 	}
