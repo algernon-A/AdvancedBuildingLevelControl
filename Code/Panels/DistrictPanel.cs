@@ -190,12 +190,14 @@ namespace ABLC
 
                 upgradeButton.eventClicked += (control, clickEvent) =>
                 {
-                    LevelDistrict(targetID, true);
+                    Singleton<SimulationManager>.instance.AddAction(() =>
+                        LevelDistrict(targetID, true));
                 };
 
                 downgradeButton.eventClicked += (control, clickEvent) =>
                 {
-                    LevelDistrict(targetID, false);
+                    Singleton<SimulationManager>.instance.AddAction(() =>
+                        LevelDistrict(targetID, false));
                 };
 
             }
@@ -270,7 +272,7 @@ namespace ABLC
                 Building thisBuilding = buildings.m_buffer[i];
 
                 // Skip non-existent buildings or non-Private AI buildings.
-                if (thisBuilding.m_flags != Building.Flags.None || !(thisBuilding.Info?.GetAI() is PrivateBuildingAI))
+                if ((thisBuilding.m_flags & Building.Flags.Created) != 0 && thisBuilding.Info?.GetAI() is PrivateBuildingAI)
                 {
                     // Building exists; get its district and see if it matches the target district.
                     if (districtManager.GetDistrict(thisBuilding.m_position) == districtID)
@@ -309,7 +311,7 @@ namespace ABLC
                                 byte thisMinLevel = minLevel;
 
                                 // Upgrade.
-                                Singleton<SimulationManager>.instance.AddAction(delegate { LevelUtils.ForceLevel(buildingID, thisMinLevel); });
+                                LevelUtils.ForceLevel(buildingID, thisMinLevel);
                             }
                         }
                         else
@@ -325,7 +327,7 @@ namespace ABLC
                                 byte thisMaxLevel = maxLevel;
 
                                 // Downgrade.
-                                Singleton<SimulationManager>.instance.AddAction(delegate { LevelUtils.ForceLevel(buildingID, thisMaxLevel); });
+                                LevelUtils.ForceLevel(buildingID, thisMaxLevel);
                             }
                         }
                     }

@@ -17,6 +17,24 @@ namespace ABLC
         // Upgrade and downgrade target levels.
         protected byte upgradeLevel, downgradeLevel;
 
+        // Update status flag.
+        internal bool updateReady = false;
+
+
+        /// <summary>
+        /// Called by Unity every tick.  Used here to check to see if we need to update the panel after a building has been updated via the simulation thread.
+        /// </summary>
+        public override void Update()
+        {
+            base.Update();
+
+            // Check to see if an update is ready; if so, refresh the panel and clear the flag.
+            if (updateReady)
+            {
+                UpdatePanel();
+                updateReady = false;
+            }
+        }
 
         /// <summary>
         /// Performs initial setup for the panel; we don't use Start() as that's not sufficiently reliable (race conditions), and is not needed with the dynamic create/destroy process.
@@ -70,20 +88,17 @@ namespace ABLC
                     // Local references for SimulationManager action.
                     ushort buildingID = targetID;
                     byte targetLevel = upgradeLevel;
+                    Logging.KeyMessage("upgrading building to level ", upgradeLevel);
                     Singleton<SimulationManager>.instance.AddAction(delegate
                     {
                         LevelUtils.ForceLevel(targetID, targetLevel);
                     });
 
                     // Check to see if we should increase this buildings maximum level.
-                    byte newLevel = Singleton<BuildingManager>.instance.m_buildings.m_buffer[targetID].m_level;
-                    if (BuildingsABLC.GetMaxLevel(targetID) < newLevel)
+                    if (BuildingsABLC.GetMaxLevel(targetID) < upgradeLevel)
                     {
-                        maxLevelDropDown.selectedIndex = newLevel;
+                        maxLevelDropDown.selectedIndex = upgradeLevel;
                     }
-
-                    // Update the panel once done.
-                    UpdatePanel();
                 };
 
                 downgradeButton.eventClick += (control, clickEvent) =>
@@ -92,20 +107,17 @@ namespace ABLC
                     // Local references for SimulationManager action.
                     ushort buildingID = targetID;
                     byte targetLevel = downgradeLevel;
+                    Logging.KeyMessage("downgrading building to level ", downgradeLevel);
                     Singleton<SimulationManager>.instance.AddAction(delegate
                     {
                         LevelUtils.ForceLevel(targetID, targetLevel);
                     });
 
                     // Check to see if we should increase this buildings maximum level.
-                    byte newLevel = Singleton<BuildingManager>.instance.m_buildings.m_buffer[targetID].m_level;
-                    if (BuildingsABLC.GetMinLevel(targetID) > newLevel)
+                    if (BuildingsABLC.GetMinLevel(targetID) > downgradeLevel)
                     {
-                        minLevelDropDown.selectedIndex = newLevel;
+                        minLevelDropDown.selectedIndex = downgradeLevel;
                     }
-
-                    // Update the panel once done.
-                    UpdatePanel();
                 };
 
                 // Close button.

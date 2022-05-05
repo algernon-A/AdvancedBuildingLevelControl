@@ -89,7 +89,7 @@ namespace ABLC
         internal static void ForceLevel(ushort buildingID, byte targetLevel)
         {
             // BuildingInfo to change to, if this building isn't historical.
-            BuildingInfo targetInfo = null;
+            BuildingInfo targetInfo;
 
             // References.
             BuildingManager buildingManager = Singleton<BuildingManager>.instance;
@@ -97,55 +97,33 @@ namespace ABLC
             BuildingInfo buildingInfo = buildingBuffer[buildingID].Info;
             PrivateBuildingAI buildingAI = buildingInfo?.GetAI() as PrivateBuildingAI;
 
-            if (buildingInfo == null || buildingAI == null)
+            if (buildingAI == null)
             {
                 // If something went wrong, abort.
-                Logging.Error("couldn't get existing building info");
+                Logging.Error("couldn't get PrivateBuildingAI");
                 return;
             }
+            // Get upgrade/downgrade building target.
+            targetInfo = GetTargetInfo(buildingID, targetLevel);
 
-            // Check to see if this is historical or not, or is a RICO ploppable.
-            bool isHistorical = buildingAI.IsHistorical(buildingID, ref Singleton<BuildingManager>.instance.m_buildings.m_buffer[buildingID], out bool _) || ModUtils.CheckRICOPloppable(buildingInfo);
-
-            // Get target prefab (if needed, i.e. not historical or RICO ploppable).
-            if (!isHistorical)
-            {
-                // Get upgrade/downgrade building target.
-                targetInfo = GetTargetInfo(buildingID, targetLevel);
-                if (targetInfo == null)
-                {
-                    // If we failed, don't do anything more.
-                    return;
-                }
-            }
-
-            // If we have a valid upgrade/downgrade target, proceed.
-            if (isHistorical || targetInfo != null)
+            // Ensure valid AI before proceeding.
+            if (targetInfo?.GetAI() is PrivateBuildingAI newAI)
             {
                 // Apply target level to our building and cancel all level-up progress.
                 buildingBuffer[buildingID].m_level = targetLevel;
                 buildingBuffer[buildingID].m_levelUpProgress = 0;
 
-                // Apply our upgrade/downgrade target if not historical
-                if (!isHistorical)
-                {
-                    buildingManager.UpdateBuildingInfo(buildingID, targetInfo);
-                }
+                // Apply updated info.
+                buildingManager.UpdateBuildingInfo(buildingID, targetInfo);
+                buildingManager.UpdateBuildingRenderer(buildingID, true);
 
-                // Post-downgrade processing to update instance values - call game method if new level is equal to or greater than info base level, otherwise use custom method.
-                BuildingInfo newInfo = targetInfo ?? buildingInfo;
-                if (newInfo.GetAI() is PrivateBuildingAI newAI)
+                // Post-downgrade processing via custom method.
+                CustomBuildingUpgraded(newAI, buildingID, ref buildingBuffer[buildingID]);
+
+                // Set building panel updated flag if panel is open.
+                if (BuildingPanelManager.Panel != null)
                 {
-                    if (targetLevel < (byte)newInfo.GetClassLevel())
-                    {
-                        // New level is less than info base level; call custom method.
-                        CustomBuildingUpgraded(newAI, buildingID, ref buildingBuffer[buildingID]);
-                    }
-                    else
-                    {
-                        // New level is equal to or greater than info base level; call game method.
-                        newAI.BuildingUpgraded(buildingID, ref buildingBuffer[buildingID]);
-                    }
+                    BuildingPanelManager.Panel.updateReady = true;
                 }
             }
         }
