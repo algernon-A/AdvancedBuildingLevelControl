@@ -1,4 +1,5 @@
 ﻿- Fix historical buildings sometimes upgrading to one level above the maximum
+- Overhaul options panel code; panel now automatically refreshes on language change
 
 
 Version 1.1 -

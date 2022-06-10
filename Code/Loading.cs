@@ -133,6 +133,9 @@ namespace ABLC
                 // Add building info panel button.
                 BuildingPanelManager.AddInfoPanelButton();
 
+                // Set up options panel event handler (need to redo this now that options panel has been reset after loading into game).
+                OptionsPanel.OptionsEventHook();
+
                 // Set loaded status flag.
                 isLoaded = true;
             }

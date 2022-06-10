@@ -28,6 +28,19 @@ namespace ABLC
 
             // Load the settings file.
             ModSettings.Load();
+
+            // Add the options panel event handler for the start screen (to enable/disable options panel based on visibility).
+            // First, check to see if UIView is ready.
+            if (UIView.GetAView() != null)
+            {
+                // It's ready - attach the hook now.
+                OptionsPanel.OptionsEventHook();
+            }
+            else
+            {
+                // Otherwise, queue the hook for when the intro's finished loading.
+                LoadingManager.instance.m_introLoaded += OptionsPanel.OptionsEventHook;
+            }
         }
 
 
@@ -49,23 +62,8 @@ namespace ABLC
         /// </summary>
         public void OnSettingsUI(UIHelperBase helper)
         {
-            // Language options.
-            UIHelperBase languageGroup = helper.AddGroup(Translations.Translate("TRN_CHOICE"));
-            UIDropDown languageDropDown = (UIDropDown)languageGroup.AddDropdown(Translations.Translate("TRN_CHOICE"), Translations.LanguageList, Translations.Index, (value) => { Translations.Index = value; ModSettings.Save(); });
-            languageDropDown.autoSize = false;
-            languageDropDown.width = 270f;
-
-            // Panel options.
-            UIHelperBase panelGroup = helper.AddGroup(Translations.Translate("ABLC_OPT_PNL"));
-            UICheckBox onRightCheck = (UICheckBox)panelGroup.AddCheckbox(Translations.Translate("ABLC_OPT_RT"), ModSettings.onRight, (value) => { ModSettings.onRight = value; ModSettings.Save(); } );
-            UICheckBox showPanelCheck = (UICheckBox)panelGroup.AddCheckbox(Translations.Translate("ABLC_OPT_SHO"), ModSettings.showPanel, (value) => { ModSettings.showPanel = value; ModSettings.Save(); });
-
-            // Gameplay options.
-            UIHelperBase gameGroup = helper.AddGroup(Translations.Translate("ABLC_OPT_PLY"));
-            UICheckBox abandonHistCheck = (UICheckBox)gameGroup.AddCheckbox(Translations.Translate("ABLC_OPT_HNA"), ModSettings.noAbandonHistorical, (value) => { ModSettings.noAbandonHistorical = value; ModSettings.Save(); });
-            UICheckBox abandonAnyCheck = (UICheckBox)gameGroup.AddCheckbox(Translations.Translate("ABLC_OPT_ANA"), ModSettings.noAbandonAny, (value) => { ModSettings.noAbandonAny = value; if (value) abandonHistCheck.isChecked = true; ModSettings.Save(); });
-            UICheckBox randomLevelCheck = (UICheckBox)gameGroup.AddCheckbox(Translations.Translate("ABLC_OPT_RND"), ModSettings.randomLevels, (value) => { ModSettings.randomLevels = value; ModSettings.Save(); });
-            UICheckBox loadLevelCheck = (UICheckBox)gameGroup.AddCheckbox(Translations.Translate("ABLC_OPT_CLL"), ModSettings.loadLevelCheck, (value) => { ModSettings.loadLevelCheck = value; ModSettings.Save(); });
+            // Create options panel.
+            OptionsPanel.Setup(helper);
         }
     }
 }
