@@ -1,4 +1,7 @@
-﻿Version 1.1 -
+﻿- Fix buildings sometime upgrading to one level above the maximum
+
+
+Version 1.1 -
 
 - Add option to randomize building apperance to include models from one level lower or higher
 - Add fix for building flags left incorrectly set by 'No Abandonment' mod

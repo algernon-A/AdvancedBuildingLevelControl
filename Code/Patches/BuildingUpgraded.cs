@@ -34,9 +34,6 @@ namespace ABLC
 			// Override original method if we have a private building AI.
 			if (data.Info.m_buildingAI is PrivateBuildingAI buildingAI)
 			{
-				// Skip original method level check against prefab.
-				data.m_level += 1;
-
 				// Update building CitizenUnits to match new state.
 				buildingAI.CalculateWorkplaceCount((ItemClass.Level)data.m_level, new Randomizer(buildingID), data.Width, data.Length, out int level, out int level2, out int level3, out int level4);
 				buildingAI.AdjustWorkplaceCount(buildingID, ref data, ref level, ref level2, ref level3, ref level4);
