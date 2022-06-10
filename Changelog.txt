@@ -1,4 +1,4 @@
-﻿- Fix buildings sometime upgrading to one level above the maximum
+﻿- Fix historical buildings sometimes upgrading to one level above the maximum
 
 
 Version 1.1 -

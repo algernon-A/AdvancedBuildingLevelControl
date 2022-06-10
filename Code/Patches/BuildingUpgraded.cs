@@ -34,6 +34,13 @@ namespace ABLC
 			// Override original method if we have a private building AI.
 			if (data.Info.m_buildingAI is PrivateBuildingAI buildingAI)
 			{
+				// Historical building target level is already applied in PrivateBuildingAI.StartUpgrading.
+				if ((data.m_flags & Building.Flags.Historical) == 0)
+				{
+					// Non-historical buildings need their level increased manually here.
+					data.m_level += 1;
+				}
+
 				// Update building CitizenUnits to match new state.
 				buildingAI.CalculateWorkplaceCount((ItemClass.Level)data.m_level, new Randomizer(buildingID), data.Width, data.Length, out int level, out int level2, out int level3, out int level4);
 				buildingAI.AdjustWorkplaceCount(buildingID, ref data, ref level, ref level2, ref level3, ref level4);
