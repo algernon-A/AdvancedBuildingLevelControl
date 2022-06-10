@@ -38,7 +38,7 @@
 "ABLC_OPT_RT","Platziere das ABLC Panel auf der rechten Seite des Info-Panels (anstatt auf der linken Seite)"
 "ABLC_OPT_ANA","Gebäude werden nicht verlassen"
 "ABLC_OPT_HNA","Nur Gebäude unter Denkmalschutz werden nicht verlassen"
-"ABLC_OPT_RND","Gebäudevarianten innerhalb von +/- 1 Baustufe zufällih auswählen"
+"ABLC_OPT_RND","Gebäudevarianten innerhalb von +/- 1 Baustufe zufällig auswählen"
 "ABLC_OPT_CLL","Alle Gebäude auf der Karte beim Laden überprüfen und fehlerhafte Gebäude-Level korrigieren"
 "TRN_CHOICE","Sprache einstellen"
 "TRN_SYS","Nutze Spielsprache"
