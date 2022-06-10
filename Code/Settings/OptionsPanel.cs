@@ -113,6 +113,7 @@ namespace ABLC
                 basePanel.height = 725f;
                 basePanel.clipChildren = false;
                 float headerWidth = basePanel.width - (TitleMargin * 2f);
+                float checkLabelWidth = headerWidth - 40f;
 
                 // Needed to ensure position is consistent if we regenerate after initial opening (e.g. on language change).
                 basePanel.relativePosition = new Vector2(10f, 10f);
@@ -136,12 +137,12 @@ namespace ABLC
                 // Panel options.
                 currentY = AddTitle(basePanel, "ABLC_OPT_PNL", semiBold, headerWidth, currentY);
 
-                UICheckBox onRightCheck = UIControls.AddPlainCheckBox(basePanel, Margin, currentY, Translations.Translate("ABLC_OPT_RT"));
+                UICheckBox onRightCheck = UIControls.AddPlainCheckBox(basePanel, Margin, currentY, Translations.Translate("ABLC_OPT_RT"), checkLabelWidth);
                 onRightCheck.isChecked = ModSettings.onRight;
                 onRightCheck.eventCheckChanged += (control, value) => { ModSettings.onRight = value; };
                 currentY += onRightCheck.height + Margin;
 
-                UICheckBox showPanelCheck = UIControls.AddPlainCheckBox(basePanel, Margin, currentY, Translations.Translate("ABLC_OPT_SHO"));
+                UICheckBox showPanelCheck = UIControls.AddPlainCheckBox(basePanel, Margin, currentY, Translations.Translate("ABLC_OPT_SHO"), checkLabelWidth);
                 showPanelCheck.isChecked = ModSettings.showPanel;
                 showPanelCheck.eventCheckChanged += (control, value) => { ModSettings.showPanel = value; };
                 currentY += showPanelCheck.height + Margin;
@@ -149,22 +150,22 @@ namespace ABLC
                 // Gameplay options.
                 currentY = AddTitle(basePanel, "ABLC_OPT_PLY", semiBold, headerWidth, currentY);
 
-                UICheckBox abandonHistCheck = UIControls.AddPlainCheckBox(basePanel, Margin, currentY, Translations.Translate("ABLC_OPT_HNA"));
+                UICheckBox abandonHistCheck = UIControls.AddPlainCheckBox(basePanel, Margin, currentY, Translations.Translate("ABLC_OPT_HNA"), checkLabelWidth);
                 abandonHistCheck.isChecked = ModSettings.noAbandonHistorical;
                 abandonHistCheck.eventCheckChanged += (control, value) => { ModSettings.noAbandonHistorical = value; };
                 currentY += abandonHistCheck.height + Margin;
 
-                UICheckBox abandonAnyCheck = UIControls.AddPlainCheckBox(basePanel, Margin, currentY, Translations.Translate("ABLC_OPT_ANA"));
+                UICheckBox abandonAnyCheck = UIControls.AddPlainCheckBox(basePanel, Margin, currentY, Translations.Translate("ABLC_OPT_ANA"), checkLabelWidth);
                 abandonAnyCheck.isChecked = ModSettings.noAbandonAny;
                 abandonAnyCheck.eventCheckChanged += (control, value) => { ModSettings.noAbandonAny = value; };
                 currentY += abandonAnyCheck.height + Margin;
 
-                UICheckBox randomLevelCheck = UIControls.AddPlainCheckBox(basePanel, Margin, currentY, Translations.Translate("ABLC_OPT_RND"));
+                UICheckBox randomLevelCheck = UIControls.AddPlainCheckBox(basePanel, Margin, currentY, Translations.Translate("ABLC_OPT_RND"), checkLabelWidth);
                 randomLevelCheck.isChecked = ModSettings.randomLevels;
                 randomLevelCheck.eventCheckChanged += (control, value) => { ModSettings.randomLevels = value; };
                 currentY += randomLevelCheck.height + Margin;
 
-                UICheckBox loadLevelCheck = UIControls.AddPlainCheckBox(basePanel, Margin, currentY, Translations.Translate("ABLC_OPT_CLL"));
+                UICheckBox loadLevelCheck = UIControls.AddPlainCheckBox(basePanel, Margin, currentY, Translations.Translate("ABLC_OPT_CLL"), checkLabelWidth);
                 loadLevelCheck.isChecked = ModSettings.loadLevelCheck;
                 loadLevelCheck.eventCheckChanged += (control, value) => { ModSettings.loadLevelCheck = value; };
                 currentY += loadLevelCheck.height + Margin;
