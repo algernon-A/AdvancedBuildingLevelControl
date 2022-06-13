@@ -264,6 +264,11 @@ namespace ABLC
             // Instances and arrays.
             Array16<Building> buildings = Singleton<BuildingManager>.instance.m_buildings;
             DistrictManager districtManager = Singleton<DistrictManager>.instance;
+            SimulationManager simulationManager = Singleton<SimulationManager>.instance;
+
+            // Pause simulation.
+            bool originalForcedPause = simulationManager.ForcedSimulationPaused;
+            simulationManager.ForcedSimulationPaused = true;
 
             // Iterate through all buildings in map.
             for (ushort i = 0; i < buildings.m_size; ++i)
@@ -333,6 +338,9 @@ namespace ABLC
                     }
                 }
             }
+
+            // Resume simulation.
+            simulationManager.ForcedSimulationPaused = originalForcedPause;
         }
     }
 }
