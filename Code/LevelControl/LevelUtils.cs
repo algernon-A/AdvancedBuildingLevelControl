@@ -113,12 +113,17 @@ namespace ABLC
                 buildingBuffer[buildingID].m_level = targetLevel;
                 buildingBuffer[buildingID].m_levelUpProgress = 0;
 
+                // Reset upgrade-related flags.
+                buildingBuffer[buildingID].m_flags = buildingBuffer[buildingID].m_flags & ~Building.Flags.LevelUpEducation & ~Building.Flags.LevelUpLandValue;
+
                 // Apply updated info.
                 buildingManager.UpdateBuildingInfo(buildingID, targetInfo);
-                buildingManager.UpdateBuildingRenderer(buildingID, true);
 
                 // Post-downgrade processing via custom method.
                 CustomBuildingUpgraded(newAI, buildingID, ref buildingBuffer[buildingID]);
+
+                // Update building render.
+                buildingManager.UpdateBuildingRenderer(buildingID, true);
 
                 // Set building panel updated flag if panel is open.
                 if (BuildingPanelManager.Panel != null)
