@@ -1,6 +1,6 @@
 ﻿- Pause simulation when upgrading/downgrading districts
 - Reset upgrade-related building flags when force-changing building levels
-- Don't force up/downgrade burned down or collapsed buildings
+- Don't force up/downgrade abandoned, burned down, or collapsed buildings
 
 
 Version 1.1.1 -

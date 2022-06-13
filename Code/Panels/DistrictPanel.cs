@@ -276,8 +276,8 @@ namespace ABLC
                 // Get local reference.
                 Building thisBuilding = buildings.m_buffer[i];
 
-                // Skip non-existent, burned down, or collapsed buildings, or non-Private AI buildings.
-                if ((thisBuilding.m_flags & Building.Flags.Created) != 0 && (thisBuilding.m_flags & Building.Flags.BurnedDown & Building.Flags.Collapsed) == 0 && thisBuilding.Info?.GetAI() is PrivateBuildingAI)
+                // Skip non-existent,abandoned, burned down, or collapsed buildings, or non-Private AI buildings.
+                if ((thisBuilding.m_flags & Building.Flags.Created) != 0 && (thisBuilding.m_flags & (Building.Flags.Abandoned | Building.Flags.BurnedDown | Building.Flags.Collapsed)) == 0 && thisBuilding.Info?.GetAI() is PrivateBuildingAI)
                 {
                     // Building exists; get its district and see if it matches the target district.
                     if (districtManager.GetDistrict(thisBuilding.m_position) == districtID)
