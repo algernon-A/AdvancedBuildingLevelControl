@@ -1,4 +1,6 @@
-﻿- Fix 'randomize levels' and 'new buildings historical' settings for districts sometimes not applying when loading a save from when ABLC wasn't active
+﻿Version 1.1.2.1 -
+
+- Fix 'randomize levels' and 'new buildings historical' settings for districts sometimes not applying when loading a save from when ABLC wasn't active
 
 
 Version 1.1.2 -
