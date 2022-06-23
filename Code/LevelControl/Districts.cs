@@ -207,14 +207,19 @@ namespace ABLC
         /// <returns>True if flag set, false otherwise</returns>
         internal static bool GetFlag(ushort districtID, byte flag)
         {
-            // Safety check.
-            if (districtID <= NumDistricts && districtFlags != null)
+            // Safety checks.
+            if (districtID >= NumDistricts)
             {
-                return (districtFlags[districtID] & flag) != (byte)DistrictFlags.none;
+                Logging.Error("districtID ", districtID, " for GetFlag is above limit of ", NumDistricts);
+                return false;
+            }
+            if (districtFlags == null)
+            {
+                Logging.Error("attempted to get district flag when districtFlags not initialized");
+                return false;
             }
 
-            // Fallback is to return false.
-            return false;
+            return (districtFlags[districtID] & flag) != 0;
         }
 
 
@@ -226,19 +231,28 @@ namespace ABLC
         /// <param name="bool">True to set the flag, false to clear</param>
         internal static void SetFlag(ushort districtID, byte flag, bool flagState)
         {
-            // Safety check.
-            if (districtID <= NumDistricts && districtFlags != null)
+            // Safety checks.
+            if (districtID >= NumDistricts)
             {
-                if (flagState)
-                {
-                    // Set flag by OR.
-                    districtFlags[districtID] |= flag;
-                }
-                else
-                {
-                    // Clear flag by AND NOT.
-                    districtFlags[districtID] &= (byte)~flag;
-                }
+                Logging.Error("districtID ", districtID, " for SetFlag is above limit of ", NumDistricts);
+                return;
+            }
+            if (districtFlags == null)
+            {
+                Logging.Error("attempted to get district flag when districtFlags not initialized");
+                return;
+            }
+
+            // Set/clar flag.
+            if (flagState)
+            {
+                // Set flag by OR.
+                districtFlags[districtID] |= flag;
+            }
+            else
+            {
+                // Clear flag by AND NOT.
+                districtFlags[districtID] &= (byte)~flag;
             }
         }
 
@@ -312,19 +326,24 @@ namespace ABLC
         internal static void CheckArrays()
         {
             Logging.KeyMessage("Performing post-load array checks");
-            if (minResLevels == null || minResLevels.Length != 128)
+            if (districtFlags == null || minResLevels.Length != NumDistricts)
+            {
+                districtFlags = ResetLevels(0, "flags ");
+            }
+            minResLevels = ResetLevels(0, "residential minimum ");
+            if (minResLevels == null || minResLevels.Length != NumDistricts)
             {
                 minResLevels = ResetLevels(0, "residential minimum ");
             }
-            if (maxResLevels == null || maxResLevels.Length != 128)
+            if (maxResLevels == null || maxResLevels.Length != NumDistricts)
             {
                 maxResLevels = ResetLevels(MaxResLevel, "residential maximum ");
             }
-            if (minWorkLevels == null || minWorkLevels.Length != 128)
+            if (minWorkLevels == null || minWorkLevels.Length != NumDistricts)
             {
                 minWorkLevels = ResetLevels(0, "workplace minimum ");
             }
-            if (maxWorkLevels == null || maxWorkLevels.Length != 128)
+            if (maxWorkLevels == null || maxWorkLevels.Length != NumDistricts)
             {
                 maxWorkLevels = ResetLevels(MaxWorkLevel, "workplace maximum ");
             }

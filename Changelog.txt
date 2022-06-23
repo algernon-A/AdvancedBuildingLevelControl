@@ -1,4 +1,7 @@
-﻿Version 1.1.2 -
+﻿- Fix 'randomize levels' and 'new buildings historical' settings for districts sometimes not applying when loading a save from when ABLC wasn't active
+
+
+Version 1.1.2 -
 
 - Pause simulation when upgrading/downgrading districts
 - Reset upgrade-related building flags when force-changing building levels
