@@ -1,4 +1,9 @@
-﻿namespace ABLC
+﻿// <copyright file="DistrictSerializer.cs" company="algernon (K. Algernon A. Sheppard)">
+// Copyright (c) algernon (K. Algernon A. Sheppard). All rights reserved.
+// Licensed under the MIT license. See LICENSE.txt file in the project root for full license information.
+// </copyright>
+
+namespace ABLC
 {
     using AlgernonCommons;
     using ColossalFramework.IO;
@@ -11,27 +16,26 @@
         /// <summary>
         /// Serialise to savegame.
         /// </summary>
-        /// <param name="serializer">Data serializer</param>
+        /// <param name="serializer">Data serializer.</param>
         public void Serialize(DataSerializer serializer)
         {
             Logging.Message("writing district settings");
 
             // Write district level arrays to savegame.
-            serializer.WriteByteArray(DistrictsABLC.MinResLevels);
-            serializer.WriteByteArray(DistrictsABLC.MaxResLevels);
-            serializer.WriteByteArray(DistrictsABLC.MinWorkLevels);
-            serializer.WriteByteArray(DistrictsABLC.MaxWorkLevels);
+            serializer.WriteByteArray(Districts.MinResLevels);
+            serializer.WriteByteArray(Districts.MaxResLevels);
+            serializer.WriteByteArray(Districts.MinWorkLevels);
+            serializer.WriteByteArray(Districts.MaxWorkLevels);
 
             // Extended attributes - starting with version flag.
             serializer.WriteInt16(0);
-            serializer.WriteByteArray(DistrictsABLC.Flags);
+            serializer.WriteByteArray(Districts.Flags);
         }
-
 
         /// <summary>
         /// Deseralise from savegame.
         /// </summary>
-        /// <param name="serializer">Data serializer</param>
+        /// <param name="serializer">Data serializer.</param>
         public void Deserialize(DataSerializer serializer)
         {
             Logging.Message("reading district settings");
@@ -58,14 +62,13 @@
             }
 
             // Load read data into arrays.
-            DistrictsABLC.Deserialize(minResLevel, maxResLevel, minWorkLevel, maxWorkLevel, flags);
+            Districts.Deserialize(minResLevel, maxResLevel, minWorkLevel, maxWorkLevel, flags);
         }
-
 
         /// <summary>
         /// Post-deserialisation.
         /// </summary>
-        /// <param name="serializer">Data serializer</param>
+        /// <param name="serializer">Data serializer.</param>
         public void AfterDeserialize(DataSerializer serializer)
         {
             Logging.Message("district settings read");

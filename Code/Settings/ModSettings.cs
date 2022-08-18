@@ -1,4 +1,9 @@
-﻿namespace ABLC
+﻿// <copyright file="ModSettings.cs" company="algernon (K. Algernon A. Sheppard)">
+// Copyright (c) algernon (K. Algernon A. Sheppard). All rights reserved.
+// Licensed under the MIT license. See LICENSE.txt file in the project root for full license information.
+// </copyright>
+
+namespace ABLC
 {
     using System;
     using System.IO;
@@ -20,59 +25,83 @@
         [XmlIgnore]
         private static readonly string UserSettingsDir = ColossalFramework.IO.DataLocation.localApplicationData;
 
-        // Panel on right side of info panel, not left.
-        [XmlIgnore]
-        internal static bool onRight = false;
-
-        // Show panel automatically on info panel show.
-        [XmlIgnore]
-        internal static bool showPanel = true;
-
-        // No abandonment for historical buildings.
-        [XmlIgnore]
-        internal static bool noAbandonHistorical = false;
-
-        // No abaondoment for any buildings.
-        [XmlIgnore]
-        internal static bool noAbandonAny = false;
-
-        // Check building prfabs on load for illegal levels (and fix them).
-        [XmlIgnore]
-        internal static bool loadLevelCheck = true;
-
-        // Randomise building model levels +/- 1 level from intended target (for greater physical variation).
-        [XmlIgnore]
-        internal static bool randomLevels = false;
-
-        // Version.
+        /// <summary>
+        /// Gets or sets the data file format version.
+        /// </summary>
         [XmlAttribute("Version")]
-        public int version = 0;
+        public int Version { get; set; } = 0;
 
-        // Panel position.
+        /// <summary>
+        /// Gets or sets a value indicating whether the ABLC panel should appear on the right-hand side of the target WorldInfoPanel (instead of the left).
+        /// </summary>
         [XmlElement("PanelOnRight")]
-        public bool OnRight { get => onRight; set => onRight = value; }
+        public bool XMLOnRight { get => OnRight; set => OnRight = value; }
 
-        // Show panel.
+        /// <summary>
+        /// Gets or sets a value indicating whether the ABLC panel should be automatically shown when the target WorldInfoPanel is shown.
+        /// </summary>
         [XmlElement("ShowPanel")]
-        public bool ShowPanel { get => showPanel; set => showPanel = value; }
+        public bool XMLShowPanel { get => ShowPanel; set => ShowPanel = value; }
 
-        // No historical abandonment.
+        /// <summary>
+        /// Gets or sets a value indicating whether there is no abandonment for historical buildings.
+        /// </summary>
         [XmlElement("NoAbandonHistorical")]
-        public bool NoAbandonHistorical { get => noAbandonHistorical; set => noAbandonHistorical = value; }
+        public bool XMLNoAbandonHistorical { get => NoAbandonHistorical; set => NoAbandonHistorical = value; }
 
-        // No abandonment at all.
+        /// <summary>
+        /// Gets or sets a value indicating whether there is no abandonment for any buildings.
+        /// </summary>
         [XmlElement("NoAbandonAny")]
-        public bool NoAbandonAny { get => noAbandonAny; set => noAbandonAny = value; }
+        public bool XMLNoAbandonAny { get => NoAbandonAny; set => NoAbandonAny = value; }
 
-        // Check building levels on game load.
+        /// <summary>
+        /// Gets or sets a value indicating whether building prfabs should be checked on load for illegal levels (and errors fixed).
+        /// </summary>
         [XmlElement("LoadLevelCheck")]
-        public bool LoadLevelCheck { get => loadLevelCheck; set => loadLevelCheck = value; }
+        public bool XMLLoadLevelCheck { get => LoadLevelCheck; set => LoadLevelCheck = value; }
 
-        // Randomise building model levels.
+        /// <summary>
+        /// Gets or sets a value indicating whether building models should display a random level +/- 1 level from intended target (for greater physical variation).
+        /// </summary>
         [XmlElement("RandomLevels")]
-        public bool LoadLevelRandomLevelsCheck { get => randomLevels; set => randomLevels = value; }
+        public bool XMLRandomLevels { get => RandomLevels; set => RandomLevels = value; }
 
+        /// <summary>
+        /// Gets or sets a value indicating whether the ABLC panel should appear on the right-hand side of the target WorldInfoPanel (instead of the left).
+        /// </summary>
+        [XmlIgnore]
+        internal static bool OnRight { get; set; } = false;
 
+        /// <summary>
+        /// Gets or sets a value indicating whether the ABLC panel should be automatically shown when the target WorldInfoPanel is shown.
+        /// </summary>
+        [XmlIgnore]
+        internal static bool ShowPanel { get; set; } = true;
+
+        /// <summary>
+        /// Gets or sets a value indicating whether there is no abandonment for historical buildings.
+        /// </summary>
+        [XmlIgnore]
+        internal static bool NoAbandonHistorical { get; set; } = false;
+
+        /// <summary>
+        /// Gets or sets a value indicating whether there is no abandonment for any buildings.
+        /// </summary>
+        [XmlIgnore]
+        internal static bool NoAbandonAny { get; set; } = false;
+
+        /// <summary>
+        /// Gets or sets a value indicating whether building prfabs should be checked on load for illegal levels (and errors fixed).
+        /// </summary>
+        [XmlIgnore]
+        internal static bool LoadLevelCheck { get; set; } = true;
+
+        /// <summary>
+        /// Gets or sets a value indicating whether building models should display a random level +/- 1 level from intended target (for greater physical variation).
+        /// </summary>
+        [XmlIgnore]
+        internal static bool RandomLevels { get; set; } = false;
 
         /// <summary>
         /// Load settings from XML file.
@@ -112,7 +141,6 @@
                 Logging.LogException(e, "exception reading XML settings file");
             }
         }
-
 
         /// <summary>
         /// Save settings to XML file.

@@ -1,16 +1,20 @@
-﻿namespace ABLC
+﻿// <copyright file="Mod.cs" company="algernon (K. Algernon A. Sheppard)">
+// Copyright (c) algernon (K. Algernon A. Sheppard). All rights reserved.
+// Licensed under the MIT license. See LICENSE.txt file in the project root for full license information.
+// </copyright>
+
+namespace ABLC
 {
     using AlgernonCommons.Patching;
     using AlgernonCommons.Translation;
     using AlgernonCommons.UI;
-    using CitiesHarmony.API;
     using ColossalFramework.UI;
     using ICities;
 
     /// <summary>
     /// The base mod class for instantiation by the game.
     /// </summary>
-    public sealed class ABLCMod : PatcherMod, IUserMod
+    public sealed class Mod : PatcherMod, IUserMod
     {
         /// <summary>
         /// Gets the mod's base display name (name only).

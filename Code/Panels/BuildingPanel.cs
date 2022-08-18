@@ -1,6 +1,10 @@
-﻿namespace ABLC
+﻿// <copyright file="BuildingPanel.cs" company="algernon (K. Algernon A. Sheppard)">
+// Copyright (c) algernon (K. Algernon A. Sheppard). All rights reserved.
+// Licensed under the MIT license. See LICENSE.txt file in the project root for full license information.
+// </copyright>
+
+namespace ABLC
 {
-    using System;
     using AlgernonCommons;
     using ColossalFramework;
     using ColossalFramework.UI;
@@ -9,17 +13,112 @@
     /// <summary>
     /// ABLC building settings info panel.
     /// </summary>
-    internal class ABLCBuildingPanel : ABLCPanel
+    internal class BuildingPanel : ABLCPanel
     {
-        // Constants.
-        protected override float PanelHeight => 220f;
-
         // Upgrade and downgrade target levels.
-        protected byte upgradeLevel, downgradeLevel;
+        private byte _upgradeLevel;
+        private byte _downgradeLevel;
 
-        // Update status flag.
-        internal bool updateReady = false;
+        /// <summary>
+        /// Initializes a new instance of the <see cref="BuildingPanel"/> class.
+        /// </summary>
+        internal BuildingPanel()
+        {
+            // Set initial building.
+            BuildingChanged();
 
+            // Add event handlers.
+            m_minLevelDropDown.eventSelectedIndexChanged += (control, index) =>
+            {
+                // Don't do anything if events are disabled.
+                if (!m_disableEvents)
+                {
+                    // Set minimum level of building in dictionary.
+                    UpdateMinLevel((byte)index);
+
+                    // If the minimum level is now greater than the maximum level, increase the maximum to match the minimum.
+                    if (index > m_maxLevelDropDown.selectedIndex)
+                    {
+                        m_maxLevelDropDown.selectedIndex = index;
+                    }
+                }
+            };
+
+            m_maxLevelDropDown.eventSelectedIndexChanged += (control, index) =>
+            {
+                // Don't do anything if events are disabled.
+                if (!m_disableEvents)
+                {
+                    // Update maximum level.
+                    UpdateMaxLevel((byte)index);
+
+                    // If the maximum level is now less than the minimum level, reduce the minimum to match the maximum.
+                    if (index < m_minLevelDropDown.selectedIndex)
+                    {
+                        m_minLevelDropDown.selectedIndex = index;
+                    }
+                }
+            };
+
+            m_upgradeButton.eventClick += (control, clickEvent) =>
+            {
+                // Local references for SimulationManager action.
+                ushort buildingID = m_targetID;
+                byte targetLevel = _upgradeLevel;
+                Logging.KeyMessage("upgrading building to level ", _upgradeLevel);
+                Singleton<SimulationManager>.instance.AddAction(() =>
+                {
+                    LevelUtils.ForceLevel(m_targetID, targetLevel);
+                });
+
+                // Check to see if we should increase this buildings maximum level.
+                if (Buildings.GetMaxLevel(m_targetID) < _upgradeLevel)
+                {
+                    m_maxLevelDropDown.selectedIndex = _upgradeLevel;
+                }
+            };
+
+            m_downgradeButton.eventClick += (control, clickEvent) =>
+            {
+                // Local references for SimulationManager action.
+                ushort buildingID = m_targetID;
+                byte targetLevel = _downgradeLevel;
+                Logging.KeyMessage("downgrading building to level ", _downgradeLevel);
+                Singleton<SimulationManager>.instance.AddAction(() =>
+                {
+                    LevelUtils.ForceLevel(m_targetID, targetLevel);
+                });
+
+                // Check to see if we should increase this buildings maximum level.
+                if (Buildings.GetMinLevel(m_targetID) > _downgradeLevel)
+                {
+                    m_minLevelDropDown.selectedIndex = _downgradeLevel;
+                }
+            };
+
+            // Close button.
+            UIButton closeButton = AddUIComponent<UIButton>();
+            closeButton.relativePosition = new Vector2(width - 35, 2);
+            closeButton.normalBgSprite = "buttonclose";
+            closeButton.hoveredBgSprite = "buttonclosehover";
+            closeButton.pressedBgSprite = "buttonclosepressed";
+
+            // Close button event handler.
+            closeButton.eventClick += (component, clickEvent) =>
+            {
+                BuildingPanelManager.Close();
+            };
+        }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether an update is ready.
+        /// </summary>
+        internal bool UpdateReady { get; set; } = false;
+
+        /// <summary>
+        /// Gets the panel height.
+        /// </summary>
+        protected override float PanelHeight => 220f;
 
         /// <summary>
         /// Called by Unity every tick.  Used here to check to see if we need to update the panel after a building has been updated via the simulation thread.
@@ -29,116 +128,12 @@
             base.Update();
 
             // Check to see if an update is ready; if so, refresh the panel and clear the flag.
-            if (updateReady)
+            if (UpdateReady)
             {
                 UpdatePanel();
-                updateReady = false;
+                UpdateReady = false;
             }
         }
-
-        /// <summary>
-        /// Performs initial setup for the panel.
-        /// </summary>
-        internal override void Setup()
-        {
-            try
-            {
-                base.Setup();
-
-                // Set initial building.
-                BuildingChanged();
-
-                // Add event handlers.
-                minLevelDropDown.eventSelectedIndexChanged += (control, index) =>
-                {
-                    // Don't do anything if events are disabled.
-                    if (!disableEvents)
-                    {
-                        // Set minimum level of building in dictionary.
-                        UpdateMinLevel((byte)index);
-
-                        // If the minimum level is now greater than the maximum level, increase the maximum to match the minimum.
-                        if (index > maxLevelDropDown.selectedIndex)
-                        {
-                            maxLevelDropDown.selectedIndex = index;
-                        }
-                    }
-                };
-
-                maxLevelDropDown.eventSelectedIndexChanged += (control, index) =>
-                {
-                    // Don't do anything if events are disabled.
-                    if (!disableEvents)
-                    {
-                        // Update maximum level.
-                        UpdateMaxLevel((byte)index);
-
-                        // If the maximum level is now less than the minimum level, reduce the minimum to match the maximum.
-                        if (index < minLevelDropDown.selectedIndex)
-                        {
-                            minLevelDropDown.selectedIndex = index;
-                        }
-                    }
-                };
-
-                upgradeButton.eventClick += (control, clickEvent) =>
-                {
-
-                    // Local references for SimulationManager action.
-                    ushort buildingID = targetID;
-                    byte targetLevel = upgradeLevel;
-                    Logging.KeyMessage("upgrading building to level ", upgradeLevel);
-                    Singleton<SimulationManager>.instance.AddAction(delegate
-                    {
-                        LevelUtils.ForceLevel(targetID, targetLevel);
-                    });
-
-                    // Check to see if we should increase this buildings maximum level.
-                    if (BuildingsABLC.GetMaxLevel(targetID) < upgradeLevel)
-                    {
-                        maxLevelDropDown.selectedIndex = upgradeLevel;
-                    }
-                };
-
-                downgradeButton.eventClick += (control, clickEvent) =>
-                {
-
-                    // Local references for SimulationManager action.
-                    ushort buildingID = targetID;
-                    byte targetLevel = downgradeLevel;
-                    Logging.KeyMessage("downgrading building to level ", downgradeLevel);
-                    Singleton<SimulationManager>.instance.AddAction(delegate
-                    {
-                        LevelUtils.ForceLevel(targetID, targetLevel);
-                    });
-
-                    // Check to see if we should increase this buildings maximum level.
-                    if (BuildingsABLC.GetMinLevel(targetID) > downgradeLevel)
-                    {
-                        minLevelDropDown.selectedIndex = downgradeLevel;
-                    }
-                };
-
-                // Close button.
-                UIButton closeButton = AddUIComponent<UIButton>();
-                closeButton.relativePosition = new Vector2(width - 35, 2);
-                closeButton.normalBgSprite = "buttonclose";
-                closeButton.hoveredBgSprite = "buttonclosehover";
-                closeButton.pressedBgSprite = "buttonclosepressed";
-
-                // Close button event handler.
-                closeButton.eventClick += (component, clickEvent) =>
-                {
-                    BuildingPanelManager.Close();
-                };
-
-            }
-            catch (Exception e)
-            {
-                Logging.LogException(e, "exception setting up building panel");
-            }
-        }
-
 
         /// <summary>
         /// Called when the selected building has changed.
@@ -146,22 +141,22 @@
         internal void BuildingChanged()
         {
             // Update selected building ID.
-            targetID = WorldInfoPanel.GetCurrentInstanceID().Building;
+            m_targetID = WorldInfoPanel.GetCurrentInstanceID().Building;
 
             // Check maximum level for this building type.
-            int maxLevel = LevelUtils.GetMaxLevel(targetID);
+            int maxLevel = LevelUtils.GetMaxLevel(m_targetID);
 
             // If building doesn't have more than one level, then we don't have any business to do here.
             if (maxLevel == 1)
             {
-                BuildingPanelManager.panelButton.Disable();
+                BuildingPanelManager.PanelButton.Disable();
                 Hide();
                 return;
             }
             else
             {
                 // Enable info panel button.
-                BuildingPanelManager.panelButton.Enable();
+                BuildingPanelManager.PanelButton.Enable();
 
                 // Make sure we're visible if we're not already.
                 if (!isVisible)
@@ -171,31 +166,30 @@
             }
 
             // Disable events while we make changes to avoid triggering event handler.
-            disableEvents = true;
+            m_disableEvents = true;
 
             // Set name.
-            nameLabel.text = Singleton<BuildingManager>.instance.GetBuildingName(targetID, InstanceID.Empty);
+            m_nameLabel.text = Singleton<BuildingManager>.instance.GetBuildingName(m_targetID, InstanceID.Empty);
 
             // Build level dropdown ranges.
-            minLevelDropDown.items = new string[maxLevel];
-            maxLevelDropDown.items = new string[maxLevel];
+            m_minLevelDropDown.items = new string[maxLevel];
+            m_maxLevelDropDown.items = new string[maxLevel];
             for (int i = 0; i < maxLevel; i++)
             {
-                minLevelDropDown.items[i] = (i + 1).ToString();
-                maxLevelDropDown.items[i] = (i + 1).ToString();
+                m_minLevelDropDown.items[i] = (i + 1).ToString();
+                m_maxLevelDropDown.items[i] = (i + 1).ToString();
             }
 
             // Update dropdown selection to match building's settings.
-            minLevelDropDown.selectedIndex = BuildingsABLC.GetMinLevel(targetID);
-            maxLevelDropDown.selectedIndex = Mathf.Min(BuildingsABLC.GetMaxLevel(targetID), maxLevelDropDown.items.Length - 1);
+            m_minLevelDropDown.selectedIndex = Buildings.GetMinLevel(m_targetID);
+            m_maxLevelDropDown.selectedIndex = Mathf.Min(Buildings.GetMaxLevel(m_targetID), m_maxLevelDropDown.items.Length - 1);
 
             // Initialise panel with correct level settings.
             UpdatePanel();
 
             // All done: re-enable events.
-            disableEvents = false;
+            m_disableEvents = false;
         }
-
 
         /// <summary>
         /// Updates the panel according to building's current level settings.
@@ -203,75 +197,72 @@
         internal void UpdatePanel()
         {
             // Make sure we have a valid builidng first.
-            if (targetID == 0 || (Singleton<BuildingManager>.instance.m_buildings.m_buffer[targetID].m_flags == Building.Flags.None))
+            if (m_targetID == 0 || (Singleton<BuildingManager>.instance.m_buildings.m_buffer[m_targetID].m_flags == Building.Flags.None))
             {
                 // Invalid target - disable buttons.
-                upgradeButton.Disable();
-                downgradeButton.Disable();
+                m_upgradeButton.Disable();
+                m_downgradeButton.Disable();
                 return;
             }
 
             // Get building level.
-            byte level = (Singleton<BuildingManager>.instance.m_buildings.m_buffer[targetID].m_level);
+            byte level = Singleton<BuildingManager>.instance.m_buildings.m_buffer[m_targetID].m_level;
 
             // Check to see if the building can be upgraded one level.
-            upgradeLevel = (byte)(level + 1);
-            if (LevelUtils.GetTargetInfo(targetID, upgradeLevel) == null)
-
+            _upgradeLevel = (byte)(level + 1);
+            if (LevelUtils.GetTargetInfo(m_targetID, _upgradeLevel) == null)
             {
                 // Nope - disable upgrade button.
-                upgradeButton.Disable();
+                m_upgradeButton.Disable();
             }
             else
             {
                 // Yep - enable upgrade button.
-                upgradeButton.Enable();
+                m_upgradeButton.Enable();
             }
-            
+
             // Check to see if the building can be downgraded one level.
-            downgradeLevel = (byte)(level - 1);
-            if (LevelUtils.GetTargetInfo(targetID, downgradeLevel) == null)
+            _downgradeLevel = (byte)(level - 1);
+            if (LevelUtils.GetTargetInfo(m_targetID, _downgradeLevel) == null)
             {
                 // Nope - disable downgrade button.
-                downgradeButton.Disable();
+                m_downgradeButton.Disable();
             }
             else
             {
                 // Yep - enable downgrade button.
-                downgradeButton.Enable();
+                m_downgradeButton.Enable();
             }
         }
-
 
         /// <summary>
         /// Updates the buildng's minimum level.
         /// </summary>
-        /// <param name="minLevel">New minimum level</param>
+        /// <param name="minLevel">New minimum level.</param>
         private void UpdateMinLevel(byte minLevel)
         {
             // Don't do anything if events are disabled.
-            if (!disableEvents)
+            if (!m_disableEvents)
             {
                 // Update minimum level.
-                BuildingsABLC.UpdateMinLevel(targetID, minLevel);
+                Buildings.UpdateMinLevel(m_targetID, minLevel);
 
                 // Update the panel.
                 BuildingChanged();
             }
         }
 
-
         /// <summary>
         /// Updates the buildng's maximum level.
         /// </summary>
-        /// <param name="maxLevel">New maximum level</param>
+        /// <param name="maxLevel">New maximum level.</param>
         private void UpdateMaxLevel(byte maxLevel)
         {
             // Don't do anything if events are disabled.
-            if (!disableEvents)
+            if (!m_disableEvents)
             {
                 // Update maximum level.
-                BuildingsABLC.UpdateMaxLevel(targetID, maxLevel);
+                Buildings.UpdateMaxLevel(m_targetID, maxLevel);
 
                 // Update the panel.
                 BuildingChanged();

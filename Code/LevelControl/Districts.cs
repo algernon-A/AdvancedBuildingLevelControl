@@ -1,22 +1,18 @@
-﻿namespace ABLC
+﻿// <copyright file="Districts.cs" company="algernon (K. Algernon A. Sheppard)">
+// Copyright (c) algernon (K. Algernon A. Sheppard). All rights reserved.
+// Licensed under the MIT license. See LICENSE.txt file in the project root for full license information.
+// </copyright>
+
+namespace ABLC
 {
     using System;
     using AlgernonCommons;
     using ColossalFramework;
 
-    // District flags enum.
-    internal enum DistrictFlags
-    {
-        none = 0x0,
-        randomSpawnLevels = 0x1,
-        spawnHistorical = 0x2
-    }
-
-
     /// <summary>
     /// Static class to hold the level control data for districts.
     /// </summary>
-    internal static class DistrictsABLC
+    internal static class Districts
     {
         // Level constants.
         private const byte MaxResLevel = 4;
@@ -25,77 +21,94 @@
         // District size constant.
         private const byte NumDistricts = DistrictManager.MAX_DISTRICT_COUNT;
 
-
-        // Level data arrays.
-        private static byte[] minResLevels, maxResLevels, minWorkLevels, maxWorkLevels;
+        // Level data arrays.;
+        private static byte[] s_minResLevels;
+        private static byte[] s_maxResLevels;
+        private static byte[] s_minWorkLevels;
+        private static byte[] s_maxWorkLevels;
 
         // District flags.
-        private static byte[] districtFlags;
-
-
-        /// <summary>
-        /// Accessor - minimum residential level array.
-        /// </summary>
-        internal static byte[] MinResLevels => minResLevels;
-
+        private static byte[] s_districtFlags;
 
         /// <summary>
-        /// Accessor - maximum residential level array.
+        /// ABLC district flags.
         /// </summary>
-        internal static byte[] MaxResLevels => maxResLevels;
+        internal enum DistrictFlags
+        {
+            /// <summary>
+            /// No flags.
+            /// </summary>
+            None = 0x0,
 
+            /// <summary>
+            /// Random building spawn levels.
+            /// </summary>
+            RandomSpawnLevels = 0x1,
+
+            /// <summary>
+            /// Buildings spawn with the historical flag set.
+            /// </summary>
+            SpawnHistorical = 0x2,
+        }
 
         /// <summary>
-        /// Accessor - minimum workplace level array.
+        /// Gets the minimum residential levels array.
         /// </summary>
-        internal static byte[] MinWorkLevels => minWorkLevels;
-
+        internal static byte[] MinResLevels => s_minResLevels;
 
         /// <summary>
-        /// Accessor - maximum workplace level array.
+        /// Gets the maximum residential levels array.
         /// </summary>
-        internal static byte[] MaxWorkLevels => maxWorkLevels;
-
+        internal static byte[] MaxResLevels => s_maxResLevels;
 
         /// <summary>
-        /// Accessor - distric flag array.
+        /// Gets the minimum workplace levels array.
         /// </summary>
-        internal static byte[] Flags => districtFlags;
+        internal static byte[] MinWorkLevels => s_minWorkLevels;
 
+        /// <summary>
+        /// Gets the maximum workplace levels array.
+        /// </summary>
+        internal static byte[] MaxWorkLevels => s_maxWorkLevels;
+
+        /// <summary>
+        /// Gets the district flags array.
+        /// </summary>
+        internal static byte[] Flags => s_districtFlags;
 
         /// <summary>
         /// Gets the maximum level set for the given building's current district.
         /// </summary>
-        /// <param name="buildingID">Building ID to check</param>
-        /// <param name="isResidential">True if this building uses residential level restrictions, false if workplace</param>
-        /// <returns>Maximum level for building set in the current district, if set (4 (residential) or 2 (workplace) if no value is set)</returns>
-        internal static byte GetMaxLevel(ushort buildingID, bool isResidential) => GetDistrictMax(Singleton<DistrictManager>.instance.GetDistrict(Singleton<BuildingManager>.instance.m_buildings.m_buffer[buildingID].m_position), isResidential);
-
+        /// <param name="buildingID">Building ID to check.</param>
+        /// <param name="isResidential">True if this building uses residential level restrictions, false if workplace.</param>
+        /// <returns>Maximum level for building set in the current district, if set (4 (residential) or 2 (workplace) if no value is set).</returns>
+        internal static byte GetMaxLevel(ushort buildingID, bool isResidential) =>
+            GetDistrictMax(Singleton<DistrictManager>.instance.GetDistrict(Singleton<BuildingManager>.instance.m_buildings.m_buffer[buildingID].m_position), isResidential);
 
         /// <summary>
         /// Gets the minimum level set for the given building's current district.
         /// </summary>
-        /// <param name="buildingID">Building ID to check</param>
-        /// <param name="isResidential">True if this building uses residential level restrictions, false (default) if workplace</param>
-        /// <returns>minimum level for building set in the current district, if set (0 if no value is set)</returns>
-        internal static byte GetMinLevel(ushort buildingID, bool isResidential) => GetDistrictMin(Singleton<DistrictManager>.instance.GetDistrict(Singleton<BuildingManager>.instance.m_buildings.m_buffer[buildingID].m_position), isResidential);
-
+        /// <param name="buildingID">Building ID to check.</param>
+        /// <param name="isResidential">True if this building uses residential level restrictions, false (default) if workplace.</param>
+        /// <returns>minimum level for building set in the current district, if set (0 if no value is set).</returns>
+        internal static byte GetMinLevel(ushort buildingID, bool isResidential) =>
+            GetDistrictMin(Singleton<DistrictManager>.instance.GetDistrict(Singleton<BuildingManager>.instance.m_buildings.m_buffer[buildingID].m_position), isResidential);
 
         /// <summary>
         /// Gets the maximum level set for the given district.
         /// </summary>
-        /// <param name="districtID">District ID</param>
-        /// <param name="isResidential">True if this building uses residential level restrictions, false (default) if workplace</param>
-        /// <returns>Maximum level for this type of building in the given district</returns>
+        /// <param name="districtID">District ID.</param>
+        /// <param name="isResidential">True if this building uses residential level restrictions, false (default) if workplace.</param>
+        /// <returns>Maximum level for this type of building in the given district.</returns>
         internal static byte GetDistrictMax(ushort districtID, bool isResidential)
         {
             // Residential or workplace?
             if (isResidential)
             {
                 // Residential - check that array has ben initialised, and if so, return the relevant district maximum.
-                if (minResLevels != null)
+                if (s_minResLevels != null)
                 {
-                    return maxResLevels[districtID];
+                    return s_maxResLevels[districtID];
                 }
 
                 // If we got here, no value was retrieved; return the default.
@@ -104,9 +117,9 @@
             else
             {
                 // Workplace - check that array has ben initialised, and if so, return the relevant district maximum.
-                if (minWorkLevels != null)
+                if (s_minWorkLevels != null)
                 {
-                    return maxWorkLevels[districtID];
+                    return s_maxWorkLevels[districtID];
                 }
 
                 // If we got here, no value was retrieved; return the default.
@@ -114,22 +127,21 @@
             }
         }
 
-
         /// <summary>
         /// Gets the minimum level set for the given district.
         /// </summary>
-        /// <param name="districtID">District ID</param>
-        /// <param name="isResidential">True if this building uses residential level restrictions, false (default) if workplace</param>
-        /// <returns>Minimum level for this type of building in the given district</returns>
+        /// <param name="districtID">District ID.</param>
+        /// <param name="isResidential">True if this building uses residential level restrictions, false (default) if workplace.</param>
+        /// <returns>Minimum level for this type of building in the given district.</returns>
         internal static byte GetDistrictMin(ushort districtID, bool isResidential)
         {
             // Residential or workplace?
             if (isResidential)
             {
                 // Residential - check that array has ben initialised, and if so, return the relevant district minimum.
-                if (minResLevels != null)
+                if (s_minResLevels != null)
                 {
-                    return minResLevels[districtID];
+                    return s_minResLevels[districtID];
                 }
 
                 // If we got here, no value was retrieved; return the default.
@@ -138,9 +150,9 @@
             else
             {
                 // Workplace - check that array has ben initialised, and if so, return the relevant district minimum.
-                if (minWorkLevels != null)
+                if (s_minWorkLevels != null)
                 {
-                    return minWorkLevels[districtID];
+                    return s_minWorkLevels[districtID];
                 }
 
                 // If we got here, no value was retrieved; return the default.
@@ -148,13 +160,12 @@
             }
         }
 
-
         /// <summary>
         /// Sets the minimum level for the given district.
         /// </summary>
-        /// <param name="districtID">District ID</param>
-        /// <param name="isResidential">True if this building uses residential level restrictions, false (default) if workplace</param>
-        /// <param name="level">New minimum level</param>
+        /// <param name="districtID">District ID.</param>
+        /// <param name="isResidential">True if this building uses residential level restrictions, false (default) if workplace.</param>
+        /// <param name="level">New minimum level.</param>
         internal static void SetDistrictMin(ushort districtID, bool isResidential, byte level)
         {
             if (districtID > NumDistricts)
@@ -165,22 +176,21 @@
 
             if (isResidential)
             {
-                minResLevels[districtID] = Math.Min(level, MaxResLevel);
+                s_minResLevels[districtID] = Math.Min(level, MaxResLevel);
             }
             else
             {
-                minWorkLevels[districtID] = Math.Min(level, MaxWorkLevel);
+                s_minWorkLevels[districtID] = Math.Min(level, MaxWorkLevel);
             }
         }
-
 
         /// <summary>
         /// Sets the maximum level for the given district.
         /// </summary>
-        /// <param name="districtID">District ID</param>
-        /// <param name="isResidential">True if this building uses residential level restrictions, false (default) if workplace</param>
-        /// <param name="level">New maximum level</param>
-        internal static void  SetDistrictMax(ushort districtID, bool isResidential, byte level)
+        /// <param name="districtID">District ID.</param>
+        /// <param name="isResidential">True if this building uses residential level restrictions, false (default) if workplace.</param>
+        /// <param name="level">New maximum level.</param>
+        internal static void SetDistrictMax(ushort districtID, bool isResidential, byte level)
         {
             if (districtID > NumDistricts)
             {
@@ -190,21 +200,20 @@
 
             if (isResidential)
             {
-                maxResLevels[districtID] = Math.Min(level, MaxResLevel);
+                s_maxResLevels[districtID] = Math.Min(level, MaxResLevel);
             }
             else
             {
-                maxWorkLevels[districtID] = Math.Min(level, MaxWorkLevel);
+                s_maxWorkLevels[districtID] = Math.Min(level, MaxWorkLevel);
             }
         }
-
 
         /// <summary>
         /// Checks the given flag for the given district.
         /// </summary>
-        /// <param name="districtID">District ID</param>
-        /// <param name="flag">Flag to check</param>
-        /// <returns>True if flag set, false otherwise</returns>
+        /// <param name="districtID">District ID.</param>
+        /// <param name="flag">Flag to check.</param>
+        /// <returns>True if flag set, false otherwise.</returns>
         internal static bool GetFlag(ushort districtID, byte flag)
         {
             // Safety checks.
@@ -213,22 +222,22 @@
                 Logging.Error("districtID ", districtID, " for GetFlag is above limit of ", NumDistricts);
                 return false;
             }
-            if (districtFlags == null)
+
+            if (s_districtFlags == null)
             {
                 Logging.Error("attempted to get district flag when districtFlags not initialized");
                 return false;
             }
 
-            return (districtFlags[districtID] & flag) != 0;
+            return (s_districtFlags[districtID] & flag) != 0;
         }
-
 
         /// <summary>
         /// Sets or clears the given flag for the given district.
         /// </summary>
-        /// <param name="districtID">District ID</param>
-        /// <param name="flag">Flag to set</param>
-        /// <param name="flagState">True to set the flag, false to clear</param>
+        /// <param name="districtID">District ID.</param>
+        /// <param name="flag">Flag to set.</param>
+        /// <param name="flagState">True to set the flag, false to clear.</param>
         internal static void SetFlag(ushort districtID, byte flag, bool flagState)
         {
             // Safety checks.
@@ -237,7 +246,8 @@
                 Logging.Error("districtID ", districtID, " for SetFlag is above limit of ", NumDistricts);
                 return;
             }
-            if (districtFlags == null)
+
+            if (s_districtFlags == null)
             {
                 Logging.Error("attempted to get district flag when districtFlags not initialized");
                 return;
@@ -247,78 +257,76 @@
             if (flagState)
             {
                 // Set flag by OR.
-                districtFlags[districtID] |= flag;
+                s_districtFlags[districtID] |= flag;
             }
             else
             {
                 // Clear flag by AND NOT.
-                districtFlags[districtID] &= (byte)~flag;
+                s_districtFlags[districtID] &= (byte)~flag;
             }
         }
-
 
         /// <summary>
         /// Deserialises savegame data into the arrays.
         /// </summary>
-        /// <param name="savedMinResLevels">Minimum residential level array (from save data)</param>
-        /// <param name="savedMaxResLevels">Maximum residential level array (from save data)</param>
-        /// <param name="savedWorkMinLevels">Minimum workplace level array (from save data)</param>
-        /// <param name="savedWorkMaxLevels">Maximum workplace level array (from save data)</param>
-        /// <param name="savedFlags">District attribute flags (from save data)</param>
+        /// <param name="savedMinResLevels">Minimum residential level array (from save data).</param>
+        /// <param name="savedMaxResLevels">Maximum residential level array (from save data).</param>
+        /// <param name="savedWorkMinLevels">Minimum workplace level array (from save data).</param>
+        /// <param name="savedWorkMaxLevels">Maximum workplace level array (from save data).</param>
+        /// <param name="savedFlags">District attribute flags (from save data).</param>
         internal static void Deserialize(byte[] savedMinResLevels, byte[] savedMaxResLevels, byte[] savedWorkMinLevels, byte[] savedWorkMaxLevels, byte[] savedFlags)
         {
             // Populate arrays, checking data validity before we do.
             if (savedMinResLevels != null && savedMinResLevels.Length == NumDistricts)
             {
-                minResLevels = savedMinResLevels;
+                s_minResLevels = savedMinResLevels;
             }
             else
             {
                 // Invalid data - reset the district array to default.
-                minResLevels = ResetLevels(0, "minResLevels");
+                s_minResLevels = ResetLevels(0, "minResLevels");
             }
 
             if (savedMaxResLevels != null && savedMaxResLevels.Length == NumDistricts)
             {
-                maxResLevels = savedMaxResLevels;
+                s_maxResLevels = savedMaxResLevels;
             }
             else
             {
                 // Invalid data - reset the district array to default.
-                maxResLevels = ResetLevels(MaxResLevel, "maxResLevels");
+                s_maxResLevels = ResetLevels(MaxResLevel, "maxResLevels");
             }
 
             if (savedWorkMinLevels != null && savedWorkMinLevels.Length == NumDistricts)
             {
-                minWorkLevels = savedWorkMinLevels;
+                s_minWorkLevels = savedWorkMinLevels;
             }
             else
             {
                 // Invalid data - reset the district array to default.
-                minWorkLevels = ResetLevels(0, "minWorkLevels");
+                s_minWorkLevels = ResetLevels(0, "minWorkLevels");
             }
 
             if (savedWorkMaxLevels != null && savedWorkMaxLevels.Length == NumDistricts)
             {
-                maxWorkLevels = savedWorkMaxLevels;
+                s_maxWorkLevels = savedWorkMaxLevels;
             }
             else
             {
                 // Invalid data - reset the district array to default.
-                maxWorkLevels = ResetLevels(MaxWorkLevel, "maxWorkLevels");
+                s_maxWorkLevels = ResetLevels(MaxWorkLevel, "maxWorkLevels");
             }
 
             if (savedFlags != null && savedFlags.Length == NumDistricts)
             {
-                districtFlags = savedFlags;
+                s_districtFlags = savedFlags;
             }
             else
             {
                 // Invalid data - reset the district array to default.
-                districtFlags = ResetLevels(0, "flags");
+                s_districtFlags = ResetLevels(0, "flags");
             }
         }
-
 
         /// <summary>
         /// Checks that district arrays have been properly initialized; if not, initializes them with default values.
@@ -326,36 +334,39 @@
         internal static void CheckArrays()
         {
             Logging.KeyMessage("Performing post-load array checks");
-            if (districtFlags == null || minResLevels.Length != NumDistricts)
+            if (s_districtFlags == null || s_minResLevels.Length != NumDistricts)
             {
-                districtFlags = ResetLevels(0, "flags ");
+                s_districtFlags = ResetLevels(0, "flags ");
             }
-            minResLevels = ResetLevels(0, "residential minimum ");
-            if (minResLevels == null || minResLevels.Length != NumDistricts)
+
+            s_minResLevels = ResetLevels(0, "residential minimum ");
+            if (s_minResLevels == null || s_minResLevels.Length != NumDistricts)
             {
-                minResLevels = ResetLevels(0, "residential minimum ");
+                s_minResLevels = ResetLevels(0, "residential minimum ");
             }
-            if (maxResLevels == null || maxResLevels.Length != NumDistricts)
+
+            if (s_maxResLevels == null || s_maxResLevels.Length != NumDistricts)
             {
-                maxResLevels = ResetLevels(MaxResLevel, "residential maximum ");
+                s_maxResLevels = ResetLevels(MaxResLevel, "residential maximum ");
             }
-            if (minWorkLevels == null || minWorkLevels.Length != NumDistricts)
+
+            if (s_minWorkLevels == null || s_minWorkLevels.Length != NumDistricts)
             {
-                minWorkLevels = ResetLevels(0, "workplace minimum ");
+                s_minWorkLevels = ResetLevels(0, "workplace minimum ");
             }
-            if (maxWorkLevels == null || maxWorkLevels.Length != NumDistricts)
+
+            if (s_maxWorkLevels == null || s_maxWorkLevels.Length != NumDistricts)
             {
-                maxWorkLevels = ResetLevels(MaxWorkLevel, "workplace maximum ");
+                s_maxWorkLevels = ResetLevels(MaxWorkLevel, "workplace maximum ");
             }
         }
-
 
         /// <summary>
         /// Resets a district level array to 128 bytes with the given default level.
         /// </summary>
-        /// <param name="level">Default level to appluy</param>
-        /// <param name="name">Name of district level array (for logging)</param>
-        /// <returns>New district level array of 128 bytes pre-populated with the given default level</returns>
+        /// <param name="level">Default level to apply.</param>
+        /// <param name="name">Name of district level array (for logging).</param>
+        /// <returns>New district level array of 128 bytes pre-populated with the given default level.</returns>
         private static byte[] ResetLevels(byte level, string name)
         {
             // Return array.

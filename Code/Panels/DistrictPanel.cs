@@ -1,7 +1,10 @@
-﻿namespace ABLC
+﻿// <copyright file="DistrictPanel.cs" company="algernon (K. Algernon A. Sheppard)">
+// Copyright (c) algernon (K. Algernon A. Sheppard). All rights reserved.
+// Licensed under the MIT license. See LICENSE.txt file in the project root for full license information.
+// </copyright>
+
+namespace ABLC
 {
-    using System;
-    using AlgernonCommons;
     using AlgernonCommons.Translation;
     using AlgernonCommons.UI;
     using ColossalFramework;
@@ -10,20 +13,179 @@
     /// <summary>
     /// ABLC district settings info panel.
     /// </summary>
-    internal class ABLCDistrictPanel : ABLCPanel
+    internal class DistrictPanel : ABLCPanel
     {
         // Panel components.
-        protected UIDropDown minWorkLevelDropDown;
-        protected UIDropDown maxWorkLevelDropDown;
-        private UICheckBox randomSpawnCheck, spawnHistoricalCheck;
-        UIButton makeHistoricalButton, removeHistoricalButton;
+        private readonly UIDropDown _minWorkLevelDropDown;
+        private readonly UIDropDown _maxWorkLevelDropDown;
+        private readonly UICheckBox _randomSpawnCheck;
+        private readonly UICheckBox _spawnHistoricalCheck;
+        private readonly UIButton _makeHistoricalButton;
+        private readonly UIButton _removeHistoricalButton;
 
-        // Text strings.
+        /// <summary>
+        /// Initializes a new instance of the <see cref="DistrictPanel"/> class.
+        /// </summary>
+        internal DistrictPanel()
+        {
+            // Add category labels.
+            UILabels.AddLabel(this, Margin, 50f, Translations.Translate("ABLC_CAT_RES"), this.width, 0.8f, UIHorizontalAlignment.Left);
+            UILabels.AddLabel(this, Margin, 140f, Translations.Translate("ABLC_CAT_WRK"), this.width, 0.8f, UIHorizontalAlignment.Left);
+
+            // Add workplace min and max dropdowns.
+            _minWorkLevelDropDown = UIDropDowns.AddLabelledDropDown(this, width - Margin - MenuWidth, 160f, Translations.Translate("ABLC_LVL_MIN"), 60f, accomodateLabel: false, tooltip: Translations.Translate("ABLC_CAT_WMN_TIP"));
+            _minWorkLevelDropDown.items = new string[] { "1", "2", "3" };
+
+            _maxWorkLevelDropDown = UIDropDowns.AddLabelledDropDown(this, width - Margin - MenuWidth, 190f, Translations.Translate("ABLC_LVL_MAX"), 60f, accomodateLabel: false, tooltip: Translations.Translate("ABLC_CAT_WMX_TIP"));
+            _maxWorkLevelDropDown.items = new string[] { "1", "2", "3" };
+
+            // Add random level checkbox.
+            _randomSpawnCheck = UICheckBoxes.AddLabelledCheckBox(this, 20f, 235f, Translations.Translate("ABLC_RAN_SPN"), tooltip: Translations.Translate("ABLC_RAN_SPN_TIP"));
+
+            // Extend height to fit 'clear all building settings' button and historical settings section.
+            height += 200f;
+
+            // Button to clear all building settings in district.
+            UIButton clearBuildingsButton = UIButtons.AddButton(this, Margin, height - 200f, Translations.Translate("ABLC_CLR_BLD"), this.width - (Margin * 2), tooltip: Translations.Translate("ABLC_CLR_BLD_TIP"));
+            clearBuildingsButton.eventClicked += ClearBuildings;
+
+            // Spacer panel.
+            UISpacers.AddOptionsSpacer(this, Margin, height - 155f, width - (Margin * 2));
+
+            // Add historical section label.
+            UILabels.AddLabel(this, Margin, height - 140f, Translations.Translate("ABLC_HIS"), this.width, 1.0f, UIHorizontalAlignment.Center);
+
+            // Add historical spawning checkbox.
+            _spawnHistoricalCheck = UICheckBoxes.AddLabelledCheckBox(this, 20f, height - 110f, Translations.Translate("ABLC_HIS_SPN"), tooltip: Translations.Translate("ABLC_HIS_SPN_TIP"));
+
+            // Button to make all buildings in district historical.
+            _makeHistoricalButton = UIButtons.AddButton(this, Margin, height - 80f, Translations.Translate("ABLC_TRIG_HIS"), this.width - (Margin * 2), tooltip: Translations.Translate("ABLC_TRIG_HIS_TIP"));
+            _makeHistoricalButton.eventClicked += MakeHistorical;
+
+            // Button to remove historical status from all buildings in district.
+            _removeHistoricalButton = UIButtons.AddButton(this, Margin, height - 40f, Translations.Translate("ABLC_TRIG_NHS"), this.width - (Margin * 2), tooltip: Translations.Translate("ABLC_TRIG_NHS_TIP"));
+            _removeHistoricalButton.eventClicked += MakeHistorical;
+
+            // Set initial district.
+            DistrictChanged();
+
+            // Add event handlers.
+            m_minLevelDropDown.eventSelectedIndexChanged += (control, index) =>
+            {
+                // Don't do anything if events are disabled.
+                if (!m_disableEvents)
+                {
+                    // Set new minimum residential level.
+                    Districts.SetDistrictMin(m_targetID, true, (byte)index);
+
+                    // If the minimum level is now greater than the maximum level, increase the maximum to match the minimum.
+                    if (index > m_maxLevelDropDown.selectedIndex)
+                    {
+                        m_maxLevelDropDown.selectedIndex = index;
+                    }
+                }
+            };
+
+            m_maxLevelDropDown.eventSelectedIndexChanged += (control, index) =>
+            {
+                // Don't do anything if events are disabled.
+                if (!m_disableEvents)
+                {
+                    // Set new maximum residential level.
+                    Districts.SetDistrictMax(m_targetID, true, (byte)index);
+
+                    // If the maximum level is now less than the minimum level, reduce the minimum to match the maximum.
+                    if (index < m_minLevelDropDown.selectedIndex)
+                    {
+                        m_minLevelDropDown.selectedIndex = index;
+                    }
+                }
+            };
+
+            _minWorkLevelDropDown.eventSelectedIndexChanged += (control, index) =>
+            {
+                // Don't do anything if events are disabled.
+                if (!m_disableEvents)
+                {
+                    // Set new minimum workplace level.
+                    Districts.SetDistrictMin(m_targetID, false, (byte)index);
+
+                    // If the minimum level is now greater than the maximum level, increase the maximum to match the minimum.
+                    if (index > _maxWorkLevelDropDown.selectedIndex)
+                    {
+                        _maxWorkLevelDropDown.selectedIndex = index;
+                    }
+                }
+            };
+
+            _maxWorkLevelDropDown.eventSelectedIndexChanged += (control, index) =>
+            {
+                // Don't do anything if events are disabled.
+                if (!m_disableEvents)
+                {
+                    // Set new maximum workplace level.
+                    Districts.SetDistrictMax(m_targetID, false, (byte)index);
+
+                    // If the maximum level is now less than the minimum level, reduce the minimum to match the maximum.
+                    if (index < _minWorkLevelDropDown.selectedIndex)
+                    {
+                        _minWorkLevelDropDown.selectedIndex = index;
+                    }
+                }
+            };
+
+            _randomSpawnCheck.eventCheckChanged += (control, isChecked) =>
+            {
+                // Don't do anything if events are disabled.
+                if (!m_disableEvents)
+                {
+                    // Set/clear relevant flag.
+                    Districts.SetFlag(m_targetID, (byte)Districts.DistrictFlags.RandomSpawnLevels, isChecked);
+                }
+            };
+
+            _spawnHistoricalCheck.eventCheckChanged += (control, isChecked) =>
+            {
+                // Don't do anything if events are disabled.
+                if (!m_disableEvents)
+                {
+                    // Set/clear relevant flag.
+                    Districts.SetFlag(m_targetID, (byte)Districts.DistrictFlags.SpawnHistorical, isChecked);
+                }
+            };
+
+            m_upgradeButton.eventClicked += (control, clickEvent) =>
+            {
+                Singleton<SimulationManager>.instance.AddAction(() =>
+                    LevelDistrict(m_targetID, true));
+            };
+
+            m_downgradeButton.eventClicked += (control, clickEvent) =>
+            {
+                Singleton<SimulationManager>.instance.AddAction(() =>
+                    LevelDistrict(m_targetID, false));
+            };
+        }
+
+        /// <summary>
+        /// Gets the minimum level dropdown tooltip.
+        /// </summary>
         protected override string MinLevelTip => Translations.Translate("ABLC_CAT_RMN_TIP");
-        protected override string MaxLevelTip => Translations.Translate("ABLC_CAT_RMX_TIP");
-        protected override string UpgradeTip => Translations.Translate("ABLC_TRIG_UPD_TIP");
-        protected override string DowngradeTip => Translations.Translate("ABLC_TRIG_DWD_TIP");
 
+        /// <summary>
+        /// Gets the maximum level dropdown tooltip.
+        /// </summary>
+        protected override string MaxLevelTip => Translations.Translate("ABLC_CAT_RMX_TIP");
+
+        /// <summary>
+        /// Gets the upgrade button tooltip.
+        /// </summary>
+        protected override string UpgradeTip => Translations.Translate("ABLC_TRIG_UPD_TIP");
+
+        /// <summary>
+        /// Gets the downgrade button tooltip.
+        /// </summary>
+        protected override string DowngradeTip => Translations.Translate("ABLC_TRIG_DWD_TIP");
 
         /// <summary>
         /// Called when the selected district has changed.
@@ -31,208 +193,50 @@
         public void DistrictChanged()
         {
             // Disable events while we make changes to avoid triggering event handler.
-            disableEvents = true;
+            m_disableEvents = true;
 
-            // Update selected district ID> 
-            targetID = WorldInfoPanel.GetCurrentInstanceID().District;
+            // Update selected district ID.
+            m_targetID = WorldInfoPanel.GetCurrentInstanceID().District;
 
             // Set name.
-            nameLabel.text = Singleton<DistrictManager>.instance.GetDistrictName(targetID);
+            m_nameLabel.text = Singleton<DistrictManager>.instance.GetDistrictName(m_targetID);
 
             // Set min and max levels.
-            minLevelDropDown.selectedIndex = DistrictsABLC.GetDistrictMin(targetID, true);
-            maxLevelDropDown.selectedIndex = DistrictsABLC.GetDistrictMax(targetID, true);
-            minWorkLevelDropDown.selectedIndex = DistrictsABLC.GetDistrictMin(targetID, false);
-            maxWorkLevelDropDown.selectedIndex = DistrictsABLC.GetDistrictMax(targetID, false);
+            m_minLevelDropDown.selectedIndex = Districts.GetDistrictMin(m_targetID, true);
+            m_maxLevelDropDown.selectedIndex = Districts.GetDistrictMax(m_targetID, true);
+            _minWorkLevelDropDown.selectedIndex = Districts.GetDistrictMin(m_targetID, false);
+            _maxWorkLevelDropDown.selectedIndex = Districts.GetDistrictMax(m_targetID, false);
 
             // Set check state based on district flags.
-            randomSpawnCheck.isChecked = DistrictsABLC.GetFlag(targetID, (byte)DistrictFlags.randomSpawnLevels);
-            spawnHistoricalCheck.isChecked = DistrictsABLC.GetFlag(targetID, (byte)DistrictFlags.spawnHistorical);
+            _randomSpawnCheck.isChecked = Districts.GetFlag(m_targetID, (byte)Districts.DistrictFlags.RandomSpawnLevels);
+            _spawnHistoricalCheck.isChecked = Districts.GetFlag(m_targetID, (byte)Districts.DistrictFlags.SpawnHistorical);
 
             // All done: re-enable events.
-            disableEvents = false;
+            m_disableEvents = false;
         }
-
-
-        /// <summary>
-        /// Performs initial setup for the panel; we don't use Start() as that's not sufficiently reliable (race conditions), and is not needed with the dynamic create/destroy process.
-        /// </summary>
-        internal override void Setup()
-        {
-            try
-            {
-                base.Setup();
-
-                // Add category labels.
-                UILabel resLabel = AddLabel(Translations.Translate("ABLC_CAT_RES"), Margin, 50f, hAlign: UIHorizontalAlignment.Left);
-                UILabel workLabel = AddLabel(Translations.Translate("ABLC_CAT_WRK"), Margin, 140f, hAlign: UIHorizontalAlignment.Left);
-
-                // Add workplace min and max dropdowns.
-                minWorkLevelDropDown = UIDropDowns.AddLabelledDropDown(this, width - Margin - MenuWidth, 160f, Translations.Translate("ABLC_LVL_MIN"), 60f, accomodateLabel: false, tooltip: Translations.Translate("ABLC_CAT_WMN_TIP"));
-                minWorkLevelDropDown.items = new string[] { "1", "2", "3" };
-
-                maxWorkLevelDropDown = UIDropDowns.AddLabelledDropDown(this, width - Margin - MenuWidth, 190f, Translations.Translate("ABLC_LVL_MAX"), 60f, accomodateLabel: false, tooltip: Translations.Translate("ABLC_CAT_WMX_TIP"));
-                maxWorkLevelDropDown.items = new string[] { "1", "2", "3" };
-
-                // Add random level checkbox.
-                randomSpawnCheck = UICheckBoxes.AddLabelledCheckBox(this, 20f, 235f, Translations.Translate("ABLC_RAN_SPN"), tooltip: Translations.Translate("ABLC_RAN_SPN_TIP"));
-
-                // Extend height to fit 'clear all building settings' button and historical settings section.
-                height += 200f;
-
-                // Button to clear all building settings in district.
-                UIButton clearBuildingsButton = UIButtons.AddButton(this, Margin, height - 200f, Translations.Translate("ABLC_CLR_BLD"), this.width - (Margin * 2), tooltip: Translations.Translate("ABLC_CLR_BLD_TIP"));
-                clearBuildingsButton.eventClicked += ClearBuildings;
-
-                // Spacer panel.
-                UISpacers.AddOptionsSpacer(this, Margin, height - 155f, width - (Margin * 2));
-
-                // Add historical section label.
-                AddLabel(Translations.Translate("ABLC_HIS"), 0f, height - 140f, 1.0f);
-
-                // Add historical spawning checkbox.
-                spawnHistoricalCheck = UICheckBoxes.AddLabelledCheckBox(this, 20f, height - 110f, Translations.Translate("ABLC_HIS_SPN"), tooltip: Translations.Translate("ABLC_HIS_SPN_TIP"));
-
-                // Button to make all buildings in district historical.
-                makeHistoricalButton = UIButtons.AddButton(this, Margin, height - 80f, Translations.Translate("ABLC_TRIG_HIS"), this.width - (Margin * 2), tooltip: Translations.Translate("ABLC_TRIG_HIS_TIP"));
-                makeHistoricalButton.eventClicked += MakeHistorical;
-
-                // Button to remove historical status from all buildings in district.
-                removeHistoricalButton = UIButtons.AddButton(this, Margin, height - 40f, Translations.Translate("ABLC_TRIG_NHS"), this.width - (Margin * 2), tooltip: Translations.Translate("ABLC_TRIG_NHS_TIP"));
-                removeHistoricalButton.eventClicked += MakeHistorical;
-
-                // Set initial district.
-                DistrictChanged();
-
-                // Add event handlers.
-
-                minLevelDropDown.eventSelectedIndexChanged += (control, index) =>
-                {
-                    // Don't do anything if events are disabled.
-                    if (!disableEvents)
-                    {
-                        // Set new minimum residential level.
-                        DistrictsABLC.SetDistrictMin(targetID, true, (byte)index);
-
-                        // If the minimum level is now greater than the maximum level, increase the maximum to match the minimum.
-                        if (index > maxLevelDropDown.selectedIndex)
-                        {
-                            maxLevelDropDown.selectedIndex = index;
-                        }
-                    }
-                };
-
-                maxLevelDropDown.eventSelectedIndexChanged += (control, index) =>
-                {
-                    // Don't do anything if events are disabled.
-                    if (!disableEvents)
-                    {
-                        // Set new maximum residential level.
-                        DistrictsABLC.SetDistrictMax(targetID, true, (byte)index);
-
-                        // If the maximum level is now less than the minimum level, reduce the minimum to match the maximum.
-                        if (index < minLevelDropDown.selectedIndex)
-                        {
-                            minLevelDropDown.selectedIndex = index;
-                        }
-                    }
-                };
-
-                minWorkLevelDropDown.eventSelectedIndexChanged += (control, index) =>
-                {
-                    // Don't do anything if events are disabled.
-                    if (!disableEvents)
-                    {
-                        // Set new minimum workplace level.
-                        DistrictsABLC.SetDistrictMin(targetID, false, (byte)index);
-
-                        // If the minimum level is now greater than the maximum level, increase the maximum to match the minimum.
-                        if (index > maxWorkLevelDropDown.selectedIndex)
-                        {
-                            maxWorkLevelDropDown.selectedIndex = index;
-                        }
-                    }
-                };
-
-                maxWorkLevelDropDown.eventSelectedIndexChanged += (control, index) =>
-                {
-                    // Don't do anything if events are disabled.
-                    if (!disableEvents)
-                    {
-                        // Set new maximum workplace level.
-                        DistrictsABLC.SetDistrictMax(targetID, false, (byte)index);
-
-                        // If the maximum level is now less than the minimum level, reduce the minimum to match the maximum.
-                        if (index < minWorkLevelDropDown.selectedIndex)
-                        {
-                            minWorkLevelDropDown.selectedIndex = index;
-                        }
-                    }
-                };
-
-                randomSpawnCheck.eventCheckChanged += (control, isChecked) =>
-                {
-                    // Don't do anything if events are disabled.
-                    if (!disableEvents)
-                    {
-                        // Set/clear relevant flag.
-                        DistrictsABLC.SetFlag(targetID, (byte)DistrictFlags.randomSpawnLevels, isChecked);
-                    }
-                };
-
-                spawnHistoricalCheck.eventCheckChanged += (control, isChecked) =>
-                {
-                    // Don't do anything if events are disabled.
-                    if (!disableEvents)
-                    {
-                        // Set/clear relevant flag.
-                        DistrictsABLC.SetFlag(targetID, (byte)DistrictFlags.spawnHistorical, isChecked);
-                    }
-                };
-
-                upgradeButton.eventClicked += (control, clickEvent) =>
-                {
-                    Singleton<SimulationManager>.instance.AddAction(() =>
-                        LevelDistrict(targetID, true));
-                };
-
-                downgradeButton.eventClicked += (control, clickEvent) =>
-                {
-                    Singleton<SimulationManager>.instance.AddAction(() =>
-                        LevelDistrict(targetID, false));
-                };
-
-            }
-            catch (Exception e)
-            {
-                Logging.LogException(e, "exception setting up district panel");
-            }
-        }
-
 
         /// <summary>
         /// Clear building settings button event handler.
-        /// <param name="control">Calling component (unused)</param>
-        /// <param name="mouseEvent">Mouse event (unused)</param>
+        /// <param name="c">Calling component.</param>
+        /// <param name="p">Mouse event parameter.</param>
         /// </summary>
-        private void ClearBuildings(UIComponent control, UIMouseEventParameter mouseEvent) => BuildingsABLC.ClearDistrict(targetID);
-
+        private void ClearBuildings(UIComponent c, UIMouseEventParameter p) => Buildings.ClearDistrict(m_targetID);
 
         /// <summary>
         /// Clear building settings button event handler.
-        /// <param name="control">Calling component</param>
-        /// <param name="mouseEvent">Mouse event (unused)</param>
+        /// <param name="c">Calling component.</param>
+        /// <param name="p">Mouse event parameter.</param>
         /// </summary>
-        private void MakeHistorical(UIComponent control, UIMouseEventParameter mouseEvent)
+        private void MakeHistorical(UIComponent c, UIMouseEventParameter p)
         {
             // Store copy of current target district ID for simulation thread action.
-            ushort districtID = targetID;
+            ushort districtID = m_targetID;
 
             // Set historical target via determining calling component.
-            bool setHistorical = control == makeHistoricalButton;
+            bool setHistorical = c == _makeHistoricalButton;
 
             // Add 'set historical' action to simulation thread.
-            Singleton<SimulationManager>.instance.AddAction(delegate
+            Singleton<SimulationManager>.instance.AddAction(() =>
             {
                 // Local references.
                 Building[] buildingBuffer = Singleton<BuildingManager>.instance.m_buildings.m_buffer;
@@ -255,12 +259,11 @@
             });
         }
 
-
         /// <summary>
         /// Attempts to force all buildings in a district to meet the district's minimum or maximum target level, as specified.
         /// </summary>
-        /// <param name="districtID">Target district</param>
-        /// <param name="upgrade">True if we want to upgrade all buildings (below the minimum) to the minimum for this district, false if we want to downgrade (all buildings above the maximum) to the maximum</param>
+        /// <param name="districtID">Target district.</param>
+        /// <param name="upgrade">True if we want to upgrade all buildings (below the minimum) to the minimum for this district, false if we want to downgrade (all buildings above the maximum) to the maximum.</param>
         private void LevelDistrict(ushort districtID, bool upgrade)
         {
             // Instances and arrays.
@@ -308,7 +311,7 @@
                         if (upgrade)
                         {
                             // Upgrading - get the minimum level for this building.
-                            byte minLevel = BuildingsABLC.GetMinLevel(i, isResidential);
+                            byte minLevel = Buildings.GetMinLevel(i, isResidential);
 
                             // Check if building level is less than the relevant minimum.
                             if (buildings.m_buffer[i].m_level < minLevel)
@@ -324,7 +327,7 @@
                         else
                         {
                             // Downgrading - get the maximum level for this building..
-                            byte maxLevel = BuildingsABLC.GetMaxLevel(i, isResidential);
+                            byte maxLevel = Buildings.GetMaxLevel(i, isResidential);
 
                             // Check if building level is greater than the relevant maximum.
                             if (buildings.m_buffer[i].m_level > maxLevel)

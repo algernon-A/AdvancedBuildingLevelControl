@@ -1,4 +1,9 @@
-﻿namespace ABLC
+﻿// <copyright file="BuildingPanelManager.cs" company="algernon (K. Algernon A. Sheppard)">
+// Copyright (c) algernon (K. Algernon A. Sheppard). All rights reserved.
+// Licensed under the MIT license. See LICENSE.txt file in the project root for full license information.
+// </copyright>
+
+namespace ABLC
 {
     using System;
     using AlgernonCommons;
@@ -13,13 +18,21 @@
     internal static class BuildingPanelManager
     {
         // Instance references.
-        private static GameObject uiGameObject;
-        private static ABLCBuildingPanel panel;
-        internal static ABLCBuildingPanel Panel => panel;
+        private static GameObject s_gameObject;
+        private static BuildingPanel s_panel;
 
         // UI components.
-        internal static UIButton panelButton;
+        private static UIButton s_panelButton;
 
+        /// <summary>
+        /// Gets the active instance.
+        /// </summary>
+        internal static BuildingPanel Panel => s_panel;
+
+        /// <summary>
+        /// Gets the panel button instance.
+        /// </summary>
+        internal static UIButton PanelButton => s_panelButton;
 
         /// <summary>
         /// Adds event handler to show/hide building panel as appropriate (in line with ZonedBuildingWorldInfoPanel).
@@ -40,7 +53,7 @@
                     // Create / destroy our panel as and when the info panel is shown or hidden.
                     if (isVisible)
                     {
-                        if (ModSettings.showPanel)
+                        if (ModSettings.ShowPanel)
                         {
                             Create();
                         }
@@ -53,7 +66,6 @@
             }
         }
 
-
         /// <summary>
         /// Handles a change in target building from the WorldInfoPanel.
         /// Sets the panel button state according to whether or not this building is 'levellable' and communicates changes to the ABLC panel.
@@ -64,20 +76,19 @@
             if (LevelUtils.GetMaxLevel(WorldInfoPanel.GetCurrentInstanceID().Building) == 1)
             {
                 // Only one building level - not a 'levellable' building, so disable the ABLC button and update the tooltip accordingly.
-                panelButton.Disable();
-                panelButton.tooltip = Translations.Translate("ABLC_BUT_DIS");
+                s_panelButton.Disable();
+                s_panelButton.tooltip = Translations.Translate("ABLC_BUT_DIS");
             }
             else
             {
                 // Multiple levels available - enable the ABLC button and update the tooltip accordingly.
-                panelButton.Enable();
-                panelButton.tooltip = Translations.Translate("ABLC_NAME");
+                s_panelButton.Enable();
+                s_panelButton.tooltip = Translations.Translate("ABLC_NAME");
             }
 
             // Communicate target change to the panel (if it's currently instantiated).
             Panel?.BuildingChanged();
         }
-
 
         /// <summary>
         /// Creates the panel object in-game and displays it.
@@ -87,39 +98,49 @@
             try
             {
                 // If no instance already set, create one.
-                if (uiGameObject == null)
+                if (s_gameObject == null)
                 {
                     // Give it a unique name for easy finding with ModTools.
-                    uiGameObject = new GameObject("ABLCBuildingPanel");
-                    uiGameObject.transform.parent = UIView.library.Get<ZonedBuildingWorldInfoPanel>(typeof(ZonedBuildingWorldInfoPanel).Name)?.component.transform;
+                    s_gameObject = new GameObject("ABLCBuildingPanel");
+                    s_gameObject.transform.parent = UIView.library.Get<ZonedBuildingWorldInfoPanel>(typeof(ZonedBuildingWorldInfoPanel).Name)?.component.transform;
 
-                    panel = uiGameObject.AddComponent<ABLCBuildingPanel>();
+                    s_panel = s_gameObject.AddComponent<BuildingPanel>();
 
                     // Set up and show panel.
-                    Panel.transform.parent = uiGameObject.transform.parent;
-                    Panel.Setup();
+                    s_panel.transform.parent = s_gameObject.transform.parent;
+
+                    // Set position according to setting.
+                    if (ModSettings.OnRight)
+                    {
+                        // On right of info panel.
+                        s_panel.relativePosition = new Vector2(s_panel.parent.width + 10f, 0f);
+                    }
+                    else
+                    {
+                        // On left of info panel.
+                        s_panel.relativePosition = new Vector2(-(s_panel.width + 10f), 0f);
+                    }
+
                     Panel.Show();
                 }
             }
             catch (Exception e)
             {
-                Logging.LogException(e, "exception creating ABLCBuildingPanel");
+                Logging.LogException(e, "exception creating BuildingPanel");
             }
         }
-
 
         /// <summary>
         /// Closes the panel by destroying the object (removing any ongoing UI overhead).
         /// </summary>
         internal static void Close()
         {
-            GameObject.Destroy(panel);
-            GameObject.Destroy(uiGameObject);
+            GameObject.Destroy(s_panel);
+            GameObject.Destroy(s_gameObject);
 
-            panel = null;
-            uiGameObject = null;
+            s_panel = null;
+            s_gameObject = null;
         }
-
 
         /// <summary>
         /// Adds an ABLC button to a building info panel to open the ABLC panel for that building.
@@ -130,18 +151,18 @@
             const float PanelButtonSize = 36f;
 
             BuildingWorldInfoPanel infoPanel = UIView.library.Get<ZonedBuildingWorldInfoPanel>(typeof(ZonedBuildingWorldInfoPanel).Name);
-            panelButton = infoPanel.component.AddUIComponent<UIButton>();
+            s_panelButton = infoPanel.component.AddUIComponent<UIButton>();
 
             // Basic button setup.
-            panelButton.atlas = UITextures.LoadQuadSpriteAtlas("ablc_buttons");
-            panelButton.size = new Vector2(PanelButtonSize, PanelButtonSize);
-            panelButton.normalFgSprite = "normal";
-            panelButton.focusedFgSprite = "hovered";
-            panelButton.hoveredFgSprite = "hovered";
-            panelButton.pressedFgSprite = "pressed";
-            panelButton.disabledFgSprite = "disabled";
-            panelButton.name = "ABLCbutton";
-            panelButton.tooltip = Translations.Translate("ABLC_NAME");
+            s_panelButton.atlas = UITextures.LoadQuadSpriteAtlas("ablc_buttons");
+            s_panelButton.size = new Vector2(PanelButtonSize, PanelButtonSize);
+            s_panelButton.normalFgSprite = "normal";
+            s_panelButton.focusedFgSprite = "hovered";
+            s_panelButton.hoveredFgSprite = "hovered";
+            s_panelButton.pressedFgSprite = "pressed";
+            s_panelButton.disabledFgSprite = "disabled";
+            s_panelButton.name = "ABLCbutton";
+            s_panelButton.tooltip = Translations.Translate("ABLC_NAME");
 
             // Find ProblemsPanel relative position to position button.
             // We'll use 40f as a default relative Y in case something doesn't work.
@@ -171,14 +192,14 @@
             }
 
             // Set position.
-            panelButton.AlignTo(infoPanel.component, UIAlignAnchor.TopLeft);
-            panelButton.relativePosition += new Vector3(infoPanel.component.width - 62f - PanelButtonSize, relativeY, 0f);
+            s_panelButton.AlignTo(infoPanel.component, UIAlignAnchor.TopLeft);
+            s_panelButton.relativePosition += new Vector3(infoPanel.component.width - 62f - PanelButtonSize, relativeY, 0f);
 
             // Event handler.
-            panelButton.eventClick += (control, clickEvent) =>
+            s_panelButton.eventClick += (control, clickEvent) =>
             {
                 // Toggle panel visibility.
-                if (uiGameObject == null)
+                if (s_gameObject == null)
                 {
                     Create();
                 }

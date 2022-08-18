@@ -1,4 +1,9 @@
-﻿namespace ABLC
+﻿// <copyright file="Serializer.cs" company="algernon (K. Algernon A. Sheppard)">
+// Copyright (c) algernon (K. Algernon A. Sheppard). All rights reserved.
+// Licensed under the MIT license. See LICENSE.txt file in the project root for full license information.
+// </copyright>
+
+namespace ABLC
 {
     using System;
     using System.IO;
@@ -12,10 +17,11 @@
     /// </summary>
     public class Serializer : SerializableDataExtensionBase
     {
-        // Unique data ID.
-        private readonly string dataID = "ABLC";
+        // Current data version.
         private const uint DataVersion = 0;
 
+        // Unique data ID.
+        private readonly string dataID = "ABLC";
 
         /// <summary>
         /// Serializes data to the savegame.
@@ -24,7 +30,6 @@
         public override void OnSaveData()
         {
             base.OnSaveData();
-
 
             using (MemoryStream stream = new MemoryStream())
             {
@@ -42,7 +47,6 @@
                 Logging.Message("wrote " + stream.Length);
             }
         }
-
 
         /// <summary>
         /// Deserializes data from a savegame (or initialises new data structures when none available).

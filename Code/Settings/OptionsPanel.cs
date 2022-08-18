@@ -1,4 +1,9 @@
-﻿namespace ABLC
+﻿// <copyright file="OptionsPanel.cs" company="algernon (K. Algernon A. Sheppard)">
+// Copyright (c) algernon (K. Algernon A. Sheppard). All rights reserved.
+// Licensed under the MIT license. See LICENSE.txt file in the project root for full license information.
+// </copyright>
+
+namespace ABLC
 {
     using System.Linq;
     using AlgernonCommons.Translation;
@@ -22,11 +27,9 @@
         /// </summary>
         internal OptionsPanel()
         {
-
-
-
-            float headerWidth = OptionsPanelManager<OptionsPanel>.PanelWidth - Margin * 2f;
+            float headerWidth = OptionsPanelManager<OptionsPanel>.PanelWidth - (Margin * 2f);
             float checkLabelWidth = headerWidth - 40f;
+
             // Y position indicator.
             float currentY = Margin;
 
@@ -45,13 +48,13 @@
             currentY += TitleMargin;
 
             UICheckBox onRightCheck = UICheckBoxes.AddPlainCheckBox(this, Margin, currentY, Translations.Translate("ABLC_OPT_RT"), checkLabelWidth);
-            onRightCheck.isChecked = ModSettings.onRight;
-            onRightCheck.eventCheckChanged += (control, value) => { ModSettings.onRight = value; };
+            onRightCheck.isChecked = ModSettings.OnRight;
+            onRightCheck.eventCheckChanged += (control, value) => { ModSettings.OnRight = value; };
             currentY += onRightCheck.height + Margin;
 
             UICheckBox showPanelCheck = UICheckBoxes.AddPlainCheckBox(this, Margin, currentY, Translations.Translate("ABLC_OPT_SHO"), checkLabelWidth);
-            showPanelCheck.isChecked = ModSettings.showPanel;
-            showPanelCheck.eventCheckChanged += (control, value) => { ModSettings.showPanel = value; };
+            showPanelCheck.isChecked = ModSettings.ShowPanel;
+            showPanelCheck.eventCheckChanged += (control, value) => { ModSettings.ShowPanel = value; };
             currentY += showPanelCheck.height + GroupMargin;
 
             // Gameplay options.
@@ -59,23 +62,23 @@
             currentY += TitleMargin;
 
             UICheckBox abandonHistCheck = UICheckBoxes.AddPlainCheckBox(this, Margin, currentY, Translations.Translate("ABLC_OPT_HNA"), checkLabelWidth);
-            abandonHistCheck.isChecked = ModSettings.noAbandonHistorical;
-            abandonHistCheck.eventCheckChanged += (control, value) => { ModSettings.noAbandonHistorical = value; };
+            abandonHistCheck.isChecked = ModSettings.NoAbandonHistorical;
+            abandonHistCheck.eventCheckChanged += (control, value) => { ModSettings.NoAbandonHistorical = value; };
             currentY += abandonHistCheck.height + Margin;
 
             UICheckBox abandonAnyCheck = UICheckBoxes.AddPlainCheckBox(this, Margin, currentY, Translations.Translate("ABLC_OPT_ANA"), checkLabelWidth);
-            abandonAnyCheck.isChecked = ModSettings.noAbandonAny;
-            abandonAnyCheck.eventCheckChanged += (control, value) => { ModSettings.noAbandonAny = value; };
+            abandonAnyCheck.isChecked = ModSettings.NoAbandonAny;
+            abandonAnyCheck.eventCheckChanged += (control, value) => { ModSettings.NoAbandonAny = value; };
             currentY += abandonAnyCheck.height + Margin;
 
             UICheckBox randomLevelCheck = UICheckBoxes.AddPlainCheckBox(this, Margin, currentY, Translations.Translate("ABLC_OPT_RND"), checkLabelWidth);
-            randomLevelCheck.isChecked = ModSettings.randomLevels;
-            randomLevelCheck.eventCheckChanged += (control, value) => { ModSettings.randomLevels = value; };
+            randomLevelCheck.isChecked = ModSettings.RandomLevels;
+            randomLevelCheck.eventCheckChanged += (control, value) => { ModSettings.RandomLevels = value; };
             currentY += randomLevelCheck.height + Margin;
 
             UICheckBox loadLevelCheck = UICheckBoxes.AddPlainCheckBox(this, Margin, currentY, Translations.Translate("ABLC_OPT_CLL"), checkLabelWidth);
-            loadLevelCheck.isChecked = ModSettings.loadLevelCheck;
-            loadLevelCheck.eventCheckChanged += (control, value) => { ModSettings.loadLevelCheck = value; };
+            loadLevelCheck.isChecked = ModSettings.LoadLevelCheck;
+            loadLevelCheck.eventCheckChanged += (control, value) => { ModSettings.LoadLevelCheck = value; };
             currentY += loadLevelCheck.height + Margin;
         }
     }
