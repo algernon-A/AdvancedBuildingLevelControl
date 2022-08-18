@@ -13,7 +13,7 @@ namespace ABLC
 		/// Harmony Postfix patch to stop historical buildings from abandoning.
 		/// </summary>
 		/// <param name="__instance">Instance reference</param>
-		/// <param name="buildingID">Building instance ID</param
+		/// <param name="buildingID">Building instance ID</param>
 		/// <param name="buildingData">Building instance data reference</param>
 		public static void Postfix(PrivateBuildingAI __instance, ushort buildingID, ref Building buildingData)
 		{

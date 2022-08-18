@@ -1,72 +1,50 @@
-﻿using System;
-using System.Reflection;
-using HarmonyLib;
-using CitiesHarmony.API;
-
-
-namespace ABLC
+﻿namespace ABLC
 {
+    using System;
+    using System.Reflection;
+    using AlgernonCommons;
+    using AlgernonCommons.Patching;
+    using HarmonyLib;
+    using CitiesHarmony.API;
+
     /// <summary>
     /// Class to manage the mod's Harmony patches.
     /// </summary>
-    public static class Patcher
+    public class Patcher : PatcherBase
     {
         // Unique harmony identifier.
         private const string harmonyID = "com.github.algernon-A.csl.ablc";
 
-        // Flags.
-        internal static bool Patched => _patched;
-        private static bool _patched = false;
-
-
         /// <summary>
-        /// Apply all Harmony patches.
+        /// Initializes a new instance of the <see cref="Patcher"/> class.
         /// </summary>
-        public static void PatchAll()
+        /// <param name="harmonyID">This mod's unique Harmony identifier.</param>
+        public Patcher(string harmonyID)
+            : base(harmonyID)
         {
-            // Don't do anything if already patched.
-            if (!_patched)
-            {
-                // Ensure Harmony is ready before patching.
-                if (HarmonyHelper.IsHarmonyInstalled)
-                {
-                    Logging.KeyMessage("deploying Harmony patches");
-
-                    // Apply all annotated patches and update flag.
-                    Harmony harmonyInstance = new Harmony(harmonyID);
-                    harmonyInstance.PatchAll();
-                    _patched = true;
-                }
-                else
-                {
-                    Logging.Error("Harmony not ready");
-                }
-            }
         }
 
-
         /// <summary>
-        /// Remove all Harmony patches.
+        /// Gets the active instance reference.
         /// </summary>
-        public static void UnpatchAll()
+        public static new Patcher Instance
         {
-            // Only unapply if patches appplied.
-            if (_patched)
+            get
             {
-                Logging.KeyMessage("reverting Harmony patches");
+                // Auto-initializing getter.
+                if (s_instance == null)
+                {
+                    s_instance = new Patcher(PatcherMod.Instance.HarmonyID);
+                }
 
-                // Unapply patches, but only with our HarmonyID.
-                Harmony harmonyInstance = new Harmony(harmonyID);
-                harmonyInstance.UnpatchAll(harmonyID);
-                _patched = false;
+                return s_instance as Patcher;
             }
         }
 
         /// <summary>
         /// Applies or unapplies Building Themees patch.
         /// </summary>
-        /// <param name="active">True to apply patch, false to unapply</param>
-        public static void PatchBuildingThemes()
+        public void PatchBuildingThemes()
         {
             // Ensure Harmony is ready before patching.
             if (HarmonyHelper.IsHarmonyInstalled)

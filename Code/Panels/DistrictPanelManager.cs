@@ -1,10 +1,10 @@
-﻿using System;
-using UnityEngine;
-using ColossalFramework.UI;
-
-
-namespace ABLC
+﻿namespace ABLC
 {
+    using System;
+    using AlgernonCommons;
+    using ColossalFramework.UI;
+    using UnityEngine;
+
     /// <summary>
     /// Static class to manage the ABLC district panel.
     /// </summary>

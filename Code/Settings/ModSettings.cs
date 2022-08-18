@@ -1,15 +1,16 @@
-﻿using System;
-using System.IO;
-using System.Xml.Serialization;
-
-
-namespace ABLC
+﻿namespace ABLC
 {
+    using System;
+    using System.IO;
+    using System.Xml.Serialization;
+    using AlgernonCommons;
+    using AlgernonCommons.XML;
+
     /// <summary>
     /// Class to hold global mod settings.
     /// </summary>
-    [XmlRoot(ElementName = "AdvancedBuildingLevelControl", Namespace = "", IsNullable = false)]
-    public class ModSettings
+    [XmlRoot(ElementName = "AdvancedBuildingLevelControl")]
+    public class ModSettings : SettingsXMLBase
     {
         // Settings file name.
         [XmlIgnore]
@@ -46,21 +47,6 @@ namespace ABLC
         // Version.
         [XmlAttribute("Version")]
         public int version = 0;
-
-        // Language.
-        [XmlElement("Language")]
-        public string Language
-        {
-            get
-            {
-                return Translations.CurrentLanguage;
-            }
-            set
-            {
-                Translations.CurrentLanguage = value;
-            }
-        }
-
 
         // Panel position.
         [XmlElement("PanelOnRight")]
@@ -131,27 +117,6 @@ namespace ABLC
         /// <summary>
         /// Save settings to XML file.
         /// </summary>
-        internal static void Save()
-        {
-            try
-            {
-                // Save into user local settings.
-                using (StreamWriter writer = new StreamWriter(Path.Combine(UserSettingsDir, SettingsFileName)))
-                {
-                    XmlSerializer xmlSerializer = new XmlSerializer(typeof(ModSettings));
-                    xmlSerializer.Serialize(writer, new ModSettings());
-                }
-
-                // Cleaning up after ourselves - delete any old config file in the application directory.
-                if (File.Exists(SettingsFileName))
-                {
-                    File.Delete(SettingsFileName);
-                }
-            }
-            catch (Exception e)
-            {
-                Logging.LogException(e, "exception saving XML settings file");
-            }
-        }
+        internal static void Save() => XMLFileUtils.Save<ModSettings>(Path.Combine(UserSettingsDir, SettingsFileName));
     }
 }

@@ -1,9 +1,9 @@
-﻿using System.Collections.Generic;
-using ColossalFramework;
-
-
-namespace ABLC
+﻿namespace ABLC
 {
+    using System.Collections.Generic;
+    using AlgernonCommons;
+    using ColossalFramework;
+
     /// <summary>
     /// Basic level control data class (minimum and maximum).
     /// Class, not struct, as this is mutable, and Mutable Structs Are Evil.
@@ -186,8 +186,8 @@ namespace ABLC
 
 
         /// <summary>
-        /// Clears all building settings for the given district.
-        /// <param name="buildingID">Building to remove</param>
+        /// Clears all district settings for the given district.
+        /// <param name="districtID">District to remove</param>
         /// </summary>
         internal static void ClearDistrict(ushort districtID)
         {

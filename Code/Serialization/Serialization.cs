@@ -1,13 +1,12 @@
-﻿using System;
-using System.IO;
-using System.Collections.Generic;
-using System.Runtime.Serialization.Formatters.Binary;
-using ICities;
-using ColossalFramework.IO;
-
-
-namespace ABLC
+﻿namespace ABLC
 {
+    using System;
+    using System.IO;
+    using System.Runtime.Serialization.Formatters.Binary;
+    using AlgernonCommons;
+    using ColossalFramework.IO;
+    using ICities;
+
     /// <summary>
     /// Handles savegame data saving and loading.
     /// </summary>

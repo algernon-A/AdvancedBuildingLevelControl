@@ -1,10 +1,12 @@
-﻿using System;
-using UnityEngine;
-using ColossalFramework.UI;
-
-
-namespace ABLC
+﻿namespace ABLC
 {
+    using System;
+    using AlgernonCommons;
+    using AlgernonCommons.Translation;
+    using AlgernonCommons.UI;
+    using ColossalFramework.UI;
+    using UnityEngine;
+
     /// <summary>
     /// ABLC info panel base class.
     /// </summary>
@@ -69,7 +71,7 @@ namespace ABLC
                 iconSprite.relativePosition = new Vector2(0f, 0f);
                 iconSprite.height = 36f;
                 iconSprite.width = 36f;
-                iconSprite.atlas = Textures.ABLCButtonSprites;
+                iconSprite.atlas = UITextures.LoadQuadSpriteAtlas("ablc_buttons");
                 iconSprite.spriteName = "normal";
 
                 // Category labels
@@ -77,17 +79,17 @@ namespace ABLC
                 UILabel titleLabel = AddLabel(Translations.Translate("ABLC_SHORT"), 0f, Margin, 1.0f);
 
                 // Level dropdowns.
-                minLevelDropDown = UIControls.AddLabelledDropDown(this, width - Margin - MenuWidth, 70f, Translations.Translate("ABLC_LVL_MIN"), 60f, accomodateLabel: false, tooltip: MinLevelTip);
+                minLevelDropDown = UIDropDowns.AddLabelledDropDown(this, width - Margin - MenuWidth, 70f, Translations.Translate("ABLC_LVL_MIN"), 60f, accomodateLabel: false, tooltip: MinLevelTip);
                 minLevelDropDown.items = new string[] { "1", "2", "3", "4", "5" };
 
-                maxLevelDropDown = UIControls.AddLabelledDropDown(this, width - Margin - MenuWidth, 100f, Translations.Translate("ABLC_LVL_MAX"), 60f, accomodateLabel: false, tooltip: MaxLevelTip);
+                maxLevelDropDown = UIDropDowns.AddLabelledDropDown(this, width - Margin - MenuWidth, 100f, Translations.Translate("ABLC_LVL_MAX"), 60f, accomodateLabel: false, tooltip: MaxLevelTip);
                 maxLevelDropDown.items = new string[] { "1", "2", "3", "4", "5" };
 
                 // Apply button.
-                upgradeButton = UIControls.AddButton(this, Margin, PanelHeight - 80f, Translations.Translate("ABLC_TRIG_UP"), this.width - (Margin * 2), tooltip: UpgradeTip);
+                upgradeButton = UIButtons.AddButton(this, Margin, PanelHeight - 80f, Translations.Translate("ABLC_TRIG_UP"), this.width - (Margin * 2), tooltip: UpgradeTip);
 
                 // Add 'downgrade' button.
-                downgradeButton = UIControls.AddButton(this, Margin, PanelHeight - 40f, Translations.Translate("ABLC_TRIG_DWN"), this.width - (Margin * 2), tooltip: DowngradeTip);
+                downgradeButton = UIButtons.AddButton(this, Margin, PanelHeight - 40f, Translations.Translate("ABLC_TRIG_DWN"), this.width - (Margin * 2), tooltip: DowngradeTip);
             }
             catch (Exception e)
             {
@@ -100,6 +102,7 @@ namespace ABLC
         /// Adds a UI text label to the current panel.
         /// </summary>
         /// <param name="text">Label text</param>
+        /// <param name="xPos">Relative Y position</param>
         /// <param name="yPos">Relative Y position</param>
         /// <param name="scale">Text scale (default 0.8f)</param>
         /// <returns></returns>

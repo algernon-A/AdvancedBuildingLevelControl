@@ -1,14 +1,14 @@
-﻿using System.Collections.Generic;
-using System.Reflection.Emit;
-using HarmonyLib;
-
-
-namespace ABLC
+﻿namespace ABLC
 {
-	/// <summary>
-	/// Harmony Prefix patch for PrivateBuildingAI.BuildingLoaded.
-	/// </summary>
-	[HarmonyPatch(typeof(PrivateBuildingAI), nameof(PrivateBuildingAI.BuildingLoaded))]
+    using System.Collections.Generic;
+    using System.Reflection.Emit;
+    using AlgernonCommons;
+    using HarmonyLib;
+
+    /// <summary>
+    /// Harmony Prefix patch for PrivateBuildingAI.BuildingLoaded.
+    /// </summary>
+    [HarmonyPatch(typeof(PrivateBuildingAI), nameof(PrivateBuildingAI.BuildingLoaded))]
 	public static class BuildingLoadedPatch
 	{
 		/// <summary>
@@ -18,7 +18,6 @@ namespace ABLC
 		/// <param name="__instance">Instance reference</param>
 		/// <param name="buildingID">Building instance ID</param>
 		/// <param name="data">Building data</param>
-		/// <param name="version">Data version</param>
 		public static void Prefix(PrivateBuildingAI __instance, ushort buildingID, ref Building data)
 		{
 			// Check for buildings with illegal levels - only do this if settings permit.

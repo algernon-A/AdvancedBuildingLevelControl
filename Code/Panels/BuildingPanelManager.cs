@@ -1,10 +1,12 @@
-﻿using System;
-using UnityEngine;
-using ColossalFramework.UI;
-
-
-namespace ABLC
+﻿namespace ABLC
 {
+    using System;
+    using AlgernonCommons;
+    using AlgernonCommons.Translation;
+    using AlgernonCommons.UI;
+    using ColossalFramework.UI;
+    using UnityEngine;
+
     /// <summary>
     /// Static class to manage the ABLC building panel.
     /// </summary>
@@ -131,7 +133,7 @@ namespace ABLC
             panelButton = infoPanel.component.AddUIComponent<UIButton>();
 
             // Basic button setup.
-            panelButton.atlas = Textures.ABLCButtonSprites;
+            panelButton.atlas = UITextures.LoadQuadSpriteAtlas("ablc_buttons");
             panelButton.size = new Vector2(PanelButtonSize, PanelButtonSize);
             panelButton.normalFgSprite = "normal";
             panelButton.focusedFgSprite = "hovered";

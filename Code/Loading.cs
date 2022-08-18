@@ -1,9 +1,11 @@
-﻿using ICities;
-using ABLC.MessageBox;
-
-
-namespace ABLC
+﻿namespace ABLC
 {
+    using AlgernonCommons;
+    using AlgernonCommons.Notifications;
+    using AlgernonCommons.Translation;
+    using AlgernonCommons.UI;
+    using ICities;
+
     /// <summary>
     /// Main loading class: the mod runs from here.
     /// </summary>
@@ -36,12 +38,12 @@ namespace ABLC
                 harmonyLoaded = true;
 
                 // Unload Harmony patches and exit before doing anything further.
-                Patcher.UnpatchAll();
+                Patcher.Instance.UnpatchAll();
                 return;
             }
 
             // Ensure that Harmony patches have been applied.
-            harmonyLoaded = Patcher.Patched;
+            harmonyLoaded = Patcher.Instance.Patched;
             if (!harmonyLoaded)
             {
                 isModEnabled = false;
@@ -57,7 +59,7 @@ namespace ABLC
                 isModEnabled = false;
 
                 // Unload Harmony patches and exit before doing anything further.
-                Patcher.UnpatchAll();
+                Patcher.Instance.UnpatchAll();
                 return;
             }
 
@@ -65,10 +67,10 @@ namespace ABLC
             if (!isModEnabled)
             {
                 isModEnabled = true;
-                Logging.KeyMessage("v " + ABLCMod.Version + " loading");
+                Logging.KeyMessage("version v", AssemblyUtils.TrimmedCurrentVersion, " loading");
 
                 // Patch Building Themes, if it's active.
-                Patcher.PatchBuildingThemes();
+                Patcher.Instance.PatchBuildingThemes();
             }
         }
 
@@ -83,16 +85,16 @@ namespace ABLC
             if (!harmonyLoaded)
             {
                 // Harmony 2 wasn't loaded; display warning notification and exit.
-                ListMessageBox harmonyBox = MessageBoxBase.ShowModal<ListMessageBox>();
+                ListNotification harmonyNotification = NotificationBase.ShowNotification<ListNotification>();
 
                 // Key text items.
-                harmonyBox.AddParas(Translations.Translate("ERR_HAR0"), Translations.Translate("ABLC_ERR_HAR"), Translations.Translate("ABLC_ERR_FAT"), Translations.Translate("ERR_HAR1"));
+                harmonyNotification.AddParas(Translations.Translate("ERR_HAR0"), Translations.Translate("ABLC_ERR_HAR"), Translations.Translate("ABLC_ERR_FAT"), Translations.Translate("ERR_HAR1"));
 
                 // List of dot points.
-                harmonyBox.AddList(Translations.Translate("ERR_HAR2"), Translations.Translate("ERR_HAR3"));
+                harmonyNotification.AddList(Translations.Translate("ERR_HAR2"), Translations.Translate("ERR_HAR3"));
 
                 // Closing para.
-                harmonyBox.AddParas(Translations.Translate("MES_PAGE"));
+                harmonyNotification.AddParas(Translations.Translate("MES_PAGE"));
 
                 // Exit.
                 return;
@@ -102,16 +104,16 @@ namespace ABLC
             if (conflictingMod)
             {
                 // Mod conflict detected - display warning notification and exit.
-                ListMessageBox modConflictBox = MessageBoxBase.ShowModal<ListMessageBox>();
+                ListNotification modConflictNotification = NotificationBase.ShowNotification<ListNotification>();
 
                 // Key text items.
-                modConflictBox.AddParas(Translations.Translate("ERR_CON0"), Translations.Translate("ABLC_ERR_FAT"), Translations.Translate("ABLC_ERR_CON0"), Translations.Translate("ERR_CON1"));
+                modConflictNotification.AddParas(Translations.Translate("ERR_CON0"), Translations.Translate("ABLC_ERR_FAT"), Translations.Translate("ABLC_ERR_CON0"), Translations.Translate("ERR_CON1"));
 
                 // Add conflicting mod name(s).
-                modConflictBox.AddList(ModUtils.conflictingModNames.ToArray());
+                modConflictNotification.AddList(ModUtils.conflictingModNames.ToArray());
 
                 // Closing para.
-                modConflictBox.AddParas(Translations.Translate("ABLC_ERR_CON1"));
+                modConflictNotification.AddParas(Translations.Translate("ABLC_ERR_CON1"));
 
                 // Exit.
                 return;
@@ -134,7 +136,7 @@ namespace ABLC
                 BuildingPanelManager.AddInfoPanelButton();
 
                 // Set up options panel event handler (need to redo this now that options panel has been reset after loading into game).
-                OptionsPanel.OptionsEventHook();
+                OptionsPanelManager<OptionsPanel>.OptionsEventHook();
 
                 // Set loaded status flag.
                 isLoaded = true;

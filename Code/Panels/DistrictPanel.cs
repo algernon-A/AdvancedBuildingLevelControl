@@ -1,10 +1,12 @@
-﻿using System;
-using ColossalFramework;
-using ColossalFramework.UI;
-
-
-namespace ABLC
+﻿namespace ABLC
 {
+    using System;
+    using AlgernonCommons;
+    using AlgernonCommons.Translation;
+    using AlgernonCommons.UI;
+    using ColossalFramework;
+    using ColossalFramework.UI;
+
     /// <summary>
     /// ABLC district settings info panel.
     /// </summary>
@@ -66,37 +68,37 @@ namespace ABLC
                 UILabel workLabel = AddLabel(Translations.Translate("ABLC_CAT_WRK"), Margin, 140f, hAlign: UIHorizontalAlignment.Left);
 
                 // Add workplace min and max dropdowns.
-                minWorkLevelDropDown = UIControls.AddLabelledDropDown(this, width - Margin - MenuWidth, 160f, Translations.Translate("ABLC_LVL_MIN"), 60f, accomodateLabel: false, tooltip: Translations.Translate("ABLC_CAT_WMN_TIP"));
+                minWorkLevelDropDown = UIDropDowns.AddLabelledDropDown(this, width - Margin - MenuWidth, 160f, Translations.Translate("ABLC_LVL_MIN"), 60f, accomodateLabel: false, tooltip: Translations.Translate("ABLC_CAT_WMN_TIP"));
                 minWorkLevelDropDown.items = new string[] { "1", "2", "3" };
 
-                maxWorkLevelDropDown = UIControls.AddLabelledDropDown(this, width - Margin - MenuWidth, 190f, Translations.Translate("ABLC_LVL_MAX"), 60f, accomodateLabel: false, tooltip: Translations.Translate("ABLC_CAT_WMX_TIP"));
+                maxWorkLevelDropDown = UIDropDowns.AddLabelledDropDown(this, width - Margin - MenuWidth, 190f, Translations.Translate("ABLC_LVL_MAX"), 60f, accomodateLabel: false, tooltip: Translations.Translate("ABLC_CAT_WMX_TIP"));
                 maxWorkLevelDropDown.items = new string[] { "1", "2", "3" };
 
                 // Add random level checkbox.
-                randomSpawnCheck = UIControls.LabelledCheckBox(this, 20f, 235f, Translations.Translate("ABLC_RAN_SPN"), tooltip: Translations.Translate("ABLC_RAN_SPN_TIP"));
+                randomSpawnCheck = UICheckBoxes.AddLabelledCheckBox(this, 20f, 235f, Translations.Translate("ABLC_RAN_SPN"), tooltip: Translations.Translate("ABLC_RAN_SPN_TIP"));
 
                 // Extend height to fit 'clear all building settings' button and historical settings section.
                 height += 200f;
 
                 // Button to clear all building settings in district.
-                UIButton clearBuildingsButton = UIControls.AddButton(this, Margin, height - 200f, Translations.Translate("ABLC_CLR_BLD"), this.width - (Margin * 2), tooltip: Translations.Translate("ABLC_CLR_BLD_TIP"));
+                UIButton clearBuildingsButton = UIButtons.AddButton(this, Margin, height - 200f, Translations.Translate("ABLC_CLR_BLD"), this.width - (Margin * 2), tooltip: Translations.Translate("ABLC_CLR_BLD_TIP"));
                 clearBuildingsButton.eventClicked += ClearBuildings;
 
                 // Spacer panel.
-                UIControls.OptionsSpacer(this, Margin, height - 155f, width - (Margin * 2));
+                UISpacers.AddOptionsSpacer(this, Margin, height - 155f, width - (Margin * 2));
 
                 // Add historical section label.
                 AddLabel(Translations.Translate("ABLC_HIS"), 0f, height - 140f, 1.0f);
 
                 // Add historical spawning checkbox.
-                spawnHistoricalCheck = UIControls.LabelledCheckBox(this, 20f, height - 110f, Translations.Translate("ABLC_HIS_SPN"), tooltip: Translations.Translate("ABLC_HIS_SPN_TIP"));
+                spawnHistoricalCheck = UICheckBoxes.AddLabelledCheckBox(this, 20f, height - 110f, Translations.Translate("ABLC_HIS_SPN"), tooltip: Translations.Translate("ABLC_HIS_SPN_TIP"));
 
                 // Button to make all buildings in district historical.
-                makeHistoricalButton = UIControls.AddButton(this, Margin, height - 80f, Translations.Translate("ABLC_TRIG_HIS"), this.width - (Margin * 2), tooltip: Translations.Translate("ABLC_TRIG_HIS_TIP"));
+                makeHistoricalButton = UIButtons.AddButton(this, Margin, height - 80f, Translations.Translate("ABLC_TRIG_HIS"), this.width - (Margin * 2), tooltip: Translations.Translate("ABLC_TRIG_HIS_TIP"));
                 makeHistoricalButton.eventClicked += MakeHistorical;
 
                 // Button to remove historical status from all buildings in district.
-                removeHistoricalButton = UIControls.AddButton(this, Margin, height - 40f, Translations.Translate("ABLC_TRIG_NHS"), this.width - (Margin * 2), tooltip: Translations.Translate("ABLC_TRIG_NHS_TIP"));
+                removeHistoricalButton = UIButtons.AddButton(this, Margin, height - 40f, Translations.Translate("ABLC_TRIG_NHS"), this.width - (Margin * 2), tooltip: Translations.Translate("ABLC_TRIG_NHS_TIP"));
                 removeHistoricalButton.eventClicked += MakeHistorical;
 
                 // Set initial district.

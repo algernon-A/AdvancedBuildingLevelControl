@@ -1,9 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.30204.135
+# Visual Studio Version 17
+VisualStudioVersion = 17.3.32811.315
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AdvancedBuildingLevelControl", "AdvancedBuildingLevelControl.csproj", "{02438BDE-6340-4270-926F-6D9A788E0F43}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AdvancedBuildingLevelControl", "AdvancedBuildingLevelControl.csproj", "{02438BDE-6340-4270-926F-6D9A788E0F43}"
+EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "AlgernonCommonsPatchingShared", "..\AlgernonCommons\AlgernonCommonsPatchingShared.shproj", "{25AEF446-6F0D-43A8-BB84-D1306789B68C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,5 +23,9 @@ Global
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {984ED6DC-3F3C-44BE-BBC6-7CEC20C2A4F5}
+	EndGlobalSection
+	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		..\AlgernonCommons\AlgernonCommonsPatchingShared.projitems*{02438bde-6340-4270-926f-6d9a788e0f43}*SharedItemsImports = 5
+		..\AlgernonCommons\AlgernonCommonsPatchingShared.projitems*{25aef446-6f0d-43a8-bb84-d1306789b68c}*SharedItemsImports = 13
 	EndGlobalSection
 EndGlobal

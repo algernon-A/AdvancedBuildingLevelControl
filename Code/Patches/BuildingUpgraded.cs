@@ -1,16 +1,15 @@
-﻿using System;
-using ColossalFramework;
-using ColossalFramework.Math;
-using HarmonyLib;
-
-
-
-namespace ABLC
+﻿namespace ABLC
 {
-	/// <summary>
-	/// Harmony patches (Prefix and Postfix) for PrivateBuildingAI.BuildingUpgraded.
-	/// </summary>
-	[HarmonyPatch(typeof(PrivateBuildingAI), nameof(PrivateBuildingAI.BuildingUpgraded))]
+    using System;
+	using AlgernonCommons;
+    using ColossalFramework;
+    using ColossalFramework.Math;
+    using HarmonyLib;
+
+    /// <summary>
+    /// Harmony patches (Prefix and Postfix) for PrivateBuildingAI.BuildingUpgraded.
+    /// </summary>
+    [HarmonyPatch(typeof(PrivateBuildingAI), nameof(PrivateBuildingAI.BuildingUpgraded))]
 	public static class BuildingUpgradedPatch
     {
 		/// <summary>

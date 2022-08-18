@@ -1,9 +1,9 @@
-﻿using ColossalFramework;
-using ColossalFramework.Math;
-
-
-namespace ABLC
+﻿namespace ABLC
 {
+    using AlgernonCommons;
+    using ColossalFramework;
+    using ColossalFramework.Math;
+
     internal static class LevelUtils
     {
         /// <summary>
@@ -16,7 +16,6 @@ namespace ABLC
 
         /// <summary>
         /// Returns the maximum building level of a given building, based on subclass (1-based).
-        /// <param name="subService">Building subservice</param>
         /// </summary>
         /// <param name="subService">Building subservice</param>
         /// <returns>Maximum building level (1-based)</returns>

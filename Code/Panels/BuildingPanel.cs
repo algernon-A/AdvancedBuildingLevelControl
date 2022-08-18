@@ -1,11 +1,11 @@
-﻿using System;
-using UnityEngine;
-using ColossalFramework;
-using ColossalFramework.UI;
-
-
-namespace ABLC
+﻿namespace ABLC
 {
+    using System;
+    using AlgernonCommons;
+    using ColossalFramework;
+    using ColossalFramework.UI;
+    using UnityEngine;
+
     /// <summary>
     /// ABLC building settings info panel.
     /// </summary>
@@ -37,9 +37,8 @@ namespace ABLC
         }
 
         /// <summary>
-        /// Performs initial setup for the panel; we don't use Start() as that's not sufficiently reliable (race conditions), and is not needed with the dynamic create/destroy process.
+        /// Performs initial setup for the panel.
         /// </summary>
-        /// <param name="parentTransform">Transform to attach to</param>
         internal override void Setup()
         {
             try

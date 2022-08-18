@@ -1,8 +1,9 @@
-﻿using ColossalFramework.IO;
-
-
+﻿
 namespace ABLC
 {
+    using AlgernonCommons;
+    using ColossalFramework.IO;
+
     /// <summary>
     ///  Savegame (de)serialisation for building level settings.
     /// </summary>

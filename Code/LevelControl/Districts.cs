@@ -1,9 +1,9 @@
-﻿using System;
-using ColossalFramework;
-
-
-namespace ABLC
+﻿namespace ABLC
 {
+    using System;
+    using AlgernonCommons;
+    using ColossalFramework;
+
     // District flags enum.
     internal enum DistrictFlags
     {
@@ -228,7 +228,7 @@ namespace ABLC
         /// </summary>
         /// <param name="districtID">District ID</param>
         /// <param name="flag">Flag to set</param>
-        /// <param name="bool">True to set the flag, false to clear</param>
+        /// <param name="flagState">True to set the flag, false to clear</param>
         internal static void SetFlag(ushort districtID, byte flag, bool flagState)
         {
             // Safety checks.
@@ -259,7 +259,7 @@ namespace ABLC
 
         /// <summary>
         /// Deserialises savegame data into the arrays.
-        /// <summary>
+        /// </summary>
         /// <param name="savedMinResLevels">Minimum residential level array (from save data)</param>
         /// <param name="savedMaxResLevels">Maximum residential level array (from save data)</param>
         /// <param name="savedWorkMinLevels">Minimum workplace level array (from save data)</param>

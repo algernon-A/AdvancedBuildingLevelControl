@@ -1,10 +1,10 @@
-﻿using System;
-using System.Runtime.CompilerServices;
-using HarmonyLib;
-
-
-namespace ABLC
+﻿namespace ABLC
 {
+    using System;
+    using System.Runtime.CompilerServices;
+    using AlgernonCommons;
+    using HarmonyLib;
+
     /// <summary>
     /// Static class for Harmony reverse patches.
     /// </summary>
