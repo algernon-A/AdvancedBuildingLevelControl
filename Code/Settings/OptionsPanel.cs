@@ -14,7 +14,7 @@ namespace ABLC
     /// <summary>
     /// The mod's settings options panel.
     /// </summary>
-    internal class OptionsPanel : UIPanel
+    public class OptionsPanel : UIPanel
     {
         // Layout constants.
         private const float Margin = 5f;

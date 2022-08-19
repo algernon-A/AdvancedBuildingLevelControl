@@ -18,32 +18,6 @@ namespace ABLC
     public class Patcher : PatcherBase
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="Patcher"/> class.
-        /// </summary>
-        /// <param name="harmonyID">This mod's unique Harmony identifier.</param>
-        public Patcher(string harmonyID)
-            : base(harmonyID)
-        {
-        }
-
-        /// <summary>
-        /// Gets the active instance reference.
-        /// </summary>
-        public static new Patcher Instance
-        {
-            get
-            {
-                // Auto-initializing getter.
-                if (s_instance == null)
-                {
-                    s_instance = new Patcher(PatcherMod.Instance.HarmonyID);
-                }
-
-                return s_instance as Patcher;
-            }
-        }
-
-        /// <summary>
         /// Applies or unapplies Building Themees patch.
         /// </summary>
         public void PatchBuildingThemes()
