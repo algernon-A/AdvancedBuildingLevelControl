@@ -1,4 +1,7 @@
-﻿- Implement AlgernonCommons
+﻿Version 1.2 -
+
+- Compatibility with Plazas & Promenades
+- Implement AlgernonCommons
 
 
 Version 1.1.2.1 -

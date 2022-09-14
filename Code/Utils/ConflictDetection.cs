@@ -18,7 +18,7 @@ namespace ABLC
         /// <summary>
         /// Checks for any known fatal mod conflicts.
         /// </summary>
-        /// <returns>True if a mod conflict was detected, false otherwise.</returns>
+        /// <returns>A list of conflicting mod names if a mod conflict was detected, false otherwise.</returns>
         internal static List<string> CheckConflictingMods()
         {
             // Initialise flag and list of conflicting mods.

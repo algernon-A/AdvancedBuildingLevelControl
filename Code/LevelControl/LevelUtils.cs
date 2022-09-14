@@ -34,11 +34,14 @@ namespace ABLC
                 case ItemClass.SubService.ResidentialHigh:
                 case ItemClass.SubService.ResidentialLowEco:
                 case ItemClass.SubService.ResidentialHighEco:
+                case ItemClass.SubService.ResidentialWallToWall:
                     return 5;
                 case ItemClass.SubService.CommercialLow:
                 case ItemClass.SubService.CommercialHigh:
                 case ItemClass.SubService.OfficeGeneric:
                 case ItemClass.SubService.IndustrialGeneric:
+                case ItemClass.SubService.CommercialWallToWall:
+                case ItemClass.SubService.OfficeWallToWall:
                     return 3;
                 case ItemClass.SubService.IndustrialFarming:
                 case ItemClass.SubService.IndustrialForestry:
