@@ -1,8 +1,11 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
 		<TargetFramework>net35</TargetFramework>
-		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+		<Title>Advanced Building Level Control</Title>
+		<AssemblyTitle>$(Title)</AssemblyTitle>
 		<Description>A Cities: Skylines mod.</Description>
+		<Authors>algernon</Authors>
+		<Copyright>Copyright © 2020-2022 algernon</Copyright>
 		<Version>1.2</Version>
 		<ManagedDLLPath>$(MSBuildProgramFiles32)/Steam/steamapps/common/Cities_Skylines/Cities_Data/Managed</ManagedDLLPath>
 		<AssemblySearchPaths>
