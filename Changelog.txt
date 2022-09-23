@@ -1,4 +1,8 @@
-﻿Version 1.2 -
+﻿- Fix compatibility with Building Themes for game version 1.15 (Plazas & Promenades)
+- Building appearance level randomization now also works when upgrading/downgrading manually
+
+
+Version 1.2 -
 
 - Compatibility with Plazas & Promenades
 - Implement AlgernonCommons

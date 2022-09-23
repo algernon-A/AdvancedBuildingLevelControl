@@ -60,25 +60,7 @@ namespace ABLC
             }
 
             // Randomize building level.
-            Randomizer r = new Randomizer(buildingID);
-            for (int i = 0; i <= data.m_level; i++)
-            {
-                r.Int32(1000u);
-            }
-
-            // Randomize level to +/- 1 level from original.
-            int maxLevel = LevelUtils.GetMaxLevel(data.Info.GetSubService()) - 1;   // GetMaxLevel is 1-based, convert to zero-based.
-            int finalLevel = data.m_level + 2 - r.Int32(3);
-
-            // Clamp level.
-            if (finalLevel < 0)
-            {
-                finalLevel = 0;
-            }
-            else if (finalLevel > maxLevel)
-            {
-                finalLevel = maxLevel;
-            }
+            ItemClass.Level finalLevel = LevelUtils.GetRandomLevel(__instance.m_info, buildingID, (byte)(data.m_level + 1), out Randomizer r);
 
             // Get target info.
             DistrictManager instance = Singleton<DistrictManager>.instance;
@@ -95,7 +77,7 @@ namespace ABLC
                     ref r,
                     __instance.m_info.m_class.m_service,
                     __instance.m_info.m_class.m_subService,
-                    (ItemClass.Level)finalLevel,
+                    finalLevel,
                     data.Width,
                     data.Length,
                     __instance.m_info.m_zoningMode,
@@ -108,7 +90,7 @@ namespace ABLC
                     ref r,
                     __instance.m_info.m_class.m_service,
                     __instance.m_info.m_class.m_subService,
-                    (ItemClass.Level)finalLevel,
+                    finalLevel,
                     data.Width,
                     data.Length,
                     __instance.m_info.m_zoningMode,

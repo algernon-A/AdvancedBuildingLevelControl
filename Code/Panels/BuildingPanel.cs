@@ -205,12 +205,14 @@ namespace ABLC
                 return;
             }
 
-            // Get building level.
-            byte level = Singleton<BuildingManager>.instance.m_buildings.m_buffer[m_targetID].m_level;
+            // Get building level and subservive.
+            ref Building building = ref Singleton<BuildingManager>.instance.m_buildings.m_buffer[m_targetID];
+            byte level = building.m_level;
+            ItemClass.SubService subService = building.Info.m_class.m_subService;
 
             // Check to see if the building can be upgraded one level.
             _upgradeLevel = (byte)(level + 1);
-            if (LevelUtils.GetTargetInfo(m_targetID, _upgradeLevel) == null)
+            if (LevelUtils.GetMaxLevel(subService) <= level || LevelUtils.GetTargetInfo(m_targetID, _upgradeLevel) == null)
             {
                 // Nope - disable upgrade button.
                 m_upgradeButton.Disable();
@@ -223,7 +225,7 @@ namespace ABLC
 
             // Check to see if the building can be downgraded one level.
             _downgradeLevel = (byte)(level - 1);
-            if (LevelUtils.GetTargetInfo(m_targetID, _downgradeLevel) == null)
+            if (LevelUtils.GetMaxLevel(subService) <= level || LevelUtils.GetTargetInfo(m_targetID, _downgradeLevel) == null)
             {
                 // Nope - disable downgrade button.
                 m_downgradeButton.Disable();

@@ -174,8 +174,64 @@ namespace ABLC
             byte district = Singleton<DistrictManager>.instance.GetDistrict(thisBuilding.m_position);
             ushort style = Singleton<DistrictManager>.instance.m_districts.m_buffer[district].m_Style;
 
+            // Randomize levels.
+            Randomizer r;
+            ItemClass.Level finalLevel = (ItemClass.Level)targetLevel;
+            if (ModSettings.RandomLevels)
+            {
+                // Randomize building level.
+                finalLevel = GetRandomLevel(thisBuilding.Info, buildingID, targetLevel, out r);
+            }
+            else
+            {
+                // Not randomizing levels - need to initialize randomizer.
+                r = new Randomizer(buildingID);
+            }
+
             // Get new building target, if we can.
-            return buildingManager.GetRandomBuildingInfo(ref Singleton<SimulationManager>.instance.m_randomizer, thisBuilding.Info.GetService(), thisBuilding.Info.GetSubService(), (ItemClass.Level)targetLevel, thisBuilding.Width, thisBuilding.Length, thisBuilding.Info.m_zoningMode, style);
+            return buildingManager.GetRandomBuildingInfo(
+                ref r,
+                thisBuilding.Info.GetService(),
+                thisBuilding.Info.GetSubService(),
+                finalLevel,
+                thisBuilding.Width,
+                thisBuilding.Length,
+                thisBuilding.Info.m_zoningMode,
+                style);
+        }
+
+        /// <summary>
+        /// Gets a random building level +/- 1 from the given target level, suitable for the given building prefab.
+        /// </summary>
+        /// <param name="buildingInfo">Original (current) building prefab.</param>
+        /// <param name="buildingID">Building ID.</param>
+        /// <param name="targetLevel">Target building level.</param>
+        /// <param name="r">Randomizer used for allocation.</param>
+        /// <returns>Randomized building level.</returns>
+        internal static ItemClass.Level GetRandomLevel(BuildingInfo buildingInfo, ushort buildingID, byte targetLevel, out Randomizer r)
+        {
+            // Randomize building level.
+            r = new Randomizer(buildingID);
+            for (int i = 0; i < targetLevel; ++i)
+            {
+                r.Int32(1000u);
+            }
+
+            // Randomize level to +/- 1 level from original.
+            int maxLevel = GetMaxLevel(buildingInfo.GetSubService()) - 1;   // GetMaxLevel is 1-based, convert to zero-based.
+            int finalLevel = targetLevel + 1 - r.Int32(3);
+
+            // Clamp level.
+            if (finalLevel < 0)
+            {
+                finalLevel = 0;
+            }
+            else if (finalLevel > maxLevel)
+            {
+                finalLevel = maxLevel;
+            }
+
+            return (ItemClass.Level)finalLevel;
         }
 
         /// <summary>
