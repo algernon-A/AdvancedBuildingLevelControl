@@ -37,7 +37,7 @@
 "ABLC_OPT_RT","Coloque o painel ABLC à direita do painel de informações do jogo (em vez de à esquerda)"
 "ABLC_OPT_ANA","Sem abandono para todos os edifícios"
 "ABLC_OPT_HNA","No abandonment for historical buildings"
-"ABLC_OPT_RND","Randomize building appearance within +/- 1 building level"
+"ABLC_OPT_RND","Randomize a aparência do edifício dentro de +/- 1 nível do edifício"
 "ABLC_OPT_CLL","Verifique todos os edifícios de mapas carregados e corrija quaisquer níveis ilegais"
 "TRN_CHOICE","Definir idioma"
 "LANGUAGE_GAME","Usar o idioma do sistema"
