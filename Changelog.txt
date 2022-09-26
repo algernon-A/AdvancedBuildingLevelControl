@@ -1,4 +1,7 @@
-﻿Version 1.2.1 -
+﻿- Fix district residential minimum levels sometimes resetting to 1
+
+
+Version 1.2.1 -
 
 - Fix compatibility with Building Themes for game version 1.15 (Plazas & Promenades)
 - Building appearance level randomization now also works when upgrading/downgrading manually

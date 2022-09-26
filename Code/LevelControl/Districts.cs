@@ -339,7 +339,6 @@ namespace ABLC
                 s_districtFlags = ResetLevels(0, "flags ");
             }
 
-            s_minResLevels = ResetLevels(0, "residential minimum ");
             if (s_minResLevels == null || s_minResLevels.Length != NumDistricts)
             {
                 s_minResLevels = ResetLevels(0, "residential minimum ");
