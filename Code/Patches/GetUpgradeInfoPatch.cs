@@ -53,14 +53,18 @@ namespace ABLC
         /// <returns>False (don't execute original method) if mod settings are set to randomize building levels, true (exectue original method) otherwise.</returns>
         public static bool Prefix(PrivateBuildingAI __instance, ref BuildingInfo __result, ushort buildingID, ref Building data)
         {
-            // If we're not randomizing building levels, continue on to original method.
-            if (!ModSettings.RandomLevels)
+            // Determine target building level.
+            ItemClass.Level finalLevel;
+            Randomizer r;
+            if (ModSettings.RandomLevels)
             {
-                return true;
+                finalLevel = LevelUtils.GetRandomLevel(__instance.m_info, buildingID, (byte)(data.m_level + 1), out r);
             }
-
-            // Randomize building level.
-            ItemClass.Level finalLevel = LevelUtils.GetRandomLevel(__instance.m_info, buildingID, (byte)(data.m_level + 1), out Randomizer r);
+            else
+            {
+                finalLevel = (ItemClass.Level)data.m_level + 1;
+                r = new Randomizer(buildingID);
+            }
 
             // Get target info.
             DistrictManager instance = Singleton<DistrictManager>.instance;
@@ -95,6 +99,12 @@ namespace ABLC
                     data.Length,
                     __instance.m_info.m_zoningMode,
                     style);
+            }
+
+            // Allow upgrade using existing prefab if the upgrade-without-target setting is enabled.
+            if (ModSettings.UpgradeWithoutTarget && __result == null)
+            {
+                __result = __instance.m_info;
             }
 
             // Don't execute original method.

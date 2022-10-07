@@ -38,6 +38,7 @@
 "ABLC_OPT_ANA","No abandonment for all buildings"
 "ABLC_OPT_HNA","No abandonment for historical buildings"
 "ABLC_OPT_RND","Randomize building appearance within +/- 1 building level"
+"ABLC_OPT_UWT","Permit non-historical buildings to upgrade as if historical if no other model is available"
 "ABLC_OPT_CLL","Check all map buildings on load and fix any illegal levels"
 "TRN_CHOICE","Set language"
 "LANGUAGE_GAME","Use game language"

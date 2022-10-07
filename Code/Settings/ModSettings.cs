@@ -68,6 +68,12 @@ namespace ABLC
         public bool XMLRandomLevels { get => RandomLevels; set => RandomLevels = value; }
 
         /// <summary>
+        /// Gets or sets a value indicating whether non-historical buildings can still upgrade (as if they were historical) when there's no eligible target prefab.
+        /// </summary>
+        [XmlElement("UpgradeWithoutTarget")]
+        public bool XMLUpgradeWithoutTarget { get => UpgradeWithoutTarget; set => UpgradeWithoutTarget = value; }
+
+        /// <summary>
         /// Gets or sets a value indicating whether the ABLC panel should appear on the right-hand side of the target WorldInfoPanel (instead of the left).
         /// </summary>
         [XmlIgnore]
@@ -102,6 +108,12 @@ namespace ABLC
         /// </summary>
         [XmlIgnore]
         internal static bool RandomLevels { get; set; } = false;
+
+        /// <summary>
+        /// Gets or sets a value indicating whether non-historical buildings can still upgrade (as if they were historical) when there's no eligible target prefab.
+        /// </summary>
+        [XmlIgnore]
+        internal static bool UpgradeWithoutTarget { get; set; } = false;
 
         /// <summary>
         /// Load settings from XML file.

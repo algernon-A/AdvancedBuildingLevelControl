@@ -49,12 +49,12 @@ namespace ABLC
 
             UICheckBox onRightCheck = UICheckBoxes.AddPlainCheckBox(this, Margin, currentY, Translations.Translate("ABLC_OPT_RT"), checkLabelWidth);
             onRightCheck.isChecked = ModSettings.OnRight;
-            onRightCheck.eventCheckChanged += (control, value) => { ModSettings.OnRight = value; };
+            onRightCheck.eventCheckChanged += (c, value) => { ModSettings.OnRight = value; };
             currentY += onRightCheck.height + Margin;
 
             UICheckBox showPanelCheck = UICheckBoxes.AddPlainCheckBox(this, Margin, currentY, Translations.Translate("ABLC_OPT_SHO"), checkLabelWidth);
             showPanelCheck.isChecked = ModSettings.ShowPanel;
-            showPanelCheck.eventCheckChanged += (control, value) => { ModSettings.ShowPanel = value; };
+            showPanelCheck.eventCheckChanged += (c, value) => { ModSettings.ShowPanel = value; };
             currentY += showPanelCheck.height + GroupMargin;
 
             // Gameplay options.
@@ -63,22 +63,27 @@ namespace ABLC
 
             UICheckBox abandonHistCheck = UICheckBoxes.AddPlainCheckBox(this, Margin, currentY, Translations.Translate("ABLC_OPT_HNA"), checkLabelWidth);
             abandonHistCheck.isChecked = ModSettings.NoAbandonHistorical;
-            abandonHistCheck.eventCheckChanged += (control, value) => { ModSettings.NoAbandonHistorical = value; };
+            abandonHistCheck.eventCheckChanged += (c, value) => { ModSettings.NoAbandonHistorical = value; };
             currentY += abandonHistCheck.height + Margin;
 
             UICheckBox abandonAnyCheck = UICheckBoxes.AddPlainCheckBox(this, Margin, currentY, Translations.Translate("ABLC_OPT_ANA"), checkLabelWidth);
             abandonAnyCheck.isChecked = ModSettings.NoAbandonAny;
-            abandonAnyCheck.eventCheckChanged += (control, value) => { ModSettings.NoAbandonAny = value; };
+            abandonAnyCheck.eventCheckChanged += (c, value) => { ModSettings.NoAbandonAny = value; };
             currentY += abandonAnyCheck.height + Margin;
 
             UICheckBox randomLevelCheck = UICheckBoxes.AddPlainCheckBox(this, Margin, currentY, Translations.Translate("ABLC_OPT_RND"), checkLabelWidth);
             randomLevelCheck.isChecked = ModSettings.RandomLevels;
-            randomLevelCheck.eventCheckChanged += (control, value) => { ModSettings.RandomLevels = value; };
+            randomLevelCheck.eventCheckChanged += (c, value) => { ModSettings.RandomLevels = value; };
             currentY += randomLevelCheck.height + Margin;
+
+            UICheckBox upgradeWithoutTargetCheck = UICheckBoxes.AddPlainCheckBox(this, Margin, currentY, Translations.Translate("ABLC_OPT_UWT"), checkLabelWidth);
+            upgradeWithoutTargetCheck.isChecked = ModSettings.UpgradeWithoutTarget;
+            upgradeWithoutTargetCheck.eventCheckChanged += (c, value) => { ModSettings.UpgradeWithoutTarget = value; };
+            currentY += upgradeWithoutTargetCheck.height + Margin;
 
             UICheckBox loadLevelCheck = UICheckBoxes.AddPlainCheckBox(this, Margin, currentY, Translations.Translate("ABLC_OPT_CLL"), checkLabelWidth);
             loadLevelCheck.isChecked = ModSettings.LoadLevelCheck;
-            loadLevelCheck.eventCheckChanged += (control, value) => { ModSettings.LoadLevelCheck = value; };
+            loadLevelCheck.eventCheckChanged += (c, value) => { ModSettings.LoadLevelCheck = value; };
             currentY += loadLevelCheck.height + Margin;
         }
     }
