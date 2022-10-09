@@ -1,4 +1,7 @@
-﻿- Add option to allow buildings to upgrade as if historical if no other target prefab is available
+﻿Version 1.2.2 -
+
+
+- Add option to allow buildings to upgrade as if historical if no other target prefab is available
 
 
 Version 1.2.1.1 -
