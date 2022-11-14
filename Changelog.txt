@@ -1,4 +1,9 @@
-﻿Version 1.2.2 -
+﻿Version 1.2.3 -
+
+- Update AlgernonCommons
+
+
+Version 1.2.2 -
 
 - Add option to allow buildings to upgrade as if historical if no other target prefab is available
 
