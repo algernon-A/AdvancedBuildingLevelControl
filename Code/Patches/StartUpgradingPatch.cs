@@ -34,7 +34,7 @@ namespace ABLC
         }
 
         /// <summary>
-        /// Harmony postfix for PrivateBuildingAI.StartUpgrading to remove temporary 'historical' status applied by prefix./
+        /// Harmony postfix for PrivateBuildingAI.StartUpgrading to remove temporary 'historical' status applied by prefix.
         /// </summary>
         /// <param name="buildingData">Building data reference.</param>
         /// <param name="__state">Flag from prefix indicating whether 'historical' flag was artificially set.</param>
