@@ -1,4 +1,8 @@
-﻿- Implement common translations
+﻿Version 1.2.4 -
+
+- Add support for financial office buildings
+- Add detailed debugging logging option
+- Implement common translations
 
 
 Version 1.2.3 -

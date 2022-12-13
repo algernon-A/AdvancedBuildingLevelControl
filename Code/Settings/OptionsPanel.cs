@@ -5,6 +5,7 @@
 
 namespace ABLC
 {
+    using AlgernonCommons;
     using AlgernonCommons.Translation;
     using AlgernonCommons.UI;
     using ColossalFramework.UI;
@@ -82,7 +83,12 @@ namespace ABLC
             UICheckBox loadLevelCheck = UICheckBoxes.AddPlainCheckBox(this, Margin, currentY, Translations.Translate("ABLC_OPT_CLL"), checkLabelWidth);
             loadLevelCheck.isChecked = ModSettings.LoadLevelCheck;
             loadLevelCheck.eventCheckChanged += (c, value) => { ModSettings.LoadLevelCheck = value; };
-            currentY += loadLevelCheck.height + Margin;
+            currentY += loadLevelCheck.height + GroupMargin;
+
+            // Logging checkbox.
+            UICheckBox loggingCheck = UICheckBoxes.AddPlainCheckBox(this, Margin, currentY, Translations.Translate("DETAIL_LOGGING"));
+            loggingCheck.isChecked = Logging.DetailLogging;
+            loggingCheck.eventCheckChanged += (c, isChecked) => { Logging.DetailLogging = isChecked; };
         }
     }
 }

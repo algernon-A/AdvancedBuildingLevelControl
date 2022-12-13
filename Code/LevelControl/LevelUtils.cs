@@ -42,6 +42,7 @@ namespace ABLC
                 case ItemClass.SubService.IndustrialGeneric:
                 case ItemClass.SubService.CommercialWallToWall:
                 case ItemClass.SubService.OfficeWallToWall:
+                case ItemClass.SubService.OfficeFinancial:
                     return 3;
                 case ItemClass.SubService.IndustrialFarming:
                 case ItemClass.SubService.IndustrialForestry:

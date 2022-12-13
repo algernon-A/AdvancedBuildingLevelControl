@@ -45,7 +45,7 @@ namespace ABLC
                 }
                 else
                 {
-                    Logging.Error("didn't patch Building Themes");
+                    Logging.KeyMessage("didn't patch Building Themes");
                 }
             }
             else
