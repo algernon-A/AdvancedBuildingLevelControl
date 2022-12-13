@@ -5,11 +5,9 @@
 
 namespace ABLC
 {
-    using System.Linq;
     using AlgernonCommons.Translation;
     using AlgernonCommons.UI;
     using ColossalFramework.UI;
-    using UnityEngine;
 
     /// <summary>
     /// The mod's settings options panel.
@@ -34,7 +32,7 @@ namespace ABLC
             float currentY = Margin;
 
             // Language choice.
-            UIDropDown languageDropDown = UIDropDowns.AddPlainDropDown(this, LeftMargin, currentY, Translations.Translate("TRN_CHOICE"), Translations.LanguageList, Translations.Index);
+            UIDropDown languageDropDown = UIDropDowns.AddPlainDropDown(this, LeftMargin, currentY, Translations.Translate("LANGUAGE_CHOICE"), Translations.LanguageList, Translations.Index);
             languageDropDown.eventSelectedIndexChanged += (control, index) =>
             {
                 Translations.Index = index;
