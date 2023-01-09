@@ -36,7 +36,7 @@ namespace ABLC
             }
             else
             {
-                districtInfoPanel.eventVisibilityChanged += (control, isVisible) =>
+                districtInfoPanel.eventVisibilityChanged += (c, isVisible) =>
                 {
                     if (isVisible)
                     {

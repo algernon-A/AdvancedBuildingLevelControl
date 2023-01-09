@@ -28,7 +28,7 @@ namespace ABLC
             BuildingChanged();
 
             // Add event handlers.
-            m_minLevelDropDown.eventSelectedIndexChanged += (control, index) =>
+            m_minLevelDropDown.eventSelectedIndexChanged += (c, index) =>
             {
                 // Don't do anything if events are disabled.
                 if (!m_disableEvents)
@@ -44,7 +44,7 @@ namespace ABLC
                 }
             };
 
-            m_maxLevelDropDown.eventSelectedIndexChanged += (control, index) =>
+            m_maxLevelDropDown.eventSelectedIndexChanged += (c, index) =>
             {
                 // Don't do anything if events are disabled.
                 if (!m_disableEvents)
@@ -60,7 +60,7 @@ namespace ABLC
                 }
             };
 
-            m_upgradeButton.eventClick += (control, clickEvent) =>
+            m_upgradeButton.eventClick += (c, p) =>
             {
                 // Local references for SimulationManager action.
                 ushort buildingID = m_targetID;
@@ -78,7 +78,7 @@ namespace ABLC
                 }
             };
 
-            m_downgradeButton.eventClick += (control, clickEvent) =>
+            m_downgradeButton.eventClick += (c, p) =>
             {
                 // Local references for SimulationManager action.
                 ushort buildingID = m_targetID;

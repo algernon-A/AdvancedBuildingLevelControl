@@ -48,7 +48,7 @@ namespace ABLC
             else
             {
                 // Toggle button and/or panel visibility when game building info panel visibility changes.
-                buildingInfoPanel.eventVisibilityChanged += (control, isVisible) =>
+                buildingInfoPanel.eventVisibilityChanged += (c, isVisible) =>
                 {
                     // Create / destroy our panel as and when the info panel is shown or hidden.
                     if (isVisible)
@@ -196,7 +196,7 @@ namespace ABLC
             s_panelButton.relativePosition += new Vector3(infoPanel.component.width - 62f - PanelButtonSize, relativeY, 0f);
 
             // Event handler.
-            s_panelButton.eventClick += (control, clickEvent) =>
+            s_panelButton.eventClick += (c, p) =>
             {
                 // Toggle panel visibility.
                 if (s_gameObject == null)

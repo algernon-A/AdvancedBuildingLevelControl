@@ -70,7 +70,7 @@ namespace ABLC
             DistrictChanged();
 
             // Add event handlers.
-            m_minLevelDropDown.eventSelectedIndexChanged += (control, index) =>
+            m_minLevelDropDown.eventSelectedIndexChanged += (c, index) =>
             {
                 // Don't do anything if events are disabled.
                 if (!m_disableEvents)
@@ -86,7 +86,7 @@ namespace ABLC
                 }
             };
 
-            m_maxLevelDropDown.eventSelectedIndexChanged += (control, index) =>
+            m_maxLevelDropDown.eventSelectedIndexChanged += (c, index) =>
             {
                 // Don't do anything if events are disabled.
                 if (!m_disableEvents)
@@ -102,7 +102,7 @@ namespace ABLC
                 }
             };
 
-            _minWorkLevelDropDown.eventSelectedIndexChanged += (control, index) =>
+            _minWorkLevelDropDown.eventSelectedIndexChanged += (c, index) =>
             {
                 // Don't do anything if events are disabled.
                 if (!m_disableEvents)
@@ -118,7 +118,7 @@ namespace ABLC
                 }
             };
 
-            _maxWorkLevelDropDown.eventSelectedIndexChanged += (control, index) =>
+            _maxWorkLevelDropDown.eventSelectedIndexChanged += (c, index) =>
             {
                 // Don't do anything if events are disabled.
                 if (!m_disableEvents)
@@ -134,7 +134,7 @@ namespace ABLC
                 }
             };
 
-            _randomSpawnCheck.eventCheckChanged += (control, isChecked) =>
+            _randomSpawnCheck.eventCheckChanged += (c, isChecked) =>
             {
                 // Don't do anything if events are disabled.
                 if (!m_disableEvents)
@@ -144,7 +144,7 @@ namespace ABLC
                 }
             };
 
-            _spawnHistoricalCheck.eventCheckChanged += (control, isChecked) =>
+            _spawnHistoricalCheck.eventCheckChanged += (c, isChecked) =>
             {
                 // Don't do anything if events are disabled.
                 if (!m_disableEvents)
@@ -154,13 +154,13 @@ namespace ABLC
                 }
             };
 
-            m_upgradeButton.eventClicked += (control, clickEvent) =>
+            m_upgradeButton.eventClicked += (c, p) =>
             {
                 Singleton<SimulationManager>.instance.AddAction(() =>
                     LevelDistrict(m_targetID, true));
             };
 
-            m_downgradeButton.eventClicked += (control, clickEvent) =>
+            m_downgradeButton.eventClicked += (c, p) =>
             {
                 Singleton<SimulationManager>.instance.AddAction(() =>
                     LevelDistrict(m_targetID, false));
