@@ -1,4 +1,7 @@
-﻿Version 1.2.4 -
+﻿- Update AlgernonCommons
+
+
+Version 1.2.4 -
 
 - Add support for financial office buildings
 - Add detailed debugging logging option

@@ -13,7 +13,7 @@ namespace ABLC
     /// <summary>
     /// The mod's settings options panel.
     /// </summary>
-    public class OptionsPanel : UIPanel
+    public class OptionsPanel : OptionsPanelBase
     {
         // Layout constants.
         private const float Margin = 5f;
@@ -22,9 +22,9 @@ namespace ABLC
         private const float GroupMargin = 40f;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="OptionsPanel"/> class.
+        /// Performs on-demand panel setup.
         /// </summary>
-        internal OptionsPanel()
+        protected override void Setup()
         {
             float headerWidth = OptionsPanelManager<OptionsPanel>.PanelWidth - (Margin * 2f);
             float checkLabelWidth = headerWidth - 40f;

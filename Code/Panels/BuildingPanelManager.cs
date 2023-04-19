@@ -209,7 +209,7 @@ namespace ABLC
                 }
 
                 // Manually unfocus control, otherwise it can stay focused until next UI event (looks untidy).
-                control.Unfocus();
+                c.Unfocus();
             };
         }
     }
