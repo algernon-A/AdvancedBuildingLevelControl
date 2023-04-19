@@ -75,6 +75,11 @@ namespace ABLC
             randomLevelCheck.eventCheckChanged += (c, value) => { ModSettings.RandomLevels = value; };
             currentY += randomLevelCheck.height + Margin;
 
+            UICheckBox trulyRandomCheck = UICheckBoxes.AddPlainCheckBox(this, Margin, currentY, Translations.Translate("ABLC_OPT_TRN"), checkLabelWidth);
+            trulyRandomCheck.isChecked = LevelUtils.TrulyRandom;
+            trulyRandomCheck.eventCheckChanged += (c, value) => { LevelUtils.TrulyRandom = value; };
+            currentY += trulyRandomCheck.height + Margin;
+
             UICheckBox upgradeWithoutTargetCheck = UICheckBoxes.AddPlainCheckBox(this, Margin, currentY, Translations.Translate("ABLC_OPT_UWT"), checkLabelWidth);
             upgradeWithoutTargetCheck.isChecked = ModSettings.UpgradeWithoutTarget;
             upgradeWithoutTargetCheck.eventCheckChanged += (c, value) => { ModSettings.UpgradeWithoutTarget = value; };

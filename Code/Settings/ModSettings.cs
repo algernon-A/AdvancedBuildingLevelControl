@@ -68,6 +68,12 @@ namespace ABLC
         public bool XMLRandomLevels { get => RandomLevels; set => RandomLevels = value; }
 
         /// <summary>
+        /// Gets or sets a value indicating whether building-related randomizers should be seeded with random seeds (true) or building IDs (false, game default).
+        /// </summary>
+        [XmlElement("TrueRandom")]
+        public bool XMLTrueRandom { get => LevelUtils.TrulyRandom; set => LevelUtils.TrulyRandom = value; }
+
+        /// <summary>
         /// Gets or sets a value indicating whether non-historical buildings can still upgrade (as if they were historical) when there's no eligible target prefab.
         /// </summary>
         [XmlElement("UpgradeWithoutTarget")]

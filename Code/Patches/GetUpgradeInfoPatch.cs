@@ -63,7 +63,7 @@ namespace ABLC
             else
             {
                 finalLevel = (ItemClass.Level)data.m_level + 1;
-                r = new Randomizer(buildingID);
+                r = LevelUtils.GetRandomizer(buildingID);
             }
 
             // Get target info.

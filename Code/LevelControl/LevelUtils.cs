@@ -15,11 +15,23 @@ namespace ABLC
     internal static class LevelUtils
     {
         /// <summary>
+        /// Gets or sets a value indicating whether building-related randomizers should be seeded with random seeds (true) or building IDs (false, game default).
+        /// </summary>
+        internal static bool TrulyRandom { get; set; } = false;
+
+        /// <summary>
         /// Returns the maximum building level of a given building, based on subclass (1-based).
         /// </summary>
         /// <param name="buildingID">Building ID.</param>
         /// <returns>Maximum building level (1-based).</returns>
         internal static byte GetMaxLevel(ushort buildingID) => GetMaxLevel(Singleton<BuildingManager>.instance.m_buildings.m_buffer[buildingID].Info.m_class.m_subService);
+
+        /// <summary>
+        /// Gets a randomizer seeded according to current settings.
+        /// </summary>
+        /// <param name="buildingID">Building ID.</param>
+        /// <returns>New seeded randomizer.</returns>
+        internal static Randomizer GetRandomizer(ushort buildingID) => TrulyRandom ? new Randomizer(Singleton<SimulationManager>.instance.m_randomizer.ULong64()) : new Randomizer(buildingID);
 
         /// <summary>
         /// Returns the maximum building level of a given building, based on subclass (1-based).
@@ -186,7 +198,7 @@ namespace ABLC
             else
             {
                 // Not randomizing levels - need to initialize randomizer.
-                r = new Randomizer(buildingID);
+                r = GetRandomizer(buildingID);
             }
 
             // Get new building target, if we can.
@@ -212,7 +224,7 @@ namespace ABLC
         internal static ItemClass.Level GetRandomLevel(BuildingInfo buildingInfo, ushort buildingID, byte targetLevel, out Randomizer r)
         {
             // Randomize building level.
-            r = new Randomizer(buildingID);
+            r = GetRandomizer(buildingID);
             for (int i = 0; i < targetLevel; ++i)
             {
                 r.Int32(1000u);
