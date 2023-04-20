@@ -20,10 +20,23 @@ namespace ABLC
         private byte _downgradeLevel;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="BuildingPanel"/> class.
+        /// Gets or sets a value indicating whether an update is ready.
         /// </summary>
-        internal BuildingPanel()
+        internal bool UpdateReady { get; set; } = false;
+
+        /// <summary>
+        /// Gets the panel height.
+        /// </summary>
+        protected override float PanelHeight => 220f;
+
+        /// <summary>
+        /// Called by Unity when the object is created.
+        /// Used to perform setup.
+        /// </summary>
+        public override void Awake()
         {
+            base.Awake();
+
             // Set initial building.
             BuildingChanged();
 
@@ -109,16 +122,6 @@ namespace ABLC
                 BuildingPanelManager.Close();
             };
         }
-
-        /// <summary>
-        /// Gets or sets a value indicating whether an update is ready.
-        /// </summary>
-        internal bool UpdateReady { get; set; } = false;
-
-        /// <summary>
-        /// Gets the panel height.
-        /// </summary>
-        protected override float PanelHeight => 220f;
 
         /// <summary>
         /// Called by Unity every tick.  Used here to check to see if we need to update the panel after a building has been updated via the simulation thread.

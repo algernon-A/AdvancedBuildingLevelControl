@@ -16,18 +16,41 @@ namespace ABLC
     internal class DistrictPanel : ABLCPanel
     {
         // Panel components.
-        private readonly UIDropDown _minWorkLevelDropDown;
-        private readonly UIDropDown _maxWorkLevelDropDown;
-        private readonly UICheckBox _randomSpawnCheck;
-        private readonly UICheckBox _spawnHistoricalCheck;
-        private readonly UIButton _makeHistoricalButton;
-        private readonly UIButton _removeHistoricalButton;
+        private UIDropDown _minWorkLevelDropDown;
+        private UIDropDown _maxWorkLevelDropDown;
+        private UICheckBox _randomSpawnCheck;
+        private UICheckBox _spawnHistoricalCheck;
+        private UIButton _makeHistoricalButton;
+        private UIButton _removeHistoricalButton;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="DistrictPanel"/> class.
+        /// Gets the minimum level dropdown tooltip.
         /// </summary>
-        internal DistrictPanel()
+        protected override string MinLevelTip => Translations.Translate("ABLC_CAT_RMN_TIP");
+
+        /// <summary>
+        /// Gets the maximum level dropdown tooltip.
+        /// </summary>
+        protected override string MaxLevelTip => Translations.Translate("ABLC_CAT_RMX_TIP");
+
+        /// <summary>
+        /// Gets the upgrade button tooltip.
+        /// </summary>
+        protected override string UpgradeTip => Translations.Translate("ABLC_TRIG_UPD_TIP");
+
+        /// <summary>
+        /// Gets the downgrade button tooltip.
+        /// </summary>
+        protected override string DowngradeTip => Translations.Translate("ABLC_TRIG_DWD_TIP");
+
+        /// <summary>
+        /// Called by Unity when the object is created.
+        /// Used to perform setup.
+        /// </summary>
+        public override void Awake()
         {
+            base.Awake();
+
             // Add category labels.
             UILabels.AddLabel(this, Margin, 50f, Translations.Translate("ABLC_CAT_RES"), this.width, 0.8f, UIHorizontalAlignment.Left);
             UILabels.AddLabel(this, Margin, 140f, Translations.Translate("ABLC_CAT_WRK"), this.width, 0.8f, UIHorizontalAlignment.Left);
@@ -166,26 +189,6 @@ namespace ABLC
                     LevelDistrict(m_targetID, false));
             };
         }
-
-        /// <summary>
-        /// Gets the minimum level dropdown tooltip.
-        /// </summary>
-        protected override string MinLevelTip => Translations.Translate("ABLC_CAT_RMN_TIP");
-
-        /// <summary>
-        /// Gets the maximum level dropdown tooltip.
-        /// </summary>
-        protected override string MaxLevelTip => Translations.Translate("ABLC_CAT_RMX_TIP");
-
-        /// <summary>
-        /// Gets the upgrade button tooltip.
-        /// </summary>
-        protected override string UpgradeTip => Translations.Translate("ABLC_TRIG_UPD_TIP");
-
-        /// <summary>
-        /// Gets the downgrade button tooltip.
-        /// </summary>
-        protected override string DowngradeTip => Translations.Translate("ABLC_TRIG_DWD_TIP");
 
         /// <summary>
         /// Called when the selected district has changed.

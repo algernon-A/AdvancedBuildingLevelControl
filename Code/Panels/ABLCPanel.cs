@@ -29,22 +29,22 @@ namespace ABLC
         /// <summary>
         /// Minimum level dropdown.
         /// </summary>
-        protected readonly UIDropDown m_minLevelDropDown;
+        protected UIDropDown m_minLevelDropDown;
 
         /// <summary>
         /// Maximum level dropdown.
         /// </summary>
-        protected readonly UIDropDown m_maxLevelDropDown;
+        protected UIDropDown m_maxLevelDropDown;
 
         /// <summary>
         /// Upgrade button.
         /// </summary>
-        protected readonly UIButton m_upgradeButton;
+        protected UIButton m_upgradeButton;
 
         /// <summary>
         /// Downgrade button.
         /// </summary>
-        protected readonly UIButton m_downgradeButton;
+        protected UIButton m_downgradeButton;
 
         /// <summary>
         /// Target ID.
@@ -62,10 +62,13 @@ namespace ABLC
         protected UILabel m_nameLabel;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="ABLCPanel"/> class.
+        /// Called by Unity when the object is created.
+        /// Used to perform setup.
         /// </summary>
-        internal ABLCPanel()
+        public override void Awake()
         {
+            base.Awake();
+
             // Basic setup.
             autoLayout = false;
             backgroundSprite = "MenuPanel2";
@@ -94,10 +97,10 @@ namespace ABLC
             m_maxLevelDropDown = UIDropDowns.AddLabelledDropDown(this, width - Margin - MenuWidth, 100f, Translations.Translate("ABLC_LVL_MAX"), 60f, accomodateLabel: false, tooltip: MaxLevelTip);
             m_maxLevelDropDown.items = new string[] { "1", "2", "3", "4", "5" };
 
-            // Apply button.
+            // Upgrade button.
             m_upgradeButton = UIButtons.AddButton(this, Margin, PanelHeight - 80f, Translations.Translate("ABLC_TRIG_UP"), this.width - (Margin * 2), tooltip: UpgradeTip);
 
-            // Add 'downgrade' button.
+            // Downgrade button.
             m_downgradeButton = UIButtons.AddButton(this, Margin, PanelHeight - 40f, Translations.Translate("ABLC_TRIG_DWN"), this.width - (Margin * 2), tooltip: DowngradeTip);
         }
 
