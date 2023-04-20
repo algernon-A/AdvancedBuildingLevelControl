@@ -29,6 +29,9 @@ namespace ABLC
         {
             byte maxLevel = LevelUtils.GetMaxLevel(buildingID);
 
+            // Reset building seed.
+            LevelUtils.ClearBuildingSeed(buildingID);
+
             // Check against maxLevel (m_level is zero-based, maxLevel is 1-based, so >= to catch overflows).
             if (data.m_level >= maxLevel)
             {

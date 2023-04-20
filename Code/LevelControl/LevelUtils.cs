@@ -5,6 +5,7 @@
 
 namespace ABLC
 {
+    using System.Collections.Generic;
     using AlgernonCommons;
     using ColossalFramework;
     using ColossalFramework.Math;
@@ -14,6 +15,9 @@ namespace ABLC
     /// </summary>
     internal static class LevelUtils
     {
+        // Dictionary of random seeds for buildings.
+        private static readonly Dictionary<ushort, ulong> BuildingSeeds = new Dictionary<ushort, ulong>();
+
         /// <summary>
         /// Gets or sets a value indicating whether building-related randomizers should be seeded with random seeds (true) or building IDs (false, game default).
         /// </summary>
@@ -27,11 +31,41 @@ namespace ABLC
         internal static byte GetMaxLevel(ushort buildingID) => GetMaxLevel(Singleton<BuildingManager>.instance.m_buildings.m_buffer[buildingID].Info.m_class.m_subService);
 
         /// <summary>
+        /// Clears any recorded building seed for the specified building, permitting generation of a new seed.
+        /// </summary>
+        /// <param name="buildingID">Building ID.</param>
+        internal static void ClearBuildingSeed(ushort buildingID)
+        {
+            if (TrulyRandom)
+            {
+                BuildingSeeds.Remove(buildingID);
+            }
+        }
+
+        /// <summary>
         /// Gets a randomizer seeded according to current settings.
         /// </summary>
         /// <param name="buildingID">Building ID.</param>
         /// <returns>New seeded randomizer.</returns>
-        internal static Randomizer GetRandomizer(ushort buildingID) => TrulyRandom ? new Randomizer(Singleton<SimulationManager>.instance.m_randomizer.ULong64()) : new Randomizer(buildingID);
+        internal static Randomizer GetRandomizer(ushort buildingID)
+        {
+            if (TrulyRandom)
+            {
+                // See if we've already recorded a seed for this building.
+                if (!BuildingSeeds.TryGetValue(buildingID, out ulong seed))
+                {
+                    // No existing seed - create one and record it.
+                    seed = Singleton<SimulationManager>.instance.m_randomizer.ULong64();
+                    BuildingSeeds.Add(buildingID, seed);
+                }
+
+                // Return seeded randomizer.
+                return new Randomizer(seed);
+            }
+
+            // Default game behaviour is a randomizer seeded with the building ID.
+            return new Randomizer(buildingID);
+        }
 
         /// <summary>
         /// Returns the maximum building level of a given building, based on subclass (1-based).
@@ -261,6 +295,9 @@ namespace ABLC
             int homeCount = buildingAI.CalculateHomeCount((ItemClass.Level)data.m_level, new Randomizer(buildingID), data.Width, data.Length);
             int visitCount = buildingAI.CalculateVisitplaceCount((ItemClass.Level)data.m_level, new Randomizer(buildingID), data.Width, data.Length);
             ReversePatches.EnsureCitizenUnits(buildingAI, buildingID, ref data, homeCount, workCount, visitCount, 0);
+
+            // Reset building seed.
+            ClearBuildingSeed(buildingID);
         }
     }
 }
