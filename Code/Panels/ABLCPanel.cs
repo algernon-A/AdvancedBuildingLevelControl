@@ -61,6 +61,34 @@ namespace ABLC
         /// </summary>
         protected UILabel m_nameLabel;
 
+        // Layout constants - private.
+        private const float IconButtonSize = 30f;
+
+        /// <summary>
+        /// Gets the panel height.
+        /// </summary>
+        protected virtual float PanelHeight => 310f;
+
+        /// <summary>
+        /// Gets the minimum level dropdown tooltip.
+        /// </summary>
+        protected virtual string MinLevelTip => Translations.Translate("ABLC_LVL_MIN_TIP");
+
+        /// <summary>
+        /// Gets the maximum level dropdown tooltip.
+        /// </summary>
+        protected virtual string MaxLevelTip => Translations.Translate("ABLC_LVL_MAX_TIP");
+
+        /// <summary>
+        /// Gets the upgrade button tooltip.
+        /// </summary>
+        protected virtual string UpgradeTip => Translations.Translate("ABLC_TRIG_UPB_TIP");
+
+        /// <summary>
+        /// Gets the downgrade button tooltip.
+        /// </summary>
+        protected virtual string DowngradeTip => Translations.Translate("ABLC_TRIG_DWB_TIP");
+
         /// <summary>
         /// Called by Unity when the object is created.
         /// Used to perform setup.
@@ -98,35 +126,49 @@ namespace ABLC
             m_maxLevelDropDown.items = new string[] { "1", "2", "3", "4", "5" };
 
             // Upgrade button.
-            m_upgradeButton = UIButtons.AddButton(this, Margin, PanelHeight - 80f, Translations.Translate("ABLC_TRIG_UP"), this.width - (Margin * 2), tooltip: UpgradeTip);
+            m_upgradeButton = AddIconButton(Margin, PanelHeight - 40f, "BuildingNotificationArrowup", UpgradeTip);
 
             // Downgrade button.
-            m_downgradeButton = UIButtons.AddButton(this, Margin, PanelHeight - 40f, Translations.Translate("ABLC_TRIG_DWN"), this.width - (Margin * 2), tooltip: DowngradeTip);
+            m_downgradeButton = AddIconButton(Margin + 40f, PanelHeight - 40f, "BuildingNotificationArrowdown", DowngradeTip);
         }
 
         /// <summary>
-        /// Gets the panel height.
+        /// Adds an icon button at the specified coordinates using the InGame atlas.
         /// </summary>
-        protected virtual float PanelHeight => 350f;
+        /// <param name="xPos">Relative X position.</param>
+        /// <param name="yPos">Relative Y position.</param>
+        /// <param name="spriteName">Foreground sprite name.</param>
+        /// <param name="tooltip">Button tooltip.</param>
+        /// <returns>New UIButton.</returns>
+        protected UIButton AddIconButton(float xPos, float yPos, string spriteName, string tooltip)
+        {
+            UIButton button = AddUIComponent<UIButton>();
 
-        /// <summary>
-        /// Gets the minimum level dropdown tooltip.
-        /// </summary>
-        protected virtual string MinLevelTip => Translations.Translate("ABLC_LVL_MIN_TIP");
+            // Size and position.
+            button.relativePosition = new Vector2(xPos, yPos);
+            button.height = IconButtonSize;
+            button.width = IconButtonSize;
 
-        /// <summary>
-        /// Gets the maximum level dropdown tooltip.
-        /// </summary>
-        protected virtual string MaxLevelTip => Translations.Translate("ABLC_LVL_MAX_TIP");
+            // Set sprites.
+            button.atlas = UITextures.InGameAtlas;
+            button.normalFgSprite = spriteName;
+            button.focusedFgSprite = spriteName;
+            button.hoveredFgSprite = spriteName;
+            button.disabledFgSprite = "GenericTabDisabled";
+            button.pressedFgSprite = "spriteName";
+            button.normalBgSprite = "IconPolicyBaseRect";
+            button.hoveredBgSprite = "IconPolicyBaseRectPressed";
+            button.focusedBgSprite = "IconPolicyBaseRect";
+            button.pressedBgSprite = "IconPolicyBaseRectFocused";
+            button.disabledBgSprite = "IconPolicyBaseRectDisabled";
 
-        /// <summary>
-        /// Gets the upgrade button tooltip.
-        /// </summary>
-        protected virtual string UpgradeTip => Translations.Translate("ABLC_TRIG_UPB_TIP");
+            // Tooltip.
+            if (tooltip != null)
+            {
+                button.tooltip = tooltip;
+            }
 
-        /// <summary>
-        /// Gets the downgrade button tooltip.
-        /// </summary>
-        protected virtual string DowngradeTip => Translations.Translate("ABLC_TRIG_DWB_TIP");
+            return button;
+        }
     }
 }

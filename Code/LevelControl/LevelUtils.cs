@@ -46,10 +46,11 @@ namespace ABLC
         /// Gets a randomizer seeded according to current settings.
         /// </summary>
         /// <param name="buildingID">Building ID.</param>
+        /// <param name="forceTrueRandom">Set to <c>true</c> to force true randomization regardless of mod settings.</param>
         /// <returns>New seeded randomizer.</returns>
-        internal static Randomizer GetRandomizer(ushort buildingID)
+        internal static Randomizer GetRandomizer(ushort buildingID, bool forceTrueRandom = false)
         {
-            if (TrulyRandom)
+            if (forceTrueRandom || TrulyRandom)
             {
                 // See if we've already recorded a seed for this building.
                 if (!BuildingSeeds.TryGetValue(buildingID, out ulong seed))
@@ -227,7 +228,7 @@ namespace ABLC
             if (ModSettings.RandomLevels)
             {
                 // Randomize building level.
-                finalLevel = GetRandomLevel(thisBuilding.Info, buildingID, targetLevel, out r);
+                finalLevel = GetRandomLevel(thisBuilding.Info, buildingID, targetLevel, false, out r);
             }
             else
             {
@@ -253,12 +254,13 @@ namespace ABLC
         /// <param name="buildingInfo">Original (current) building prefab.</param>
         /// <param name="buildingID">Building ID.</param>
         /// <param name="targetLevel">Target building level.</param>
+        /// <param name="forceTrueRandom">Set to <c>true</c> to force true randomization regardless of mod settings.</param>
         /// <param name="r">Randomizer used for allocation.</param>
         /// <returns>Randomized building level.</returns>
-        internal static ItemClass.Level GetRandomLevel(BuildingInfo buildingInfo, ushort buildingID, byte targetLevel, out Randomizer r)
+        internal static ItemClass.Level GetRandomLevel(BuildingInfo buildingInfo, ushort buildingID, byte targetLevel, bool forceTrueRandom, out Randomizer r)
         {
             // Randomize building level.
-            r = GetRandomizer(buildingID);
+            r = GetRandomizer(buildingID, forceTrueRandom);
             for (int i = 0; i < targetLevel; ++i)
             {
                 r.Int32(1000u);

@@ -21,6 +21,9 @@
 "ABLC_TRIG_UP","Force upgrade"
 "ABLC_TRIG_UPB_TIP","Forces this building to upgrade to the specified minimum."
 "ABLC_TRIG_UPD_TIP","Forces all buildings in this district with levels below the specified minimum to upgrade to that minimum."
+"BUILDING_UPGRADE","Upgrade this building by one level.";
+"BUILDING_DOWNGRADE","Downgrade this building by one level."
+"BUILDING_RANDOM","Randomize building appearance."
 "ABLC_TRIG_DWN","Force downgrade"
 "ABLC_TRIG_DWB_TIP","Forces this building to downgrade to the specified maximum."
 "ABLC_TRIG_DWD_TIP","Forces all buildings in this district with levels above the specified maximum to downgrade to that maximum."

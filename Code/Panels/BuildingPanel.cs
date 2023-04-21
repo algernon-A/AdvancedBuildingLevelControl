@@ -6,7 +6,10 @@
 namespace ABLC
 {
     using AlgernonCommons;
+    using AlgernonCommons.Translation;
+    using AlgernonCommons.UI;
     using ColossalFramework;
+    using ColossalFramework.Math;
     using ColossalFramework.UI;
     using UnityEngine;
 
@@ -27,7 +30,17 @@ namespace ABLC
         /// <summary>
         /// Gets the panel height.
         /// </summary>
-        protected override float PanelHeight => 220f;
+        protected override float PanelHeight => 180f;
+
+        /// <summary>
+        /// Gets the upgrade button tooltip.
+        /// </summary>
+        protected override string UpgradeTip => Translations.Translate("BUILDING_UPGRADE");
+
+        /// <summary>
+        /// Gets the downgrade button tooltip.
+        /// </summary>
+        protected override string DowngradeTip => Translations.Translate("BUILDING_DOWNGRADE");
 
         /// <summary>
         /// Called by Unity when the object is created.
@@ -36,6 +49,19 @@ namespace ABLC
         public override void Awake()
         {
             base.Awake();
+
+            // Add randomize appearance button (no foreground sprite).
+            UIButton randomButton = AddIconButton(Margin + 80f, PanelHeight - 40f, string.Empty, Translations.Translate("BUILDING_RANDOM"));
+            randomButton.eventClick += (c, p) => Singleton<SimulationManager>.instance.AddAction(() => RandomizeAppearance(m_targetID));
+
+            // Add foreground sprite for randomize appearance button.
+            UISprite sprite = AddUIComponent<UISprite>();
+            sprite.atlas = UITextures.InGameAtlas;
+            sprite.spriteName = "Random";
+            sprite.relativePosition = randomButton.relativePosition - new Vector3(33f, 11f);
+            sprite.width = 93f;
+            sprite.height = 55f;
+            sprite.isInteractive = false;
 
             // Set initial building.
             BuildingChanged();
@@ -271,6 +297,53 @@ namespace ABLC
 
                 // Update the panel.
                 BuildingChanged();
+            }
+        }
+
+        /// <summary>
+        /// Randomizes the appearance of the given building, leaving the level unchanged.
+        /// Should only be called via the simulation thread.
+        /// </summary>
+        /// <param name="buildingID">Building ID.</param>
+        private void RandomizeAppearance(ushort buildingID)
+        {
+            // Local references.
+            BuildingManager buildingManager = Singleton<BuildingManager>.instance;
+            Building[] buildings = buildingManager.m_buildings.m_buffer;
+            ref Building building = ref buildings[buildingID];
+            BuildingInfo buildingInfo = building.Info;
+
+            // If a private AI building, select a new random prefab.
+            if (buildingInfo?.m_buildingAI is PrivateBuildingAI buildingAI)
+            {
+                // Apply level randomization, if applicable forcing true randomziation regardless of mod settings.
+                ItemClass.Level finalLevel;
+                Randomizer r;
+                if (ModSettings.RandomLevels)
+                {
+                    // Random target level.
+                    finalLevel = LevelUtils.GetRandomLevel(buildingInfo, buildingID, building.m_level, true, out r);
+                }
+                else
+                {
+                    // Static target level.
+                    finalLevel = (ItemClass.Level)building.m_level;
+
+                    // Get true random randomizer.
+                    r = LevelUtils.GetRandomizer(buildingID, true);
+                }
+
+                // Select random info, respecting district styles.
+                BuildingInfo targetInfo = GetUpgradeInfoPatch.GetRandomInfo(buildingAI, finalLevel, ref building, ref r);
+
+                // Update building info.
+                if (targetInfo != null)
+                {
+                    buildingManager.UpdateBuildingInfo(buildingID, buildingAI.GetUpgradeInfo(buildingID, ref buildings[m_targetID]));
+                }
+
+                // Reset building seed.
+                LevelUtils.ClearBuildingSeed(buildingID);
             }
         }
     }

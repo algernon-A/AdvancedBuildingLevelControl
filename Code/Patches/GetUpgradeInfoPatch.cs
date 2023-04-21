@@ -58,7 +58,7 @@ namespace ABLC
             Randomizer r;
             if (ModSettings.RandomLevels)
             {
-                finalLevel = LevelUtils.GetRandomLevel(__instance.m_info, buildingID, (byte)(data.m_level + 1), out r);
+                finalLevel = LevelUtils.GetRandomLevel(__instance.m_info, buildingID, (byte)(data.m_level + 1), false, out r);
             }
             else
             {
@@ -67,39 +67,7 @@ namespace ABLC
             }
 
             // Get target info.
-            DistrictManager instance = Singleton<DistrictManager>.instance;
-            byte district = instance.GetDistrict(data.m_position);
-            ushort style = instance.m_districts.m_buffer[district].m_Style;
-
-            // Are we using Building Themes?
-            if (s_buildingTheme != null)
-            {
-                // Yes - get result via delegate to Building Themes' method.
-                __result = s_buildingTheme(
-                    data.m_position,
-                    data.m_infoIndex,
-                    ref r,
-                    __instance.m_info.m_class.m_service,
-                    __instance.m_info.m_class.m_subService,
-                    finalLevel,
-                    data.Width,
-                    data.Length,
-                    __instance.m_info.m_zoningMode,
-                    style);
-            }
-            else
-            {
-                // No - get result via base-game method.
-                __result = Singleton<BuildingManager>.instance.GetRandomBuildingInfo(
-                    ref r,
-                    __instance.m_info.m_class.m_service,
-                    __instance.m_info.m_class.m_subService,
-                    finalLevel,
-                    data.Width,
-                    data.Length,
-                    __instance.m_info.m_zoningMode,
-                    style);
-            }
+            __result = GetRandomInfo(__instance, finalLevel, ref data, ref r);
 
             // Allow upgrade using existing prefab if the upgrade-without-target setting is enabled.
             if (ModSettings.UpgradeWithoutTarget && __result == null)
@@ -109,6 +77,52 @@ namespace ABLC
 
             // Don't execute original method.
             return false;
+        }
+
+        /// <summary>
+        /// Selects a random target BuildingInfo for the given building, taking into account whether or not Building Themes is in use.
+        /// </summary>
+        /// <param name="buildingAI">Private building AI.</param>
+        /// <param name="targetLevel">Target building level.</param>
+        /// <param name="data">Building data reference.</param>
+        /// <param name="r">Randomizer to use.</param>
+        /// <returns>Selected target <see cref="BuildingInfo"/>, or <c>null</c> if none.</returns>
+        internal static BuildingInfo GetRandomInfo(PrivateBuildingAI buildingAI, ItemClass.Level targetLevel, ref Building data, ref Randomizer r)
+        {
+            // Get target info.
+            DistrictManager instance = Singleton<DistrictManager>.instance;
+            byte district = instance.GetDistrict(data.m_position);
+            ushort style = instance.m_districts.m_buffer[district].m_Style;
+
+            // Are we using Building Themes?
+            if (s_buildingTheme != null)
+            {
+                // Yes - get result via delegate to Building Themes' method.
+                return s_buildingTheme(
+                    data.m_position,
+                    data.m_infoIndex,
+                    ref r,
+                    buildingAI.m_info.m_class.m_service,
+                    buildingAI.m_info.m_class.m_subService,
+                    targetLevel,
+                    data.Width,
+                    data.Length,
+                    buildingAI.m_info.m_zoningMode,
+                    style);
+            }
+            else
+            {
+                // No - get result via base-game method.
+                return Singleton<BuildingManager>.instance.GetRandomBuildingInfo(
+                    ref r,
+                    buildingAI.m_info.m_class.m_service,
+                    buildingAI.m_info.m_class.m_subService,
+                    targetLevel,
+                    data.Width,
+                    data.Length,
+                    buildingAI.m_info.m_zoningMode,
+                    style);
+            }
         }
     }
 }
