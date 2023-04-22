@@ -113,73 +113,10 @@ namespace ABLC
             BuildingChanged();
 
             // Add event handlers.
-            m_minLevelDropDown.eventSelectedIndexChanged += (c, index) =>
-            {
-                // Don't do anything if events are disabled.
-                if (!m_disableEvents)
-                {
-                    // Set minimum level of building in dictionary.
-                    UpdateMinLevel((byte)index);
-
-                    // If the minimum level is now greater than the maximum level, increase the maximum to match the minimum.
-                    if (index > m_maxLevelDropDown.selectedIndex)
-                    {
-                        m_maxLevelDropDown.selectedIndex = index;
-                    }
-                }
-            };
-
-            m_maxLevelDropDown.eventSelectedIndexChanged += (c, index) =>
-            {
-                // Don't do anything if events are disabled.
-                if (!m_disableEvents)
-                {
-                    // Update maximum level.
-                    UpdateMaxLevel((byte)index);
-
-                    // If the maximum level is now less than the minimum level, reduce the minimum to match the maximum.
-                    if (index < m_minLevelDropDown.selectedIndex)
-                    {
-                        m_minLevelDropDown.selectedIndex = index;
-                    }
-                }
-            };
-
-            m_upgradeButton.eventClick += (c, p) =>
-            {
-                // Local references for SimulationManager action.
-                ushort buildingID = m_targetID;
-                byte targetLevel = _upgradeLevel;
-                Logging.KeyMessage("upgrading building to level ", _upgradeLevel);
-                Singleton<SimulationManager>.instance.AddAction(() =>
-                {
-                    LevelUtils.ForceLevel(m_targetID, targetLevel);
-                });
-
-                // Check to see if we should increase this buildings maximum level.
-                if (Buildings.GetMaxLevel(m_targetID) < _upgradeLevel)
-                {
-                    m_maxLevelDropDown.selectedIndex = _upgradeLevel;
-                }
-            };
-
-            m_downgradeButton.eventClick += (c, p) =>
-            {
-                // Local references for SimulationManager action.
-                ushort buildingID = m_targetID;
-                byte targetLevel = _downgradeLevel;
-                Logging.KeyMessage("downgrading building to level ", _downgradeLevel);
-                Singleton<SimulationManager>.instance.AddAction(() =>
-                {
-                    LevelUtils.ForceLevel(m_targetID, targetLevel);
-                });
-
-                // Check to see if we should increase this buildings maximum level.
-                if (Buildings.GetMinLevel(m_targetID) > _downgradeLevel)
-                {
-                    m_minLevelDropDown.selectedIndex = _downgradeLevel;
-                }
-            };
+            m_minLevelDropDown.eventSelectedIndexChanged += (c, index) => UpdateMinLevel(index);
+            m_maxLevelDropDown.eventSelectedIndexChanged += (c, index) => UpdateMaxLevel(index);
+            m_upgradeButton.eventClick += (c, p) => Upgrade();
+            m_downgradeButton.eventClick += (c, p) => Downgrade();
 
             // Close button.
             UIButton closeButton = AddUIComponent<UIButton>();
@@ -189,10 +126,7 @@ namespace ABLC
             closeButton.pressedBgSprite = "buttonclosepressed";
 
             // Close button event handler.
-            closeButton.eventClick += (component, clickEvent) =>
-            {
-                BuildingPanelManager.Close();
-            };
+            closeButton.eventClick += (c, p) => BuildingPanelManager.Close();
         }
 
         /// <summary>
@@ -343,6 +277,88 @@ namespace ABLC
 
                 // Update the panel.
                 BuildingChanged();
+            }
+        }
+
+        /// <summary>
+        /// Updates the selected building's minimum level.
+        /// </summary>
+        /// <param name="index">New minimum level.</param>
+        private void UpdateMinLevel(int index)
+        {
+            // Don't do anything if events are disabled.
+            if (!m_disableEvents)
+            {
+                // Set minimum level of building in dictionary.
+                UpdateMinLevel((byte)index);
+
+                // If the minimum level is now greater than the maximum level, increase the maximum to match the minimum.
+                if (index > m_maxLevelDropDown.selectedIndex)
+                {
+                    m_maxLevelDropDown.selectedIndex = index;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Updates the selected building's maximum level.
+        /// </summary>
+        /// <param name="index">New maximum level.</param>
+        private void UpdateMaxLevel(int index)
+        {
+            // Don't do anything if events are disabled.
+            if (!m_disableEvents)
+            {
+                // Update maximum level.
+                UpdateMaxLevel((byte)index);
+
+                // If the maximum level is now less than the minimum level, reduce the minimum to match the maximum.
+                if (index < m_minLevelDropDown.selectedIndex)
+                {
+                    m_minLevelDropDown.selectedIndex = index;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Upgrades the selected building one level.
+        /// </summary>
+        private void Upgrade()
+        {
+            // Local references for SimulationManager action.
+            ushort buildingID = m_targetID;
+            byte targetLevel = _upgradeLevel;
+            Logging.KeyMessage("upgrading building to level ", _upgradeLevel);
+            Singleton<SimulationManager>.instance.AddAction(() =>
+            {
+                LevelUtils.ForceLevel(m_targetID, targetLevel);
+            });
+
+            // Check to see if we should increase this buildings maximum level.
+            if (Buildings.GetMaxLevel(m_targetID) < _upgradeLevel)
+            {
+                m_maxLevelDropDown.selectedIndex = _upgradeLevel;
+            }
+        }
+
+        /// <summary>
+        /// Downgrades the selected building one level.
+        /// </summary>
+        private void Downgrade()
+        {
+            // Local references for SimulationManager action.
+            ushort buildingID = m_targetID;
+            byte targetLevel = _downgradeLevel;
+            Logging.KeyMessage("downgrading building to level ", _downgradeLevel);
+            Singleton<SimulationManager>.instance.AddAction(() =>
+            {
+                LevelUtils.ForceLevel(m_targetID, targetLevel);
+            });
+
+            // Check to see if we should increase this buildings maximum level.
+            if (Buildings.GetMinLevel(m_targetID) > _downgradeLevel)
+            {
+                m_minLevelDropDown.selectedIndex = _downgradeLevel;
             }
         }
 
