@@ -27,6 +27,10 @@ namespace ABLC
         private BuildingCollapsedDelegate _buildingCollapsed;
         private BuildingCompletedDelegate _buildingCompleted;
 
+        // Panel components.
+        private UIButton _abandonButton;
+        private UIButton _collapseButton;
+
         /// <summary>
         /// Delegate to CommonBuildingAI.BuildingCollapsed protected method.
         /// </summary>
@@ -77,12 +81,12 @@ namespace ABLC
             randomButton.eventClick += (c, p) => Singleton<SimulationManager>.instance.AddAction(() => RandomizeAppearance(m_targetID));
 
             // Add abandon button (no foreground sprite).
-            UIButton abandonButton = AddIconButton(Margin + 120f, PanelHeight - 40f, string.Empty, Translations.Translate("BUILDING_ABANDON"));
-            abandonButton.eventClick += (c, p) => Singleton<SimulationManager>.instance.AddAction(() => ToggleBuildingAbandoned(m_targetID));
+            _abandonButton = AddIconButton(Margin + 120f, PanelHeight - 40f, string.Empty, Translations.Translate("BUILDING_ABANDON"));
+            _abandonButton.eventClick += (c, p) => Singleton<SimulationManager>.instance.AddAction(() => ToggleBuildingAbandoned(m_targetID));
 
             // Add collapse button (no foreground sprite).
-            UIButton collapseButton = AddIconButton(Margin + 160f, PanelHeight - 40f, string.Empty, Translations.Translate("BUILDING_COLLAPSE"));
-            collapseButton.eventClick += (c, p) => Singleton<SimulationManager>.instance.AddAction(() => ToggleBuildingCollapse(m_targetID));
+            _collapseButton = AddIconButton(Margin + 160f, PanelHeight - 40f, string.Empty, Translations.Translate("BUILDING_COLLAPSE"));
+            _collapseButton.eventClick += (c, p) => Singleton<SimulationManager>.instance.AddAction(() => ToggleBuildingCollapse(m_targetID));
 
             // Add foreground sprite for randomize appearance button.
             UISprite randomSprite = AddUIComponent<UISprite>();
@@ -97,16 +101,16 @@ namespace ABLC
             UISprite abandonSprite = AddUIComponent<UISprite>();
             abandonSprite.atlas = UITextures.LoadSingleSpriteAtlas("Abandoned");
             abandonSprite.spriteName = "normal";
-            abandonSprite.relativePosition = abandonButton.relativePosition;
-            abandonSprite.size = abandonButton.size;
+            abandonSprite.relativePosition = _abandonButton.relativePosition;
+            abandonSprite.size = _abandonButton.size;
             abandonSprite.isInteractive = false;
 
             // Add foreground sprite for collapse button.
             UISprite collapseSprite = AddUIComponent<UISprite>();
             collapseSprite.atlas = UITextures.LoadSingleSpriteAtlas("Collapsed");
             collapseSprite.spriteName = "normal";
-            collapseSprite.relativePosition = collapseButton.relativePosition;
-            collapseSprite.size = collapseButton.size;
+            collapseSprite.relativePosition = _collapseButton.relativePosition;
+            collapseSprite.size = _collapseButton.size;
             collapseSprite.isInteractive = false;
 
             // Set initial building.
@@ -205,7 +209,7 @@ namespace ABLC
         /// </summary>
         internal void UpdatePanel()
         {
-            // Make sure we have a valid builidng first.
+            // Make sure we have a valid building first.
             if (m_targetID == 0 || (Singleton<BuildingManager>.instance.m_buildings.m_buffer[m_targetID].m_flags == Building.Flags.None))
             {
                 // Invalid target - disable buttons.
@@ -244,6 +248,9 @@ namespace ABLC
                 // Yep - enable downgrade button.
                 m_downgradeButton.Enable();
             }
+
+            // Collapsed buildings can't be abandoned.
+            _abandonButton.enabled = (building.m_flags & Building.Flags.Collapsed) == 0;
         }
 
         /// <summary>
@@ -401,7 +408,7 @@ namespace ABLC
                 // Update building info.
                 if (targetInfo != null)
                 {
-                    buildingManager.UpdateBuildingInfo(buildingID, buildingAI.GetUpgradeInfo(buildingID, ref buildings[m_targetID]));
+                    buildingManager.UpdateBuildingInfo(buildingID, targetInfo);
                 }
 
                 // Reset building seed.
@@ -456,6 +463,9 @@ namespace ABLC
                 building.m_frame1.m_constructState = 0;
                 building.m_frame2.m_constructState = 0;
                 building.m_frame3.m_constructState = 0;
+
+                // Disable abandon button (can't abandon collapsed buildings).
+                _abandonButton.Disable();
             }
             else
             {
@@ -537,6 +547,10 @@ namespace ABLC
             // Trigger building completion and clear all problems.
             _buildingCompleted(buildingAI, buildingID, ref building);
             ClearBuildingProblems(buildingID, ref building);
+
+            // Re-enable buttons.
+            _abandonButton.Enable();
+            _collapseButton.Enable();
         }
 
         /// <summary>
