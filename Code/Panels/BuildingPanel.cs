@@ -113,8 +113,8 @@ namespace ABLC
             BuildingChanged();
 
             // Add event handlers.
-            m_minLevelDropDown.eventSelectedIndexChanged += (c, index) => UpdateMinLevel(index);
-            m_maxLevelDropDown.eventSelectedIndexChanged += (c, index) => UpdateMaxLevel(index);
+            m_minLevelDropDown.eventSelectedIndexChanged += (c, index) => MinLevelChanged(index);
+            m_maxLevelDropDown.eventSelectedIndexChanged += (c, index) => MaxLevelChanged(index);
             m_upgradeButton.eventClick += (c, p) => Upgrade();
             m_downgradeButton.eventClick += (c, p) => Downgrade();
 
@@ -247,7 +247,7 @@ namespace ABLC
         }
 
         /// <summary>
-        /// Updates the buildng's minimum level.
+        /// Updates the selected building's minimum level.
         /// </summary>
         /// <param name="minLevel">New minimum level.</param>
         private void UpdateMinLevel(byte minLevel)
@@ -264,7 +264,7 @@ namespace ABLC
         }
 
         /// <summary>
-        /// Updates the buildng's maximum level.
+        /// Updates the selected building's maximum level.
         /// </summary>
         /// <param name="maxLevel">New maximum level.</param>
         private void UpdateMaxLevel(byte maxLevel)
@@ -281,10 +281,10 @@ namespace ABLC
         }
 
         /// <summary>
-        /// Updates the selected building's minimum level.
+        /// Minimum level menu event handler.
         /// </summary>
         /// <param name="index">New minimum level.</param>
-        private void UpdateMinLevel(int index)
+        private void MinLevelChanged(int index)
         {
             // Don't do anything if events are disabled.
             if (!m_disableEvents)
@@ -301,10 +301,10 @@ namespace ABLC
         }
 
         /// <summary>
-        /// Updates the selected building's maximum level.
+        /// Maximum level menu event handler.
         /// </summary>
         /// <param name="index">New maximum level.</param>
-        private void UpdateMaxLevel(int index)
+        private void MaxLevelChanged(int index)
         {
             // Don't do anything if events are disabled.
             if (!m_disableEvents)

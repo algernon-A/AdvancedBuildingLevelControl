@@ -93,101 +93,18 @@ namespace ABLC
             DistrictChanged();
 
             // Add event handlers.
-            m_minLevelDropDown.eventSelectedIndexChanged += (c, index) =>
-            {
-                // Don't do anything if events are disabled.
-                if (!m_disableEvents)
-                {
-                    // Set new minimum residential level.
-                    Districts.SetDistrictMin(m_targetID, true, (byte)index);
+            m_minLevelDropDown.eventSelectedIndexChanged += (c, index) => MinResidentialLevelChanged(index);
+            m_maxLevelDropDown.eventSelectedIndexChanged += (c, index) => MaxResidentialLevelChanged(index);
+            _minWorkLevelDropDown.eventSelectedIndexChanged += (c, index) => MinWorkLevelChanged(index);
+            _maxWorkLevelDropDown.eventSelectedIndexChanged += (c, index) => MaxWorkLevelChanged(index);
+            _randomSpawnCheck.eventCheckChanged += (c, isChecked) => RandomSpawnCheckChanged(isChecked);
+            _spawnHistoricalCheck.eventCheckChanged += (c, isChecked) => SpawnHistoricalCheckChanged(isChecked);
 
-                    // If the minimum level is now greater than the maximum level, increase the maximum to match the minimum.
-                    if (index > m_maxLevelDropDown.selectedIndex)
-                    {
-                        m_maxLevelDropDown.selectedIndex = index;
-                    }
-                }
-            };
+            m_upgradeButton.eventClicked += (c, p) => Singleton<SimulationManager>.instance.AddAction(() =>
+                LevelDistrict(m_targetID, true));
 
-            m_maxLevelDropDown.eventSelectedIndexChanged += (c, index) =>
-            {
-                // Don't do anything if events are disabled.
-                if (!m_disableEvents)
-                {
-                    // Set new maximum residential level.
-                    Districts.SetDistrictMax(m_targetID, true, (byte)index);
-
-                    // If the maximum level is now less than the minimum level, reduce the minimum to match the maximum.
-                    if (index < m_minLevelDropDown.selectedIndex)
-                    {
-                        m_minLevelDropDown.selectedIndex = index;
-                    }
-                }
-            };
-
-            _minWorkLevelDropDown.eventSelectedIndexChanged += (c, index) =>
-            {
-                // Don't do anything if events are disabled.
-                if (!m_disableEvents)
-                {
-                    // Set new minimum workplace level.
-                    Districts.SetDistrictMin(m_targetID, false, (byte)index);
-
-                    // If the minimum level is now greater than the maximum level, increase the maximum to match the minimum.
-                    if (index > _maxWorkLevelDropDown.selectedIndex)
-                    {
-                        _maxWorkLevelDropDown.selectedIndex = index;
-                    }
-                }
-            };
-
-            _maxWorkLevelDropDown.eventSelectedIndexChanged += (c, index) =>
-            {
-                // Don't do anything if events are disabled.
-                if (!m_disableEvents)
-                {
-                    // Set new maximum workplace level.
-                    Districts.SetDistrictMax(m_targetID, false, (byte)index);
-
-                    // If the maximum level is now less than the minimum level, reduce the minimum to match the maximum.
-                    if (index < _minWorkLevelDropDown.selectedIndex)
-                    {
-                        _minWorkLevelDropDown.selectedIndex = index;
-                    }
-                }
-            };
-
-            _randomSpawnCheck.eventCheckChanged += (c, isChecked) =>
-            {
-                // Don't do anything if events are disabled.
-                if (!m_disableEvents)
-                {
-                    // Set/clear relevant flag.
-                    Districts.SetFlag(m_targetID, (byte)Districts.DistrictFlags.RandomSpawnLevels, isChecked);
-                }
-            };
-
-            _spawnHistoricalCheck.eventCheckChanged += (c, isChecked) =>
-            {
-                // Don't do anything if events are disabled.
-                if (!m_disableEvents)
-                {
-                    // Set/clear relevant flag.
-                    Districts.SetFlag(m_targetID, (byte)Districts.DistrictFlags.SpawnHistorical, isChecked);
-                }
-            };
-
-            m_upgradeButton.eventClicked += (c, p) =>
-            {
-                Singleton<SimulationManager>.instance.AddAction(() =>
-                    LevelDistrict(m_targetID, true));
-            };
-
-            m_downgradeButton.eventClicked += (c, p) =>
-            {
-                Singleton<SimulationManager>.instance.AddAction(() =>
-                    LevelDistrict(m_targetID, false));
-            };
+            m_downgradeButton.eventClicked += (c, p) => Singleton<SimulationManager>.instance.AddAction(() =>
+                LevelDistrict(m_targetID, false));
         }
 
         /// <summary>
@@ -216,6 +133,114 @@ namespace ABLC
 
             // All done: re-enable events.
             m_disableEvents = false;
+        }
+
+        /// <summary>
+        /// Minimum residential level menu event handler.
+        /// </summary>
+        /// <param name="index">New minimum level.</param>
+        private void MinResidentialLevelChanged(int index)
+        {
+            // Don't do anything if events are disabled.
+            if (!m_disableEvents)
+            {
+                // Set new minimum residential level.
+                Districts.SetDistrictMin(m_targetID, true, (byte)index);
+
+                // If the minimum level is now greater than the maximum level, increase the maximum to match the minimum.
+                if (index > m_maxLevelDropDown.selectedIndex)
+                {
+                    m_maxLevelDropDown.selectedIndex = index;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Maximum residential level menu event handler.
+        /// </summary>
+        /// <param name="index">New maximum level.</param>
+        private void MaxResidentialLevelChanged(int index)
+        {
+            // Don't do anything if events are disabled.
+            if (!m_disableEvents)
+            {
+                // Set new maximum residential level.
+                Districts.SetDistrictMax(m_targetID, true, (byte)index);
+
+                // If the maximum level is now less than the minimum level, reduce the minimum to match the maximum.
+                if (index < m_minLevelDropDown.selectedIndex)
+                {
+                    m_minLevelDropDown.selectedIndex = index;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Minimum work level menu event handler.
+        /// </summary>
+        /// <param name="index">New minimum level.</param>
+        private void MinWorkLevelChanged(int index)
+        {
+            // Don't do anything if events are disabled.
+            if (!m_disableEvents)
+            {
+                // Set new minimum workplace level.
+                Districts.SetDistrictMin(m_targetID, false, (byte)index);
+
+                // If the minimum level is now greater than the maximum level, increase the maximum to match the minimum.
+                if (index > _maxWorkLevelDropDown.selectedIndex)
+                {
+                    _maxWorkLevelDropDown.selectedIndex = index;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Maximum work level menu event handler.
+        /// </summary>
+        /// <param name="index">New maximum level.</param>
+        private void MaxWorkLevelChanged(int index)
+        {
+            // Don't do anything if events are disabled.
+            if (!m_disableEvents)
+            {
+                // Set new maximum workplace level.
+                Districts.SetDistrictMax(m_targetID, false, (byte)index);
+
+                // If the maximum level is now less than the minimum level, reduce the minimum to match the maximum.
+                if (index < _minWorkLevelDropDown.selectedIndex)
+                {
+                    _minWorkLevelDropDown.selectedIndex = index;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Random spawn check event handler.
+        /// </summary>
+        /// <param name="isChecked">New checked state.</param>
+        private void RandomSpawnCheckChanged(bool isChecked)
+        {
+            // Don't do anything if events are disabled.
+            if (!m_disableEvents)
+            {
+                // Set/clear relevant flag.
+                Districts.SetFlag(m_targetID, (byte)Districts.DistrictFlags.RandomSpawnLevels, isChecked);
+            }
+        }
+
+        /// <summary>
+        /// Historical spawning check event handler.
+        /// </summary>
+        /// <param name="isChecked">New checked state.</param>
+        private void SpawnHistoricalCheckChanged(bool isChecked)
+        {
+            // Don't do anything if events are disabled.
+            if (!m_disableEvents)
+            {
+                // Set/clear relevant flag.
+                Districts.SetFlag(m_targetID, (byte)Districts.DistrictFlags.SpawnHistorical, isChecked);
+            }
         }
 
         /// <summary>

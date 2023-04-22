@@ -29,9 +29,9 @@ namespace ABLC
         [HarmonyReversePatch]
         [HarmonyPatch(typeof(BuildingAI), "EnsureCitizenUnits")]
         [MethodImpl(MethodImplOptions.NoInlining)]
-        internal static void EnsureCitizenUnits(object instance, ushort buildingID, ref Building data, int homeCount, int workCount, int visitCount, int studentCount, int hotelCount = 0)
+        internal static void EnsureCitizenUnits(object instance, ushort buildingID, ref Building data, int homeCount, int workCount, int visitCount, int studentCount)
         {
-            Logging.Error("EnsureCitizenUnits reverse Harmony patch wasn't applied, params: ", instance, buildingID, data, homeCount, workCount, visitCount, studentCount, hotelCount);
+            Logging.Error("EnsureCitizenUnits reverse Harmony patch wasn't applied, params: ", instance, buildingID, data, homeCount, workCount, visitCount, studentCount);
             throw new NotImplementedException("Harmony reverse patch not applied");
         }
     }
