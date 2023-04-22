@@ -1,4 +1,6 @@
-﻿- Add true randomization option for building level and info selection
+﻿Version 1.3 -
+
+- Add true randomization option for building level and info selection
 - Convert level buttons to icons
 - Add randomize appearance building button
 - Add button to toggle collapsed state
