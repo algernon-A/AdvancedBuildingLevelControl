@@ -11,6 +11,7 @@ namespace ABLC
     using ColossalFramework;
     using ColossalFramework.Math;
     using ColossalFramework.UI;
+    using HarmonyLib;
     using UnityEngine;
 
     /// <summary>
@@ -21,6 +22,27 @@ namespace ABLC
         // Upgrade and downgrade target levels.
         private byte _upgradeLevel;
         private byte _downgradeLevel;
+
+        // Delegates to access game protected method.
+        private BuildingCollapsedDelegate _buildingCollapsed;
+        private BuildingCompletedDelegate _buildingCompleted;
+
+        /// <summary>
+        /// Delegate to CommonBuildingAI.BuildingCollapsed protected method.
+        /// </summary>
+        /// <param name="instance">Building AI instance.</param>
+        /// <param name="buildingID">Target building ID.</param>
+        /// <param name="buildingData">Building data reference.</param>
+        /// <param name="frameData">Building frame data.</param>
+        private delegate void BuildingCollapsedDelegate(CommonBuildingAI instance, ushort buildingID, ref Building buildingData, ref Building.Frame frameData);
+
+        /// <summary>
+        /// Delegate to CommonBuildingAI.BuildingCompleted protected method.
+        /// </summary>
+        /// <param name="instance">Building AI instance.</param>
+        /// <param name="buildingID">Target building ID.</param>
+        /// <param name="buildingData">Building data reference.</param>
+        private delegate void BuildingCompletedDelegate(CommonBuildingAI instance, ushort buildingID, ref Building buildingData);
 
         /// <summary>
         /// Gets or sets a value indicating whether an update is ready.
@@ -54,14 +76,38 @@ namespace ABLC
             UIButton randomButton = AddIconButton(Margin + 80f, PanelHeight - 40f, string.Empty, Translations.Translate("BUILDING_RANDOM"));
             randomButton.eventClick += (c, p) => Singleton<SimulationManager>.instance.AddAction(() => RandomizeAppearance(m_targetID));
 
+            // Add abandon button (no foreground sprite).
+            UIButton abandonButton = AddIconButton(Margin + 120f, PanelHeight - 40f, string.Empty, Translations.Translate("BUILDING_ABANDON"));
+            abandonButton.eventClick += (c, p) => Singleton<SimulationManager>.instance.AddAction(() => ToggleBuildingAbandoned(m_targetID));
+
+            // Add collapse button (no foreground sprite).
+            UIButton collapseButton = AddIconButton(Margin + 160f, PanelHeight - 40f, string.Empty, Translations.Translate("BUILDING_COLLAPSE"));
+            collapseButton.eventClick += (c, p) => Singleton<SimulationManager>.instance.AddAction(() => ToggleBuildingCollapse(m_targetID));
+
             // Add foreground sprite for randomize appearance button.
-            UISprite sprite = AddUIComponent<UISprite>();
-            sprite.atlas = UITextures.InGameAtlas;
-            sprite.spriteName = "Random";
-            sprite.relativePosition = randomButton.relativePosition - new Vector3(33f, 11f);
-            sprite.width = 93f;
-            sprite.height = 55f;
-            sprite.isInteractive = false;
+            UISprite randomSprite = AddUIComponent<UISprite>();
+            randomSprite.atlas = UITextures.InGameAtlas;
+            randomSprite.spriteName = "Random";
+            randomSprite.relativePosition = randomButton.relativePosition - new Vector3(33f, 11f);
+            randomSprite.width = 93f;
+            randomSprite.height = 55f;
+            randomSprite.isInteractive = false;
+
+            // Add foreground sprite for abandon button.
+            UISprite abandonSprite = AddUIComponent<UISprite>();
+            abandonSprite.atlas = UITextures.LoadSingleSpriteAtlas("Abandoned");
+            abandonSprite.spriteName = "normal";
+            abandonSprite.relativePosition = abandonButton.relativePosition;
+            abandonSprite.size = abandonButton.size;
+            abandonSprite.isInteractive = false;
+
+            // Add foreground sprite for collapse button.
+            UISprite collapseSprite = AddUIComponent<UISprite>();
+            collapseSprite.atlas = UITextures.LoadSingleSpriteAtlas("Collapsed");
+            collapseSprite.spriteName = "normal";
+            collapseSprite.relativePosition = collapseButton.relativePosition;
+            collapseSprite.size = collapseButton.size;
+            collapseSprite.isInteractive = false;
 
             // Set initial building.
             BuildingChanged();
@@ -344,6 +390,151 @@ namespace ABLC
 
                 // Reset building seed.
                 LevelUtils.ClearBuildingSeed(buildingID);
+            }
+        }
+
+        /// <summary>
+        /// Toggles a building's collapsed state.
+        /// </summary>
+        /// <param name="buildingID">ID of building to toggle.</param>
+        private void ToggleBuildingCollapse(ushort buildingID)
+        {
+            // Local references.
+            BuildingManager buildingManager = Singleton<BuildingManager>.instance;
+            Building[] buildings = buildingManager.m_buildings.m_buffer;
+            ref Building building = ref buildings[buildingID];
+            BuildingInfo buildingInfo = building.Info;
+            CommonBuildingAI buildingAI = buildingInfo?.m_buildingAI as CommonBuildingAI;
+
+            // Ignore invalid buildings.
+            if ((building.m_flags & Building.Flags.Created) == 0 || buildingAI == null)
+            {
+                return;
+            }
+
+            // Get building frame data.
+            Building.Frame frame = building.GetLastFrameData();
+
+            // Check state to toggle.
+            if ((building.m_flags & Building.Flags.Collapsed) == 0)
+            {
+                // Building is not collapsed - toggle it.
+                // Get building group.
+                InstanceID id = default;
+                id.Building = buildingID;
+                InstanceManager.Group group = Singleton<InstanceManager>.instance.GetGroup(id);
+
+                // Get CommonBuildingAI.BuildingCollapsed delegate if we haven't already.
+                if (_buildingCollapsed == null)
+                {
+                    _buildingCollapsed = AccessTools.MethodDelegate<BuildingCollapsedDelegate>(AccessTools.Method(typeof(CommonBuildingAI), "BuildingCollapsed"));
+                }
+
+                // Collapse building.
+                buildingAI.CollapseBuilding(buildingID, ref building, group, testOnly: false, demolish: false, 0);
+                Building.Frame frameData = building.GetLastFrameData();
+                _buildingCollapsed(buildingAI, buildingID, ref building, ref frameData);
+
+                // Force instant visual collapse.
+                building.m_frame0.m_constructState = 0;
+                building.m_frame1.m_constructState = 0;
+                building.m_frame2.m_constructState = 0;
+                building.m_frame3.m_constructState = 0;
+            }
+            else
+            {
+                // Collapsed building - restore it.
+                RestoreBuilding(buildingID, ref building, buildingAI);
+            }
+        }
+
+        /// <summary>
+        /// Toggles a building's abandoned state.
+        /// </summary>
+        /// <param name="buildingID">ID of building to toggle.</param>
+        private void ToggleBuildingAbandoned(ushort buildingID)
+        {
+            // Local references.
+            BuildingManager buildingManager = Singleton<BuildingManager>.instance;
+            Building[] buildings = buildingManager.m_buildings.m_buffer;
+            ref Building building = ref buildings[buildingID];
+            BuildingInfo buildingInfo = building.Info;
+            CommonBuildingAI buildingAI = buildingInfo?.m_buildingAI as CommonBuildingAI;
+
+            // Ignore invalid buildings.
+            if ((building.m_flags & Building.Flags.Created) == 0 || buildingAI == null)
+            {
+                return;
+            }
+
+            // Check state to toggle.
+            if ((building.m_flags & Building.Flags.Abandoned) == 0)
+            {
+                // Non-abandoned building; abandon it.
+                building.m_flags &= ~Building.Flags.Active;
+                building.m_flags |= Building.Flags.Abandoned;
+
+                // Get building group.
+                InstanceID id = default;
+                id.Building = buildingID;
+                InstanceManager.Group group = Singleton<InstanceManager>.instance.GetGroup(id);
+
+                // Remove people and update building state.
+                DisasterHelpers.RemovePeople(group, buildingID, ref building.m_citizenUnits, 100, ref Singleton<SimulationManager>.instance.m_randomizer);
+                buildingAI.BuildingDeactivated(buildingID, ref building);
+                Singleton<BuildingManager>.instance.UpdateBuildingRenderer(buildingID, updateGroup: true);
+
+                // Clear building problems.
+                ClearBuildingProblems(buildingID, ref building);
+            }
+            else
+            {
+                // Abandoned building - restore it.
+                RestoreBuilding(buildingID, ref building, buildingAI);
+            }
+        }
+
+        /// <summary>
+        /// Restores a building to normal state (after being collapsed or abandoned).
+        /// </summary>
+        /// <param name="buildingID">ID of building to restore.</param>
+        /// <param name="building">Building data reference.</param>
+        /// <param name="buildingAI">Building AI instance.</param>
+        private void RestoreBuilding(ushort buildingID, ref Building building, CommonBuildingAI buildingAI)
+        {
+            // Restore building status.
+            building.m_flags = Building.Flags.Created;
+            buildingAI.CreateBuilding(buildingID, ref building);
+
+            // Update building frame data for instant construction.
+            building.m_frame0.m_constructState = byte.MaxValue;
+            building.m_frame1.m_constructState = byte.MaxValue;
+            building.m_frame2.m_constructState = byte.MaxValue;
+            building.m_frame3.m_constructState = byte.MaxValue;
+
+            // Get CommonBuildingAI.BuildingCompleted delegate if we haven't already.
+            if (_buildingCompleted == null)
+            {
+                _buildingCompleted = AccessTools.MethodDelegate<BuildingCompletedDelegate>(AccessTools.Method(typeof(CommonBuildingAI), "BuildingCompleted"));
+            }
+
+            // Trigger building completion and clear all problems.
+            _buildingCompleted(buildingAI, buildingID, ref building);
+            ClearBuildingProblems(buildingID, ref building);
+        }
+
+        /// <summary>
+        /// Clears all the problems from the given building data record.
+        /// </summary>
+        /// <param name="buildingID">ID of building to restore.</param>
+        /// <param name="building">Building data reference.</param>
+        private void ClearBuildingProblems(ushort buildingID, ref Building building)
+        {
+            Notification.ProblemStruct problems = building.m_problems;
+            building.m_problems = Notification.ProblemStruct.None;
+            if (building.m_problems != problems)
+            {
+                Singleton<BuildingManager>.instance.UpdateNotifications(buildingID, problems, building.m_problems);
             }
         }
     }

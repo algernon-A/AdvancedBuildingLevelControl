@@ -24,6 +24,8 @@
 "BUILDING_UPGRADE","Upgrade this building by one level.";
 "BUILDING_DOWNGRADE","Downgrade this building by one level."
 "BUILDING_RANDOM","Randomize building appearance."
+"BUILDING_ABANDON","Toggle building abandonment."
+"BUILDING_COLLAPSE","Toggle building collapse."
 "ABLC_TRIG_DWN","Force downgrade"
 "ABLC_TRIG_DWB_TIP","Forces this building to downgrade to the specified maximum."
 "ABLC_TRIG_DWD_TIP","Forces all buildings in this district with levels above the specified maximum to downgrade to that maximum."
