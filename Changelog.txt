@@ -6,6 +6,7 @@
 - Add button to toggle collapsed state
 - Add button to toggle abandoned state
 - Update AlgernonCommons
+- Updated bundled CitiesHarmony
 
 
 Version 1.2.4 -
