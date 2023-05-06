@@ -20,7 +20,7 @@
 "ABLC_HIS_SPN_TIP","When set, new buildings in this district will be automatically marked as historical. Does not affect existing buildings."
 "ABLC_TRIG_UPB_TIP","Forces this building to upgrade to the specified minimum."
 "ABLC_TRIG_UPD_TIP","Forces all buildings in this district with levels below the specified minimum to upgrade to that minimum."
-"BUILDING_UPGRADE","Upgrade this building by one level.";
+"BUILDING_UPGRADE","Upgrade this building by one level."
 "BUILDING_DOWNGRADE","Downgrade this building by one level."
 "BUILDING_RANDOM","Randomize building appearance."
 "BUILDING_ABANDON","Toggle building abandonment."
