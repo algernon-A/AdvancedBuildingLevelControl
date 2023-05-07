@@ -20,7 +20,7 @@
 "ABLC_HIS_SPN_TIP","Wenn aktiviert, werden neue Gebäude in diesem Distrikt automatisch als historisch markiert. Beeinflusst nicht schon bestehende Gebäude."
 "ABLC_TRIG_UPB_TIP","Zwingt dieses Gebäude zur Verbesserung auf das festgelegte minimale Level."
 "ABLC_TRIG_UPD_TIP","Zwingt alle Gebäude in diesem Distrikt mit einem Level unter dem festgelegtem Minimum sich auf das Minimum zu verbessern."
-"BUILDING_UPGRADE","Upgrade this building by one level.;"
+"BUILDING_UPGRADE","Upgrade this building by one level."
 "BUILDING_DOWNGRADE","Downgrade this building by one level."
 "BUILDING_RANDOM","Randomize building appearance."
 "BUILDING_ABANDON","Toggle building abandonment."

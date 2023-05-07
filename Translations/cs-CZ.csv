@@ -20,7 +20,7 @@
 "ABLC_HIS_SPN_TIP","Pokud je nastaveno, nové budovy v této oblasti budou automaticky označeny jako historické. Neovlivní stávající budovy."
 "ABLC_TRIG_UPB_TIP","Pŕinutit tuto budovu k upgradu na nastavené minimum."
 "ABLC_TRIG_UPD_TIP","Přinutit všechny budovy v této oblasti s úrovněmi pod zadaným minimem k upgradu na minimum."
-"BUILDING_UPGRADE","Upgrade this building by one level.;"
+"BUILDING_UPGRADE","Upgrade this building by one level."
 "BUILDING_DOWNGRADE","Downgrade this building by one level."
 "BUILDING_RANDOM","Randomize building appearance."
 "BUILDING_ABANDON","Toggle building abandonment."
