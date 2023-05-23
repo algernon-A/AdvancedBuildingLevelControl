@@ -6,7 +6,7 @@
 		<Description>A Cities: Skylines mod.</Description>
 		<Authors>algernon</Authors>
 		<Copyright>Copyright © 2020-2023 algernon</Copyright>
-		<Version>1.3.0.1</Version>
+		<Version>1.3.1</Version>
 		<ManagedDLLPath>$(MSBuildProgramFiles32)/Steam/steamapps/common/Cities_Skylines/Cities_Data/Managed</ManagedDLLPath>
 		<AssemblySearchPaths>
 			$(AssemblySearchPaths);

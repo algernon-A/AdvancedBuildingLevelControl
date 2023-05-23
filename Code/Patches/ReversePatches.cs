@@ -26,12 +26,13 @@ namespace ABLC
         /// <param name="workCount">Workplace count (for game method).</param>
         /// <param name="visitCount">Visitor count (for game method).</param>
         /// <param name="studentCount">Student count (for game method).</param>
+        /// <param name="hotelCount">Hotel capacity count (for game method).</param>
         [HarmonyReversePatch]
         [HarmonyPatch(typeof(BuildingAI), "EnsureCitizenUnits")]
         [MethodImpl(MethodImplOptions.NoInlining)]
-        internal static void EnsureCitizenUnits(object instance, ushort buildingID, ref Building data, int homeCount, int workCount, int visitCount, int studentCount)
+        internal static void EnsureCitizenUnits(object instance, ushort buildingID, ref Building data, int homeCount, int workCount, int visitCount, int studentCount, int hotelCount)
         {
-            Logging.Error("EnsureCitizenUnits reverse Harmony patch wasn't applied, params: ", instance, buildingID, data, homeCount, workCount, visitCount, studentCount);
+            Logging.Error("EnsureCitizenUnits reverse Harmony patch wasn't applied, params: ", instance, buildingID, data, homeCount, workCount, visitCount, studentCount, hotelCount);
             throw new NotImplementedException("Harmony reverse patch not applied");
         }
     }
