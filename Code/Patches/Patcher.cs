@@ -32,12 +32,16 @@ namespace ABLC
 
                 MethodInfo[] targets = ModUtils.BuildingThemesReflection(out MethodInfo randomBuildingInfo);
 
-                if (targets != null && randomBuildingInfo != null)
+                if (randomBuildingInfo != null)
                 {
-                    foreach (MethodInfo targetMethod in targets)
+                    // Found a Building Themes mod - patch any Detour targets (original Building Themes).
+                    if (targets != null && targets.Length > 0)
                     {
-                        Logging.Message("patching ", targetMethod);
-                        harmonyInstance.Patch(targetMethod, prefix: new HarmonyMethod(patchMethod));
+                        foreach (MethodInfo targetMethod in targets)
+                        {
+                            Logging.Message("patching ", targetMethod);
+                            harmonyInstance.Patch(targetMethod, prefix: new HarmonyMethod(patchMethod));
+                        }
                     }
 
                     // Set delegate to Building Themes' random building prefab selection method.
@@ -45,7 +49,7 @@ namespace ABLC
                 }
                 else
                 {
-                    Logging.KeyMessage("didn't patch Building Themes");
+                    Logging.Error("couldn't get Building Themes GetUpgradeInfo delegate");
                 }
             }
             else

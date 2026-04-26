@@ -112,7 +112,7 @@ namespace ABLC
         /// Uses reflection to find key methods for the Building Themes mod.
         /// </summary>
         /// <param name="randomBuildingInfo">RandomBuildingInfo_Upgrade method info (for delegate creation).</param>
-        /// <returns>Array of BuildingThemes GetUpgrdadeInfo method infos, one for each AI type.</returns>
+        /// <returns>Array of BuildingThemes GetUpgradeInfo Detour method infos, one for each AI type.</returns>
         internal static MethodInfo[] BuildingThemesReflection(out MethodInfo randomBuildingInfo)
         {
             string methodName = "GetUpgradeInfo";
@@ -125,11 +125,11 @@ namespace ABLC
                     if (assembly.GetName().Name.Equals("BuildingThemes") && plugin.isEnabled)
                     {
                         // Found BuildingThemes.dll that's part of an enabled plugin; try to get its Detours class.
-                        Logging.Message("found Building Themes");
+                        Logging.KeyMessage("found a Building Themes mod, checking for which one....");
                         Type themesDetours = assembly.GetType("BuildingThemes.Detour.PrivateBuildingAIDetour`1");
                         if (themesDetours != null)
                         {
-                            Logging.Message("found Building Themes Detours");
+                            Logging.KeyMessage("...found Building Themes Detours");
 
                             // Get RandomBuildingInfo_Upgrade MethodInfo.
                             randomBuildingInfo = assembly.GetType("BuildingThemes.RandomBuildings").GetMethod("GetRandomBuildingInfo_Upgrade", BindingFlags.Public | BindingFlags.Static);
@@ -142,6 +142,18 @@ namespace ABLC
                                 themesDetours.MakeGenericType(typeof(CommercialBuildingAI)).GetMethod(methodName),
                                 themesDetours.MakeGenericType(typeof(OfficeBuildingAI)).GetMethod(methodName),
                             };
+                        }
+
+                        // If we got here, we found Building Themes but not the Detours class, which means that this is probably using Building Themes 2.
+                        Type themesRandomBuildings = assembly.GetType("BuildingThemes.RandomBuildings");
+                        if (themesRandomBuildings != null)
+                        {
+                            Logging.KeyMessage("...found Building Themes 2 RandomBuildings");
+                            methodName = "GetRandomBuildingInfo_Upgrade";
+                            randomBuildingInfo = themesRandomBuildings.GetMethod(methodName, BindingFlags.Public | BindingFlags.Static);
+
+                            // We don't need to patch any detours or other Building Themes methods for Building Themes 2.
+                            return null;
                         }
                     }
                 }

@@ -12,8 +12,11 @@ namespace ABLC
 
     /// <summary>
     /// Harmony Prefix patch for PrivateBuildingAI.GetUpgradeInfo.
+    /// Needs to run before nay other patches to this method, to ensure that we can override the upgrade target selection process and randomize building levels before any other mods get involved in the upgrade process.
+    /// We'll invoke any other mods' methods (i.e. Building Themes) directly via a delegate as required.
     /// </summary>
     [HarmonyPatch(typeof(PrivateBuildingAI), nameof(PrivateBuildingAI.GetUpgradeInfo))]
+    [HarmonyPriority(Priority.First)]
     [System.Diagnostics.CodeAnalysis.SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony")]
     public static class GetUpgradeInfoPatch
     {
@@ -94,11 +97,13 @@ namespace ABLC
             byte district = instance.GetDistrict(data.m_position);
             ushort style = instance.m_districts.m_buffer[district].m_Style;
 
-            // Are we using Building Themes?
+            BuildingInfo selectedInfo = null;
+
+            // Are we using a Building Themes mod?
             if (s_buildingTheme != null)
             {
-                // Yes - get result via delegate to Building Themes' method.
-                return s_buildingTheme(
+                // Yes - try to get result via delegate to Building Themes' method.
+                selectedInfo = s_buildingTheme(
                     data.m_position,
                     data.m_infoIndex,
                     ref r,
@@ -110,10 +115,11 @@ namespace ABLC
                     buildingAI.m_info.m_zoningMode,
                     style);
             }
-            else
+
+            // If no Building Themes result, or if Building Themes isn't in use, get result via base-game method.
+            if (selectedInfo == null)
             {
-                // No - get result via base-game method.
-                return Singleton<BuildingManager>.instance.GetRandomBuildingInfo(
+                selectedInfo = Singleton<BuildingManager>.instance.GetRandomBuildingInfo(
                     ref r,
                     buildingAI.m_info.m_class.m_service,
                     buildingAI.m_info.m_class.m_subService,
@@ -123,6 +129,8 @@ namespace ABLC
                     buildingAI.m_info.m_zoningMode,
                     style);
             }
+
+            return selectedInfo;
         }
     }
 }
