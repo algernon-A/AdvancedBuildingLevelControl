@@ -8,6 +8,7 @@ namespace ABLC
     using ColossalFramework;
     using ColossalFramework.Math;
     using HarmonyLib;
+    using System.Reflection;
     using UnityEngine;
 
     /// <summary>
@@ -24,6 +25,11 @@ namespace ABLC
         /// Delegate to Building Themes GetRandomBuildingInfo_Upgrade.
         /// </summary>
         private static BuildingThemeDelegate s_buildingTheme;
+
+        /// <summary>
+        /// Delegate to Building Themes 2 s_intentionalNull.
+        /// </summary>
+        private static FieldInfo s_intentionalNullField;
 
         /// <summary>
         /// Delegate to Building Themes GetRandomBuildingInfo_Upgrade.
@@ -45,6 +51,11 @@ namespace ABLC
         /// Sets the Building Themes delegate.
         /// </summary>
         public static BuildingThemeDelegate BuildingTheme { set => s_buildingTheme = value; }
+
+        /// <summary>
+        /// Sets the Building Themes 2 intentional null field reference.
+        /// </summary>
+        public static FieldInfo IntentionalNullField { set => s_intentionalNullField = value; }
 
         /// <summary>
         /// Harmony Prefix patch to randomize levels of potential upgrade targets (+/- 1 level).
@@ -119,15 +130,19 @@ namespace ABLC
             // If no Building Themes result, or if Building Themes isn't in use, get result via base-game method.
             if (selectedInfo == null)
             {
-                selectedInfo = Singleton<BuildingManager>.instance.GetRandomBuildingInfo(
-                    ref r,
-                    buildingAI.m_info.m_class.m_service,
-                    buildingAI.m_info.m_class.m_subService,
-                    targetLevel,
-                    data.Width,
-                    data.Length,
-                    buildingAI.m_info.m_zoningMode,
-                    style);
+                // Check for Buiding Themes 2 intentionally returning null to prevent an upgrade due to player settings.
+                if (s_intentionalNullField == null || !(bool)s_intentionalNullField.GetValue(null))
+                {
+                    selectedInfo = Singleton<BuildingManager>.instance.GetRandomBuildingInfo(
+                        ref r,
+                        buildingAI.m_info.m_class.m_service,
+                        buildingAI.m_info.m_class.m_subService,
+                        targetLevel,
+                        data.Width,
+                        data.Length,
+                        buildingAI.m_info.m_zoningMode,
+                        style);
+                }
             }
 
             return selectedInfo;

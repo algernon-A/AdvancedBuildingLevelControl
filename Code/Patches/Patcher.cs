@@ -30,7 +30,7 @@ namespace ABLC
                 // Patch method.
                 MethodInfo patchMethod = typeof(GetUpgradeInfoPatch).GetMethod(nameof(GetUpgradeInfoPatch.Prefix));
 
-                MethodInfo[] targets = ModUtils.BuildingThemesReflection(out MethodInfo randomBuildingInfo);
+                MethodInfo[] targets = ModUtils.BuildingThemesReflection(out MethodInfo randomBuildingInfo, out FieldInfo intentionalNull);
 
                 if (randomBuildingInfo != null)
                 {
@@ -46,6 +46,7 @@ namespace ABLC
 
                     // Set delegate to Building Themes' random building prefab selection method.
                     GetUpgradeInfoPatch.BuildingTheme = Delegate.CreateDelegate(typeof(GetUpgradeInfoPatch.BuildingThemeDelegate), randomBuildingInfo) as GetUpgradeInfoPatch.BuildingThemeDelegate;
+                    GetUpgradeInfoPatch.IntentionalNullField = intentionalNull;
                 }
                 else
                 {

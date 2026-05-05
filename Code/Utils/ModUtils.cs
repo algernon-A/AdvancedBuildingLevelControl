@@ -112,10 +112,12 @@ namespace ABLC
         /// Uses reflection to find key methods for the Building Themes mod.
         /// </summary>
         /// <param name="randomBuildingInfo">RandomBuildingInfo_Upgrade method info (for delegate creation).</param>
+        /// <param name="intentionalNull">Building themes 2 intentional null field info.</param>
         /// <returns>Array of BuildingThemes GetUpgradeInfo Detour method infos, one for each AI type.</returns>
-        internal static MethodInfo[] BuildingThemesReflection(out MethodInfo randomBuildingInfo)
+        internal static MethodInfo[] BuildingThemesReflection(out MethodInfo randomBuildingInfo, out FieldInfo intentionalNull)
         {
             string methodName = "GetUpgradeInfo";
+            intentionalNull = null;
 
             // Iterate through each loaded plugin assembly.
             foreach (PluginManager.PluginInfo plugin in PluginManager.instance.GetPluginsInfo())
@@ -151,6 +153,13 @@ namespace ABLC
                             Logging.KeyMessage("...found Building Themes 2 RandomBuildings");
                             methodName = "GetRandomBuildingInfo_Upgrade";
                             randomBuildingInfo = themesRandomBuildings.GetMethod(methodName, BindingFlags.Public | BindingFlags.Static);
+
+                            // Try to reflect Building Themes 2 intentional null field (to disable vanilla fallback if the player has set that in that mod).
+                            intentionalNull = themesRandomBuildings.GetField("s_intentionalNull", BindingFlags.Public | BindingFlags.Static);
+                            if (intentionalNull == null)
+                            {
+                                Logging.Error("Unable to reflect IntentionalNull");
+                            }
 
                             // We don't need to patch any detours or other Building Themes methods for Building Themes 2.
                             return null;
