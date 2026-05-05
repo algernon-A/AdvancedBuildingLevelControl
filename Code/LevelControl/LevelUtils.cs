@@ -237,15 +237,7 @@ namespace ABLC
             }
 
             // Get new building target, if we can.
-            return buildingManager.GetRandomBuildingInfo(
-                ref r,
-                thisBuilding.Info.GetService(),
-                thisBuilding.Info.GetSubService(),
-                finalLevel,
-                thisBuilding.Width,
-                thisBuilding.Length,
-                thisBuilding.Info.m_zoningMode,
-                style);
+            return GetUpgradeInfoPatch.GetRandomInfo(thisBuilding.Info.GetAI() as PrivateBuildingAI, finalLevel, ref thisBuilding, ref r);
         }
 
         /// <summary>
