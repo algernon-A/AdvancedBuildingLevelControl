@@ -1,4 +1,9 @@
-﻿Version 1.3.2 -
+﻿Version 1.3.3 -
+
+- Support Building Themes 2 strict mode
+
+
+Version 1.3.2 -
 
 - Add support for Building Themes 2
 
