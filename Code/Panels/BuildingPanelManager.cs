@@ -11,6 +11,7 @@ namespace ABLC
     using AlgernonCommons.UI;
     using ColossalFramework.UI;
     using UnityEngine;
+    using static ABLC.Buildings;
 
     /// <summary>
     /// Static class to manage the ABLC building panel.
@@ -20,6 +21,12 @@ namespace ABLC
         // Instance references.
         private static GameObject s_gameObject;
         private static BuildingPanel s_panel;
+
+        // Level locking indicators for level progress bar.
+        private static UIPanel s_levelProgressPanel;
+        private static UILabel s_minLevelIndicator;
+        private static UILabel s_maxLevelIndicator;
+        private static UILabel s_lockedLevelIndicator;
 
         // UI components.
         private static UIButton s_panelButton;
@@ -73,7 +80,8 @@ namespace ABLC
         internal static void TargetChanged()
         {
             // Get current WorldInfoPanel building instance and determine maximum building level.
-            if (LevelUtils.GetMaxLevel(WorldInfoPanel.GetCurrentInstanceID().Building) == 1)
+            ushort buildingID = WorldInfoPanel.GetCurrentInstanceID().Building;
+            if (LevelUtils.GetMaxLevel(buildingID) == 1)
             {
                 // Only one building level - not a 'levellable' building, so disable the ABLC button and update the tooltip accordingly.
                 s_panelButton.Disable();
@@ -84,10 +92,64 @@ namespace ABLC
                 // Multiple levels available - enable the ABLC button and update the tooltip accordingly.
                 s_panelButton.Enable();
                 s_panelButton.tooltip = Translations.Translate("ABLC_NAME");
+
+                UpdateProgressBarIndicators(buildingID);
             }
 
             // Communicate target change to the panel (if it's currently instantiated).
             Panel?.BuildingChanged();
+        }
+
+        /// <summary>
+        /// Update level-locking indicators displayed on building's level progress bars.
+        /// </summary>
+        /// <param name="buildingID">Building ID of the selected builiding.</param>
+        internal static void UpdateProgressBarIndicators(ushort buildingID)
+        {
+            // Hide building level indicators by default. We'll show them if/as appropriate later.
+            s_minLevelIndicator.isVisible = false;
+            s_maxLevelIndicator.isVisible = false;
+            s_lockedLevelIndicator.isVisible = false;
+
+            // Check if building has a level range set (i.e. if it's been modified from vanilla levels). If so, show level locking indicators on the level progress bars.
+            if (Buildings.GetRecord(buildingID) is LevelRange levelRange)
+            {
+                // Position level locking indicator(s) above the appropriate progress bars.
+                // Magic constants are used to position the indicators vertically.
+                float progressPanelXPosition = s_levelProgressPanel.relativePosition.x;
+                foreach (UIComponent progressBar in s_levelProgressPanel.components)
+                {
+                    // Determine level of this progress bar, and see if it matches the building's minimum and/or maximum level.
+                    int progressBarLevel = GetProgressBarLevel(progressBar);
+                    if (progressBarLevel == levelRange.MinLevel)
+                    {
+                        if (levelRange.MinLevel == levelRange.MaxLevel)
+                        {
+                            // Minimum and maximum levels are the same - show locked level indicator.
+                            float x = progressPanelXPosition + progressBar.relativePosition.x + ((progressBar.width - s_lockedLevelIndicator.width) * 0.5f);
+                            const float y = 6.0f;
+                            s_lockedLevelIndicator.relativePosition = new Vector3(x, y);
+                            s_lockedLevelIndicator.isVisible = true;
+                        }
+                        else if (progressBarLevel > 0)
+                        {
+                            // Show minimum level indicator if the minimum level is greater than 0.
+                            float x = progressPanelXPosition + progressBar.relativePosition.x + 2.0f;
+                            const float y = 4.5f;
+                            s_minLevelIndicator.relativePosition = new Vector3(x, y);
+                            s_minLevelIndicator.isVisible = true;
+                        }
+                    }
+                    else if (progressBarLevel == levelRange.MaxLevel && levelRange.MaxLevel < LevelUtils.GetMaxLevel(buildingID) - 1)
+                    {
+                        // Show maximum level indicator if the maximum level is less than the total number of levels.
+                        float x = progressPanelXPosition + progressBar.relativePosition.x + progressBar.width - s_maxLevelIndicator.width - 1.0f;
+                        const float y = 4.5f;
+                        s_maxLevelIndicator.relativePosition = new Vector3(x, y);
+                        s_maxLevelIndicator.isVisible = true;
+                    }
+                }
+            }
         }
 
         /// <summary>
@@ -137,7 +199,6 @@ namespace ABLC
         {
             GameObject.Destroy(s_panel);
             GameObject.Destroy(s_gameObject);
-
             s_panel = null;
             s_gameObject = null;
         }
@@ -150,8 +211,38 @@ namespace ABLC
         {
             const float PanelButtonSize = 36f;
 
+            // Add ABLC button to building info panel.
             BuildingWorldInfoPanel infoPanel = UIView.library.Get<ZonedBuildingWorldInfoPanel>(typeof(ZonedBuildingWorldInfoPanel).Name);
             s_panelButton = infoPanel.component.AddUIComponent<UIButton>();
+
+            // Create level indicators to level progress panel.
+            if (infoPanel.Find("Level") is UIPanel levelPanel)
+            {
+                // Set progress panel reference.
+                s_levelProgressPanel = levelPanel.Find("LevelProgress") as UIPanel;
+
+                // Minimum level indicator.
+                s_minLevelIndicator = levelPanel.AddUIComponent<UILabel>();
+                s_minLevelIndicator.text = "↦";
+                s_minLevelIndicator.textAlignment = UIHorizontalAlignment.Left;
+                s_minLevelIndicator.textScale = 1.5f;
+
+                // Maximum level indicator.
+                s_maxLevelIndicator = levelPanel.AddUIComponent<UILabel>();
+                s_maxLevelIndicator.text = "↤";
+                s_maxLevelIndicator.textAlignment = UIHorizontalAlignment.Right;
+                s_maxLevelIndicator.textScale = 1.5f;
+                s_lockedLevelIndicator = levelPanel.AddUIComponent<UILabel>();
+
+                // Locked level indicator (minimum and maximum levels are the same).  Scale is slightly less than the arrows due to the different character height.
+                s_lockedLevelIndicator.text = "■";
+                s_lockedLevelIndicator.textAlignment = UIHorizontalAlignment.Center;
+                s_lockedLevelIndicator.textScale = 1.3f;
+            }
+            else
+            {
+                Logging.Error("Couldn't find Level panel; level indcators not created");
+            }
 
             // Basic button setup.
             s_panelButton.atlas = UITextures.LoadQuadSpriteAtlas("ablc_buttons");
@@ -211,6 +302,26 @@ namespace ABLC
                 // Manually unfocus control, otherwise it can stay focused until next UI event (looks untidy).
                 c.Unfocus();
             };
+        }
+
+        /// <summary>
+        /// Gets the zero-based building level of a progress bar component based on its name.
+        /// </summary>
+        /// <param name="progressBar">Progress bar component.</param>
+        /// <returns>Zero-based building level linked to the the given progress bar (-1 if progress bar name is invalid).</returns>
+        private static int GetProgressBarLevel(UIComponent progressBar)
+        {
+            switch (progressBar.name)
+            {
+                case "Level1Bar": return 0;
+                case "Level2Bar": return 1;
+                case "Level3Bar": return 2;
+                case "Level4Bar": return 3;
+                case "Level5Bar": return 4;
+                default:
+                    Logging.Error("invalid progress bar name: ", progressBar.name, " passed to GetProgressBarLevel");
+                    return -1;
+            }
         }
     }
 }

@@ -265,6 +265,9 @@ namespace ABLC
                 // Update minimum level.
                 Buildings.UpdateMinLevel(m_targetID, minLevel);
 
+                // Update displayed level-locking indicators on building info panel progress bars.
+                BuildingPanelManager.UpdateProgressBarIndicators(m_targetID);
+
                 // Update the panel.
                 BuildingChanged();
             }
@@ -281,6 +284,9 @@ namespace ABLC
             {
                 // Update maximum level.
                 Buildings.UpdateMaxLevel(m_targetID, maxLevel);
+
+                // Update displayed level-locking indicators on building info panel progress bars.
+                BuildingPanelManager.UpdateProgressBarIndicators(m_targetID);
 
                 // Update the panel.
                 BuildingChanged();
