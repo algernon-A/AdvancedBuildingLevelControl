@@ -226,18 +226,21 @@ namespace ABLC
                 s_minLevelIndicator.text = "↦";
                 s_minLevelIndicator.textAlignment = UIHorizontalAlignment.Left;
                 s_minLevelIndicator.textScale = 1.5f;
+                s_minLevelIndicator.tooltip = Translations.Translate("ABLC_LVL_MIN_TIP");
 
                 // Maximum level indicator.
                 s_maxLevelIndicator = levelPanel.AddUIComponent<UILabel>();
                 s_maxLevelIndicator.text = "↤";
                 s_maxLevelIndicator.textAlignment = UIHorizontalAlignment.Right;
                 s_maxLevelIndicator.textScale = 1.5f;
+                s_maxLevelIndicator.tooltip = Translations.Translate("ABLC_LVL_MAX_TIP");
                 s_lockedLevelIndicator = levelPanel.AddUIComponent<UILabel>();
 
                 // Locked level indicator (minimum and maximum levels are the same).  Scale is slightly less than the arrows due to the different character height.
                 s_lockedLevelIndicator.text = "■";
                 s_lockedLevelIndicator.textAlignment = UIHorizontalAlignment.Center;
                 s_lockedLevelIndicator.textScale = 1.3f;
+                s_lockedLevelIndicator.tooltip = Translations.Translate("ABLC_LVL_LCK_TIP");
             }
             else
             {
