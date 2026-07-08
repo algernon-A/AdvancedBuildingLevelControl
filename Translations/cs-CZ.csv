@@ -8,6 +8,7 @@
 "ABLC_LVL_MIN_TIP","Minimální povolená úroveň pro tuto budovu."
 "ABLC_LVL_MAX","Maximální úroveň"
 "ABLC_LVL_MAX_TIP","Maximální povolená úroveň pro tuto budovu."
+"ABLC_LVL_LCK_TIP","This building is locked to this level."
 "ABLC_CAT_RES","Úrovně obytných"
 "ABLC_CAT_RMN_TIP","Minimální povolená úroveň pro obytné budovy v této oblasti."
 "ABLC_CAT_RMX_TIP","Maximální povolená úroveň pro obytné budovy v této oblasti."

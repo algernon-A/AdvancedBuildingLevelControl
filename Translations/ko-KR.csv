@@ -8,6 +8,7 @@
 "ABLC_LVL_MIN_TIP","이 건물에 허용되는 최소 건물 레벨입니다."
 "ABLC_LVL_MAX","최대 레벨"
 "ABLC_LVL_MAX_TIP","이 건물에 허용되는 최대 건물 레벨입니다."
+"ABLC_LVL_LCK_TIP","This building is locked to this level."
 "ABLC_CAT_RES","거주지 레벨"
 "ABLC_CAT_RMN_TIP","이 지구의 주거용 건물에 허용되는 최소 건물 레벨입니다."
 "ABLC_CAT_RMX_TIP","이 지구의 주거용 건물에 허용되는 최대 건물 레벨입니다."

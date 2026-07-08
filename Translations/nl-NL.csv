@@ -8,6 +8,7 @@
 "ABLC_LVL_MIN_TIP","Het minimaal toegestane gebouwniveau voor dit gebouw."
 "ABLC_LVL_MAX","Maximum niveau"
 "ABLC_LVL_MAX_TIP","Het maximaal toegestane gebouwniveau voor dit gebouw."
+"ABLC_LVL_LCK_TIP","This building is locked to this level."
 "ABLC_CAT_RES","Woningbouw niveau's"
 "ABLC_CAT_RMN_TIP","Het minimaal toegestane gebouwniveau voor woningen in dit district."
 "ABLC_CAT_RMX_TIP","Het maximaal toegestane gebouwniveau voor woningen in dit district."

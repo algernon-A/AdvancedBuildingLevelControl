@@ -8,6 +8,7 @@
 "ABLC_LVL_MIN_TIP","该建筑允许的最低等级。"
 "ABLC_LVL_MAX","最高等级"
 "ABLC_LVL_MAX_TIP","该建筑允许的最高等级。"
+"ABLC_LVL_LCK_TIP","此建筑已锁定为这个等级。"
 "ABLC_CAT_RES","住宅等级"
 "ABLC_CAT_RMN_TIP","该区划内住宅建筑允许的最低等级。"
 "ABLC_CAT_RMX_TIP","该区划内住宅建筑允许的最高等级。"

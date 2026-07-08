@@ -8,6 +8,7 @@
 "ABLC_LVL_MIN_TIP","この建物タイプの最低レベルを指定"
 "ABLC_LVL_MAX","最高レベル"
 "ABLC_LVL_MAX_TIP","この建物タイプの最高レベルを指定"
+"ABLC_LVL_LCK_TIP","This building is locked to this level."
 "ABLC_CAT_RES","住宅のレベル"
 "ABLC_CAT_RMN_TIP","この地区内にある住宅の最低レベルを指定"
 "ABLC_CAT_RMX_TIP","この地区内にある住宅の最高レベルを指定"

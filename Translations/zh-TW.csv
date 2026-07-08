@@ -8,6 +8,7 @@
 "ABLC_LVL_MIN_TIP","該建築指定的最低等級"
 "ABLC_LVL_MAX","最高等級"
 "ABLC_LVL_MAX_TIP","該建築指定的最高等級"
+"ABLC_LVL_LCK_TIP","This building is locked to this level."
 "ABLC_CAT_RES","住宅等級"
 "ABLC_CAT_RMN_TIP","指定該區域住宅建築最低等級。"
 "ABLC_CAT_RMX_TIP","指定該區域住宅建築最高等級。"

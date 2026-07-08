@@ -8,6 +8,7 @@
 "ABLC_LVL_MIN_TIP","Ennek az épületnek a megengedett minimális beépítési szintje."
 "ABLC_LVL_MAX","Maximális szint"
 "ABLC_LVL_MAX_TIP","Az épület megengedett legnagyobb beépítési szintje."
+"ABLC_LVL_LCK_TIP","This building is locked to this level."
 "ABLC_CAT_RES","Lakossági szintek"
 "ABLC_CAT_RMN_TIP","A lakóépületek megengedett minimális beépítési szintje ebben a kerületben."
 "ABLC_CAT_RMX_TIP","A lakóépületek megengedett legnagyobb beépítési szintje ebben a kerületben."

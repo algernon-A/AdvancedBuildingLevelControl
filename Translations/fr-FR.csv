@@ -8,6 +8,7 @@
 "ABLC_LVL_MIN_TIP","Le niveau de bâtiment minimal autorisé pour ce bâtiment."
 "ABLC_LVL_MAX","Niveau maximal"
 "ABLC_LVL_MAX_TIP","Le niveau de bâtiment maximal autorisé pour ce bâtiment."
+"ABLC_LVL_LCK_TIP","Ce bâtiment est verrouillé à ce niveau."
 "ABLC_CAT_RES","Niveaux résidentiels"
 "ABLC_CAT_RMN_TIP","Le niveau de bâtiment minimal autorisé pour les bâtiments résidentiels de ce quartier."
 "ABLC_CAT_RMX_TIP","Le niveau de bâtiment maximal autorisé pour les bâtiments résidentiels de ce quartier."

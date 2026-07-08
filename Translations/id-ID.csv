@@ -8,6 +8,7 @@
 "ABLC_LVL_MIN_TIP","Level bangunan minimal yang diizinkan untuk bangunan ini."
 "ABLC_LVL_MAX","Level maksimal"
 "ABLC_LVL_MAX_TIP","Level bangunan maksimal yang diizinkan untuk bangunan ini."
+"ABLC_LVL_LCK_TIP","This building is locked to this level."
 "ABLC_CAT_RES","Level perumahan"
 "ABLC_CAT_RMN_TIP","Level bangunan minimal yang diizinkan untuk bangunan perumahan di distrik ini."
 "ABLC_CAT_RMX_TIP","Tingkat bangunan maksimal yang diizinkan untuk bangunan perumahan di distrik ini."
